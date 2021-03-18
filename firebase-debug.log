@@ -1,0 +1,11 @@
+[debug] [2021-03-18T17:56:49.771Z] ----------------------------------------------------------------------
+[debug] [2021-03-18T17:56:49.773Z] Command:       D:\Program Files\nodejs\node.exe C:\Users\rahul\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder
+[debug] [2021-03-18T17:56:49.774Z] CLI Version:   9.1.0
+[debug] [2021-03-18T17:56:49.774Z] Platform:      win32
+[debug] [2021-03-18T17:56:49.774Z] Node Version:  v12.13.0
+[debug] [2021-03-18T17:56:49.774Z] Time:          Thu Mar 18 2021 13:56:49 GMT-0400 (Eastern Daylight Time)
+[debug] [2021-03-18T17:56:49.775Z] ----------------------------------------------------------------------
+[debug] [2021-03-18T17:56:49.775Z] 
+[debug] [2021-03-18T17:56:49.781Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-18T17:56:49.782Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
