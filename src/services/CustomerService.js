@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/extensions
-import db from '../config/firebaseConfig';
+import firebaseProducts from '../config/firebaseConfig';
+
+const { db } = firebaseProducts;
 
 const col = db.collection('/customers');
 

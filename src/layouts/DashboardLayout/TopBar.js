@@ -57,8 +57,8 @@ const TopBar = ({
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
-            <InputIcon onClick={rmClicked} />
+          <IconButton color="inherit" onClick={rmClicked}>
+            <InputIcon />
           </IconButton>
         </Hidden>
         <Hidden lgUp>

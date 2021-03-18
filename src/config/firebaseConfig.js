@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
 // eslint-disable-next-line import/extensions
 import config from './myConfig';
 
@@ -16,10 +17,23 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
+const auth = firebase.auth();
+console.dir(auth);
 
 if (config.firestoreEmulator) {
   db.useEmulator('localhost', 8080);
   console.log('Firestore Emulator is being used');
 }
 
-export default db;
+if (config.authEmulator) {
+  console.log('1');
+  auth.useEmulator('http://localhost:9099');
+  console.log('Auth Emulator is being used');
+}
+
+const firebaseProducts = {
+  db,
+  auth
+};
+
+export default firebaseProducts;
