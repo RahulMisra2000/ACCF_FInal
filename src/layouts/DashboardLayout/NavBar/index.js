@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import userContext from 'src/contexts/userContext';
 import {
   Avatar,
   Box,
@@ -16,6 +17,7 @@ import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
   Lock as LockIcon,
+  LogOut as UnLockIcon,
   Settings as SettingsIcon,
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
@@ -32,48 +34,62 @@ const user = {
 };
 
 // menu-items for menu on the left-side
-const items = [
-  {
+let items = [];
+
+const populateItems = (usr) => {
+  items = [];
+  items.push({
     href: '/app/dashboard',
     icon: BarChartIcon,
     title: 'Dashboard'
-  },
-  {
+  });
+  items.push({
     href: '/app/customers',
     icon: UsersIcon,
     title: 'Customers'
-  },
-  {
+  });
+  items.push({
     href: '/app/products',
     icon: ShoppingBagIcon,
     title: 'Products'
-  },
-  {
+  });
+  items.push({
     href: '/app/account',
     icon: UserIcon,
     title: 'Account'
-  },
-  {
+  });
+  items.push({
     href: '/app/settings',
     icon: SettingsIcon,
     title: 'Settings'
-  },
-  {
+  });
+  items.push({
     href: '/login',
     icon: LockIcon,
     title: 'Login'
-  },
-  {
+  });
+
+  // Show logout only if user is already logged in
+  if (usr) {
+    items.push({
+      href: '/login',
+      icon: UnLockIcon,
+      title: 'Logout',
+      type: 1
+    });
+  }
+
+  items.push({
     href: '/register',
     icon: UserPlusIcon,
     title: 'Register'
-  },
-  {
+  });
+  items.push({
     href: '/404',
     icon: AlertCircleIcon,
     title: 'Error'
-  }
-];
+  });
+};
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
@@ -94,6 +110,8 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
+  const usr = useContext(userContext);
+  populateItems(usr);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -146,6 +164,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
               key={item.title}
               title={item.title}
               icon={item.icon}
+              type={item.type}
             />
           ))}
         </List>

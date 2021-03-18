@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -15,6 +15,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from 'src/components/Logo';
+import userContext from 'src/contexts/userContext';
+import firebaseProducts from 'src/config/firebaseConfig';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -31,9 +33,15 @@ const TopBar = ({
 }) => {
   const classes = useStyles();
   const [notifications] = useState([]);
+  const user = useContext(userContext);
+
+  const { auth } = firebaseProducts;
 
   const rmClicked = (e) => {
-    console.error('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', e);
+    console.error('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    console.log(e);
+    console.error(user);
+    auth.signOut();
   };
 
   return (
@@ -57,9 +65,14 @@ const TopBar = ({
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit" onClick={rmClicked}>
-            <InputIcon />
-          </IconButton>
+
+          {/* Only signed in user should be able to see the button for logout */}
+          {user && (
+            <IconButton color="inherit" onClick={rmClicked}>
+              <InputIcon />
+            </IconButton>
+          )}
+
         </Hidden>
         <Hidden lgUp>
           <IconButton

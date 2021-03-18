@@ -7,6 +7,7 @@ import 'src/mixins/chartjs';
 import theme from 'src/theme';
 import routes from 'src/routes';
 import firebaseProducts from 'src/config/firebaseConfig';
+import userContext from 'src/contexts/userContext';
 
 const { auth } = firebaseProducts;
 
@@ -27,10 +28,12 @@ const App = () => {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      {routing}
-    </ThemeProvider>
+    <userContext.Provider value={isLoggedIn}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        {routing}
+      </ThemeProvider>
+    </userContext.Provider>
   );
 };
 

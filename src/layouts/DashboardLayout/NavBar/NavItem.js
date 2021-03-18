@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
+import firebaseProducts from 'src/config/firebaseConfig';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -40,6 +41,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// logout the user
+const logOutTheUser = () => {
+  const { auth } = firebaseProducts;
+  auth.signOut();
+};
+
 const NavItem = ({
   className,
   href,
@@ -48,6 +55,32 @@ const NavItem = ({
   ...rest
 }) => {
   const classes = useStyles();
+
+  // Special processing
+  if (rest?.type === 1) {
+    return (
+      <ListItem
+        className={clsx(classes.item, className)}
+        disableGutters
+      >
+        <Button
+          activeClassName={classes.active}
+          className={classes.button}
+          onClick={logOutTheUser}
+        >
+          {Icon && (
+            <Icon
+              className={classes.icon}
+              size="20"
+            />
+          )}
+          <span className={classes.title}>
+            {title}
+          </span>
+        </Button>
+      </ListItem>
+    );
+  }
 
   return (
     <ListItem

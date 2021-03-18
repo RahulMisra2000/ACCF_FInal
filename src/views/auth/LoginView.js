@@ -15,6 +15,9 @@ import {
 import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
+import firebaseProducts from 'src/config/firebaseConfig';
+
+const { auth } = firebaseProducts;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,15 +46,31 @@ const LoginView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              email: 'r@r.com',
+              password: '123456'
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
-            onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+            validate={(values) => {
+              console.log(values);
+            }}
+            onSubmit={(values) => {
+              console.log(JSON.stringify(values));
+              console.log(navigate);
+              auth.signInWithEmailAndPassword(values.email, values.password)
+                .then((userCredential) => {
+                  // Signed in
+                  // const user = userCredential.user;
+                  console.log(userCredential);
+                  navigate('/app/dashboard', { replace: true });
+                })
+                .catch((error) => {
+                  // const errorCode = error.code;
+                  // const errorMessage = error.message;
+                  console.log(error);
+                });
             }}
           >
             {({
