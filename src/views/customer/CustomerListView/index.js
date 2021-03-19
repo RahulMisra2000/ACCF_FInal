@@ -42,6 +42,8 @@ const CustomerListView = () => {
     }
   };
 
+  console.log(error);
+  
   return (
     <Page
       className={classes.root}

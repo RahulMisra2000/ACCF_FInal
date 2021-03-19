@@ -127,7 +127,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
       })
       .catch((err) => {
         console.log("Error getting document:", err);
-        setIsError(err);
+        setIsError(err.message);
       })
       .finally(()=>{
         setIsLoading(false);
@@ -209,8 +209,8 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         .then((response) => response.text())
         .then((result) => console.log(result))
         .catch((e) => {
-          console.log(e);
-          setIsError(e);
+          console.log(e.message);
+          setIsError(e.message);
         });
     }
     else {
@@ -226,8 +226,8 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         .then((response) => response.text())
         .then((result) => console.log(result))
         .catch((e) => {
-          console.log(e);
-          setIsError(e);
+          console.log(e.message);
+          setIsError(e.message);
         });
     }
     setSaveButtonDisabled(false);

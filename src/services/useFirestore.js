@@ -30,7 +30,7 @@ const useFirestore = (collectionName, searchTerm) => {
           setError(null);
         })
         .catch((err) => {
-          setError(err.message);
+          setError(`Error accessing ${collectionName} from Firestore : ${err.message}`);
         })
         .finally(() => {
           setIsLoading(false);

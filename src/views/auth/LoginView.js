@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 const LoginView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  let loginErrorMessage = null;
 
   return (
     <Page
@@ -54,11 +56,12 @@ const LoginView = () => {
               password: Yup.string().max(255).required('Password is required')
             })}
             validate={(values) => {
+              // Here we can validate the individual fields of the forms if we wanted to
+              // https://formik.org/docs/guides/validation
               console.log(values);
             }}
-            onSubmit={(values) => {
-              console.log(JSON.stringify(values));
-              console.log(navigate);
+            onSubmit={(values, { setSubmitting, resetForm}) => {
+              
               auth.signInWithEmailAndPassword(values.email, values.password)
                 .then((userCredential) => {
                   // Signed in
@@ -67,9 +70,8 @@ const LoginView = () => {
                   navigate('/app/dashboard', { replace: true });
                 })
                 .catch((error) => {
-                  // const errorCode = error.code;
-                  // const errorMessage = error.message;
-                  console.log(error);
+                  loginErrorMessage = `${error.message}`;
+                  setSubmitting(false);
                 });
             }}
           >
@@ -102,28 +104,14 @@ const LoginView = () => {
                   container
                   spacing={3}
                 >
+                  
                   <Grid
                     item
                     xs={12}
                     md={6}
                   >
                     <Button
-                      color="primary"
-                      fullWidth
-                      startIcon={<FacebookIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
+                      disabled='true'
                       fullWidth
                       startIcon={<GoogleIcon />}
                       onClick={handleSubmit}
@@ -198,6 +186,15 @@ const LoginView = () => {
                     Sign up
                   </Link>
                 </Typography>
+                {loginErrorMessage 
+                    ?
+                      (
+                        <div>
+                          { loginErrorMessage }
+                        </div>
+                      )
+                  : 
+                    null}
               </form>
             )}
           </Formik>
