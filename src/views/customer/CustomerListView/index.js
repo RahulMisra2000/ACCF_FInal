@@ -24,31 +24,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomerListView = () => {
+  console.log('First line of CustomerListView Component');
   const classes = useStyles();
+  const [searchTerm, setSearchTerm] = useState(null);
+
+  const {isLoading, data: cdata, error} = useFirestore('customers', searchTerm);
+
+  // Just changes the state so that this and all child components are re-rendered (aka re-executed)
+  const handleSearchTerm = (q) => {
+    if (q) {
+      setSearchTerm(q);
+    }
+    if (searchTerm && !q) {
+      setSearchTerm(q);
+    }
+  };
+
+  console.warn('Isloading',isLoading);
   
-  /* LIVE DATA
-  // useCollection hook, provides cdata. cdata.docs is an array. Each element is a live link to the record in Firestore.
-  // You can do the array map on it ....  (v,i,a)=> v.id  is the unique id and v.data() is the rest of the record
-  // v.data().x where x is the field name will give you the value of the field
-  const [cdata, loading, error] = useCollection(
-    CustomerDataService.getAll().orderBy('name', 'asc')
-  );
-  */
-
-  const {isLoading, data: cdata, error} = useFirestore('customers');
-
   return (
     <Page
       className={classes.root}
       title="Customers"
     >
       <Container maxWidth={false}>
-        <Toolbar />
+        <Toolbar searchFn={(q) => { handleSearchTerm(q); }}/>
         <Box mt={3}>
-        {error && <strong>Error: {JSON.stringify(error)}</strong>}
-        {isLoading && <span>Collection: Loading...</span>}
-        {cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
-        {cdata && cdata.length ? (<Results customers={cdata} />) : null}
+          {error && <strong>Error: {JSON.stringify(error)}</strong>}
+          {isLoading && <span>Collection: Loading...</span>}
+          {cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
+          {cdata && cdata.length ? (<Results customers={cdata} />) : null}
         </Box>
       </Container>
     </Page>

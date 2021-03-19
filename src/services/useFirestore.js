@@ -5,7 +5,7 @@ const { db } = firebaseProducts;
 
 // This custom hook is for reading multiple records from a collection
 //  It runs only once when the component that uses this hook is mounted
-const useFirestore = (collectionName) => {
+const useFirestore = (collectionName, searchTerm) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -17,21 +17,23 @@ const useFirestore = (collectionName) => {
     // setTimeout is ONLY FOR DELAY SIMULATION -- Remove it when GOING LIVE
     setTimeout(() => {
       const d = [];
-      coll.get()
+      setIsLoading(true);
+
+      (collectionName === 'customers' && searchTerm ? coll.where('name', '==', searchTerm) : coll).get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             d.push({ ...doc.data(), id: doc.id });
           });
-          setIsLoading(false);
           setData(d);
           setError(null);
         })
         .catch((err) => {
-          setIsLoading(false);
           setError(err.message);
         })
         .finally(() => {
+          setIsLoading(false);
+          console.log('Accessed this data from Firestore');
           console.log(d);
         });
     }, 1500);
@@ -39,7 +41,7 @@ const useFirestore = (collectionName) => {
     return () => {
       console.log('unmounted');
     };
-  }, []);
+  }, [searchTerm]);
 
   return { isLoading, data, error };
 };

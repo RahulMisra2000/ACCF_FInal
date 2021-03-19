@@ -166,7 +166,7 @@ const Results = ({ className, customers, ...rest }) => {
                     {customer.phone}
                   </TableCell>
                   <TableCell>
-                    {moment(customer.createdAt).format('DD/MM/YYYY')}
+                    {moment(customer.createdAt).format('DD/MM/YYYY HH:MM:SS')}
                   </TableCell>
                 </TableRow>
               ))}

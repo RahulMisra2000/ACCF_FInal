@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable */
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -24,8 +25,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toolbar = ({ className, ...rest }) => {
+const Toolbar = ({ className, searchFn, ...rest }) => {
   const classes = useStyles();
+  const [q, setQ] = useState(null);
 
   return (
     <div
@@ -73,7 +75,31 @@ const Toolbar = ({ className, ...rest }) => {
                 }}
                 placeholder="Search customer"
                 variant="outlined"
+                value={q}
+                onChange={(e) => {
+                  setQ(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.keyCode === 13) {
+                    searchFn(q);
+                  }
+                }}
               />
+              {/* This shows a button if there is something in the search field
+              { q ? (
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={() => {
+                          searchFn(q);
+                        }}
+                      >
+                        Search
+                      </Button>
+                    ) 
+                  : null
+              }
+            */}
             </Box>
           </CardContent>
         </Card>
@@ -83,7 +109,8 @@ const Toolbar = ({ className, ...rest }) => {
 };
 
 Toolbar.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  searchFn: PropTypes.func
 };
 
 export default Toolbar;
