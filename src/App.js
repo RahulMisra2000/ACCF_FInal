@@ -8,6 +8,7 @@ import theme from 'src/theme';
 import routes from 'src/routes';
 import firebaseProducts from 'src/config/firebaseConfig';
 import userContext from 'src/contexts/userContext';
+import { SnackbarProvider } from 'notistack';
 
 const { auth } = firebaseProducts;
 
@@ -23,7 +24,9 @@ const App = () => {
     <userContext.Provider value={isLoggedIn}>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
-        {routing}
+        <SnackbarProvider maxSnack={3}>
+          {routing}
+        </SnackbarProvider>
       </ThemeProvider>
     </userContext.Provider>
   );

@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import {
   Box,
   Container,
-  makeStyles
+  makeStyles,
+  LinearProgress
 } from '@material-ui/core';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
@@ -28,9 +29,10 @@ const CustomerListView = () => {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState(null);
 
+  // Gets the data from Firestore
   const {isLoading, data: cdata, error} = useFirestore('customers', searchTerm);
 
-  // Just changes the state so that this and all child components are re-rendered (aka re-executed)
+  // Just changes the state so that this and all child components are re-rendered (aka component is re-executed from top to bottom)
   const handleSearchTerm = (q) => {
     if (q) {
       setSearchTerm(q);
@@ -49,7 +51,7 @@ const CustomerListView = () => {
         <Toolbar searchFn={(q) => { handleSearchTerm(q); }}/>
         <Box mt={3}>
           {error && <strong>Error: {JSON.stringify(error)}</strong>}
-          {isLoading && <span>Collection: Loading...</span>}
+          {isLoading && <LinearProgress color="secondary" />}
           {!isLoading && cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
           {!isLoading && cdata?.length ? (<Results customers={cdata} />) : null}
         </Box>

@@ -14,7 +14,9 @@ import {
   makeStyles,
   Snackbar
 } from '@material-ui/core';
-import CustomerDataService from '../../../services/CustomerService';
+import CustomerDataService from 'src/services/CustomerService';
+import { useSnackbar } from 'notistack';
+import Zoom from '@material-ui/core/Zoom';
 
 const states = [
   {
@@ -95,6 +97,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(()=>{
     console.error('Inside useEffect');
@@ -155,9 +158,9 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
   };
 
   const add50Customers = (event) => {
-    console.log('adding 50 customers', event);
+    console.log('adding 10 customers', event);
     let lcv = 0;
-    while (lcv < 50){
+    while (lcv < 10){
       saveCustomer({event, naam: generateName(), cid: null});
       lcv++;
     }
@@ -191,6 +194,16 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         .then((docRef) => {
           console.log(`cust id just created in database is ${docRef.id}`);
           setSubmitted(`cust id just created in database is ${docRef.id}`);
+          // variant could be success, error, warning, info, or default
+          enqueueSnackbar('Successfully added customer', {
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'center',
+            },
+            TransitionComponent: Zoom,
+            variant: 'success'
+          });
+
           return makeEntryInGoogleSheet(data);
         })
         .then((response) => response.text())
