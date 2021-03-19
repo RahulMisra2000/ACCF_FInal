@@ -14,10 +14,11 @@ const useFirestore = (collectionName, searchTerm) => {
   // https://firebase.google.com/docs/firestore/query-data/get-data
 
   useEffect(() => {
+    setIsLoading(true);
+
     // setTimeout is ONLY FOR DELAY SIMULATION -- Remove it when GOING LIVE
     setTimeout(() => {
       const d = [];
-      setIsLoading(true);
 
       (collectionName === 'customers' && searchTerm ? coll.where('name', '==', searchTerm) : coll).get()
         .then((querySnapshot) => {

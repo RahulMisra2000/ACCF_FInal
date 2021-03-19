@@ -40,8 +40,6 @@ const CustomerListView = () => {
     }
   };
 
-  console.warn('Isloading',isLoading);
-  
   return (
     <Page
       className={classes.root}
@@ -52,8 +50,8 @@ const CustomerListView = () => {
         <Box mt={3}>
           {error && <strong>Error: {JSON.stringify(error)}</strong>}
           {isLoading && <span>Collection: Loading...</span>}
-          {cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
-          {cdata && cdata.length ? (<Results customers={cdata} />) : null}
+          {!isLoading && cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
+          {!isLoading && cdata?.length ? (<Results customers={cdata} />) : null}
         </Box>
       </Container>
     </Page>
