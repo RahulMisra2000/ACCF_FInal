@@ -16,15 +16,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   auth.onAuthStateChanged((user) => {
-    if (user) {
-      const { uid } = user;
-      console.log('user logged in', uid);
-      console.dir(user);
-    } else {
-      console.log('user logged out');
-    }
-    setIsLoggedIn(user);
-    console.log(isLoggedIn);
+    setIsLoggedIn(user); // user.id contains the unique user id
   });
 
   return (

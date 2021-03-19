@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/extensions
-import firebaseProducts from '../config/firebaseConfig';
+import firebaseProducts from 'src/config/firebaseConfig';
 
 const { db } = firebaseProducts;
 

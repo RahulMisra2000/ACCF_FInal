@@ -1,61 +1,11 @@
-[debug] [2021-03-18T18:49:04.988Z] ----------------------------------------------------------------------
-[debug] [2021-03-18T18:49:04.990Z] Command:       D:\Program Files\nodejs\node.exe C:\Users\rahul\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder
-[debug] [2021-03-18T18:49:04.990Z] CLI Version:   9.1.0
-[debug] [2021-03-18T18:49:04.990Z] Platform:      win32
-[debug] [2021-03-18T18:49:04.990Z] Node Version:  v12.13.0
-[debug] [2021-03-18T18:49:04.991Z] Time:          Thu Mar 18 2021 14:49:04 GMT-0400 (Eastern Daylight Time)
-[debug] [2021-03-18T18:49:04.991Z] ----------------------------------------------------------------------
-[debug] [2021-03-18T18:49:04.991Z] 
-[debug] [2021-03-18T18:49:04.998Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2021-03-18T18:49:04.998Z] > authorizing via signed-in user
+[debug] [2021-03-19T03:44:03.769Z] ----------------------------------------------------------------------
+[debug] [2021-03-19T03:44:03.770Z] Command:       D:\Program Files\nodejs\node.exe C:\Users\rahul\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder
+[debug] [2021-03-19T03:44:03.771Z] CLI Version:   9.1.0
+[debug] [2021-03-19T03:44:03.771Z] Platform:      win32
+[debug] [2021-03-19T03:44:03.771Z] Node Version:  v12.13.0
+[debug] [2021-03-19T03:44:03.772Z] Time:          Thu Mar 18 2021 23:44:03 GMT-0400 (Eastern Daylight Time)
+[debug] [2021-03-19T03:44:03.772Z] ----------------------------------------------------------------------
+[debug] [2021-03-19T03:44:03.772Z] 
+[debug] [2021-03-19T03:44:03.811Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-19T03:44:03.812Z] > authorizing via signed-in user
 [info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
-[debug] [2021-03-18T18:49:07.017Z] [hub] writing locator at C:\Users\rahul\AppData\Local\Temp\hub-rm2000app.json
-[info] i  firestore: Importing data from D:\DATA\REACT\ACCF_Final\emulatorDataFolder\firestore_export\firestore_export.overall_export_metadata {"metadata":{"emulator":{"name":"firestore"},"message":"Importing data from D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\firestore_export\\firestore_export.overall_export_metadata"}}
-[debug] [2021-03-18T18:49:09.039Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
-[debug] [2021-03-18T18:49:09.040Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
-[debug] [2021-03-18T18:49:09.040Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\rahul\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.11.11.jar","--host","localhost","--port",8080,"--seed_from_export","D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\firestore_export\\firestore_export.overall_export_metadata","--rules","D:\\DATA\\REACT\\ACCF_Final\\firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\rahul\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.11.11.jar\",\"--host\",\"localhost\",\"--port\",8080,\"--seed_from_export\",\"D:\\\\DATA\\\\REACT\\\\ACCF_Final\\\\emulatorDataFolder\\\\firestore_export\\\\firestore_export.overall_export_metadata\",\"--rules\",\"D:\\\\DATA\\\\REACT\\\\ACCF_Final\\\\firestore.rules\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
-[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
-[debug] [2021-03-18T18:49:10.597Z] API endpoint: http://localhost {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://localhost"}}
-[debug] [2021-03-18T18:49:10.597Z] :8080
-If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
-
-   export FIRESTORE_EMULATOR_HOST=localhost:8080
-
-Dev App Server is now running.
-
- {"metadata":{"emulator":{"name":"firestore"},"message":":8080\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\r\n\n   export FIRESTORE_EMULATOR_HOST=localhost:8080\n\nDev App Server is now running.\n\r\n"}}
-[info] i  auth: Importing config from D:\DATA\REACT\ACCF_Final\emulatorDataFolder\auth_export\config.json {"metadata":{"emulator":{"name":"database"},"message":"Importing config from D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\auth_export\\config.json"}}
-[info] i  auth: Importing accounts from D:\DATA\REACT\ACCF_Final\emulatorDataFolder\auth_export\accounts.json {"metadata":{"emulator":{"name":"database"},"message":"Importing accounts from D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\auth_export\\accounts.json"}}
-[debug] [2021-03-18T18:49:19.211Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
-[debug] [2021-03-18T18:49:19.211Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
-[debug] [2021-03-18T18:49:19.212Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\rahul\\.cache\\firebase\\emulators\\ui-v1.4.1\\server.bundle.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\rahul\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.4.1\\\\server.bundle.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
-[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
-[debug] [2021-03-18T18:49:19.327Z] Web / API server started at http://localhost:4000
- {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at http://localhost:4000\n"}}
-[info] 
-┌─────────────────────────────────────────────────────────────┐
-│ ✔  All emulators ready! It is now safe to connect your app. │
-│ i  View Emulator UI at http://localhost:4000                │
-└─────────────────────────────────────────────────────────────┘
-
-┌────────────────┬────────────────┬─────────────────────────────────┐
-│ Emulator       │ Host:Port      │ View in Emulator UI             │
-├────────────────┼────────────────┼─────────────────────────────────┤
-│ Authentication │ localhost:9099 │ http://localhost:4000/auth      │
-├────────────────┼────────────────┼─────────────────────────────────┤
-│ Firestore      │ localhost:8080 │ http://localhost:4000/firestore │
-└────────────────┴────────────────┴─────────────────────────────────┘
-  Emulator Hub running at localhost:4400
-  Other reserved ports: 4500
-
-Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
- 
-[debug] [2021-03-18T18:56:33.366Z] Mar 18, 2021 2:56:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected non-HTTP/2 connection.
- {"metadata":{"emulator":{"name":"firestore"},"message":"Mar 18, 2021 2:56:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
-[debug] [2021-03-18T18:56:33.367Z] Mar 18, 2021 2:56:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected non-HTTP/2 connection.
- {"metadata":{"emulator":{"name":"firestore"},"message":"Mar 18, 2021 2:56:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
-[debug] [2021-03-18T18:56:33.522Z] Mar 18, 2021 2:56:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
- {"metadata":{"emulator":{"name":"firestore"},"message":"Mar 18, 2021 2:56:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected HTTP/2 connection.\r\n"}}

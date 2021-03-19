@@ -12,6 +12,7 @@ import Results from './Results';
 import Toolbar from './Toolbar';
 // import data from './data';
 import CustomerDataService from '../../../services/CustomerService';
+import useFirestore from 'src/services/useFirestore';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,13 +26,17 @@ const useStyles = makeStyles((theme) => ({
 const CustomerListView = () => {
   const classes = useStyles();
   
+  /* LIVE DATA
   // useCollection hook, provides cdata. cdata.docs is an array. Each element is a live link to the record in Firestore.
   // You can do the array map on it ....  (v,i,a)=> v.id  is the unique id and v.data() is the rest of the record
   // v.data().x where x is the field name will give you the value of the field
   const [cdata, loading, error] = useCollection(
     CustomerDataService.getAll().orderBy('name', 'asc')
   );
-  
+  */
+
+  const {isLoading, data: cdata, error} = useFirestore('customers');
+
   return (
     <Page
       className={classes.root}
@@ -41,9 +46,9 @@ const CustomerListView = () => {
         <Toolbar />
         <Box mt={3}>
         {error && <strong>Error: {JSON.stringify(error)}</strong>}
-        {loading && <span>Collection: Loading...</span>}
-        {cdata?.docs?.length == 0 ? <strong>No Customer Records</strong> : null}
-        {cdata && cdata.docs.length ? (<Results customers={cdata.docs} />) : null}
+        {isLoading && <span>Collection: Loading...</span>}
+        {cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
+        {cdata && cdata.length ? (<Results customers={cdata} />) : null}
         </Box>
       </Container>
     </Page>

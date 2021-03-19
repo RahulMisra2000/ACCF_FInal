@@ -28,15 +28,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Results = ({ className, customers, ...rest }) => {
-  console.log(className); // undefined
-  console.log(customers);
-  console.log(rest); // undefined
-
   const classes = useStyles();
 
   // STATE
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(0);
 
   const navigate = useNavigate();
@@ -81,8 +77,6 @@ const Results = ({ className, customers, ...rest }) => {
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
-
-  console.log('here');
 
   const customerInListClicked = (e, cid) => {
     console.log(`Customer ID : ${cid} clicked - ${e}`);
@@ -129,7 +123,7 @@ const Results = ({ className, customers, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
+              {customers.slice(page * limit, page * limit + limit).map((customer) => (
                 <TableRow
                   onClick={(e) => { customerInListClicked(e, customer.id); }}
                   hover
@@ -150,29 +144,29 @@ const Results = ({ className, customers, ...rest }) => {
                     >
                       <Avatar
                         className={classes.avatar}
-                        src={customer.data().avatarUrl}
+                        src={customer.avatarUrl}
                       >
-                        {getInitials(customer.data().name)}
+                        {getInitials(customer.name)}
                       </Avatar>
                       <Typography
                         color="textPrimary"
                         variant="body1"
                       >
-                        {customer.data().name}
+                        {customer.name}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.data().email}
+                    {customer.email}
                   </TableCell>
                   <TableCell>
-                    {`${customer.data().address.city}, ${customer.data().address.state}, ${customer.data().address.country}`}
+                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                   </TableCell>
                   <TableCell>
-                    {customer.data().phone}
+                    {customer.phone}
                   </TableCell>
                   <TableCell>
-                    {moment(customer.data().createdAt).format('DD/MM/YYYY')}
+                    {moment(customer.createdAt).format('DD/MM/YYYY')}
                   </TableCell>
                 </TableRow>
               ))}

@@ -87,7 +87,7 @@ const populateItems = (usr) => {
   items.push({
     href: '/404',
     icon: AlertCircleIcon,
-    title: 'Error'
+    title: 'My Messages'
   });
 };
 
