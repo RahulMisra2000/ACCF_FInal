@@ -1,13 +1,17 @@
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /customers/{customer} {
-      allow get: if true;
-      allow list: if true;
-      
-      // Allow any logged in user to create
+    match /customers/{customer}/{document=**} {
+            
+      // Allow any logged in user to do CRU
+      allow get: if request.auth != null;
+      allow list: if request.auth != null;
       allow create: if request.auth != null;
+
+      // Only the authenticated user who authored the document can update
+      allow update: if request.auth != null && request.auth.uid == resource.data.uid;
       
-      allow update: if true;
+      // No one can delete documents
       allow delete: if false;
     }
   }

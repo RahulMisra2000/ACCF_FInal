@@ -33,16 +33,16 @@ const TopBar = ({
 }) => {
   const classes = useStyles();
   const [notifications] = useState([]);
-  const { user } = useContext(AppContext);
+  const { isLoggedIn, invalidateCache } = useContext(AppContext);
 
   const { auth } = firebaseProducts;
 
-  const rmClicked = (e) => {
-    console.error('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-    console.log(e);
-    console.error(user);
+  const rmClicked = () => {
+    invalidateCache();
     auth.signOut();
   };
+
+  console.error('isLoggedIn', isLoggedIn);
 
   return (
     <AppBar
@@ -67,7 +67,7 @@ const TopBar = ({
           </IconButton>
 
           {/* Only signed in user should be able to see the button for logout */}
-          {user && (
+          {isLoggedIn && (
             <IconButton color="inherit" onClick={rmClicked}>
               <InputIcon />
             </IconButton>

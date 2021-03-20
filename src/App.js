@@ -12,33 +12,36 @@ import { SnackbarProvider } from 'notistack';
 
 const { auth } = firebaseProducts;
 
-// Initialize the context data
+// Initializing the Context --------------------------------------------
 // with data
 let appContextData = { isLoggedIn: null, cArray: [] };
 
-// with methods (Consumers of context can call this method to populate the array)
+// with methods (Consumers of context can call these methods)
 appContextData.populateCustomerArray = (carray) => {
   appContextData.cArray = [...carray];
 };
 
-appContextData.addCustomerRecord = (c) => {
-  appContextData.cArray.unshift(c);
+appContextData.addCustomerRecord = (crec) => {
+  appContextData.cArray.unshift(crec);
 };
 
-appContextData.updCustomerRecord = (c) => {
+appContextData.updCustomerRecord = (crec) => {
   let found = false;
   const a = appContextData.cArray.filter((v) => {
     found = true;
-    return !(c.id === v.id);
+    return !(crec.id === v.id);
   });
 
   if (found) {
-    a.unshift(c);
+    a.unshift(crec);
     appContextData.cArray = [...a];
   }
-
-  console.log(appContextData.cArray);
 };
+
+appContextData.invalidateCache = () => {
+  appContextData.cArray = [];
+};
+// Initializing the Context --------------------------------------------
 
 console.log('%cIn App.js but outside component', 'background-Color:black; color:white');
 
@@ -51,15 +54,18 @@ const App = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
+      console.log('****', appContextData);
+      appContextData = { ...appContextData, isLoggedIn: user };
       // Have to change state so that there is a cascade of re-rendering
       // I am placing the entire user object in isLoggedIn property and not just whether
       // the user is logged in or not (ie a boolean)
       setIsLoggedIn(user); // user.id contains the unique user id
 
       // This so that any component that consumes the context can get to these values
-      appContextData = { ...appContextData, isLoggedIn };
+      console.log('****', appContextData);
+      console.log(isLoggedIn);
     });
-  }, []);
+  });
 
   return (
     <AppContext.Provider value={appContextData}>

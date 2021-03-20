@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import firebaseProducts from 'src/config/firebaseConfig';
 import clsx from 'clsx';
@@ -8,6 +8,7 @@ import {
   ListItem,
   makeStyles
 } from '@material-ui/core';
+import AppContext from 'src/contexts/appContext';
 
 const useStyles = makeStyles((theme) => ({
   item: {
@@ -41,12 +42,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// logout the user
-const logOutTheUser = () => {
-  const { auth } = firebaseProducts;
-  auth.signOut();
-};
-
 const NavItem = ({
   className,
   href,
@@ -55,6 +50,14 @@ const NavItem = ({
   ...rest
 }) => {
   const classes = useStyles();
+  const { invalidateCache } = useContext(AppContext);
+
+  // logout the user
+  const logOutTheUser = () => {
+    const { auth } = firebaseProducts;
+    invalidateCache();
+    auth.signOut();
+  };
 
   // Special processing
   if (rest?.type === 1) {
