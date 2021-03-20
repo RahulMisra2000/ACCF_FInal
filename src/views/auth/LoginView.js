@@ -34,6 +34,11 @@ const LoginView = () => {
   const navigate = useNavigate();
   let loginErrorMessage = null;
 
+  const handleSubmitF = (e, values) => {
+    console.log('%handleSubmitF', 'color:red');
+    console.log(e, values);
+  };
+
   return (
     <Page
       className={classes.root}
@@ -60,31 +65,51 @@ const LoginView = () => {
               // https://formik.org/docs/guides/validation
               console.log(values);
             }}
-            onSubmit={(values, { setSubmitting, resetForm}) => {
-              
-              auth.signInWithEmailAndPassword(values.email, values.password)
-                .then((userCredential) => {
-                  // Signed in
-                  // const user = userCredential.user;
-                  console.log(userCredential);
+            onSubmit={(values, { setSubmitting, resetForm}) => {       
+              if (values.btnClicked === 'GOOGLE') {
+                auth.signInWithPopup(firebaseProducts.googleProvider).then(function(result) {
+                  // This gives you a Google Access Token.
+                  var token = result.credential.accessToken;
+                  // The signed-in user info.
+                  var user = result.user;
+                  console.log(result);
                   navigate('/app/dashboard', { replace: true });
-                })
-                .catch((error) => {
+                 })
+                 .catch((error) => {
                   loginErrorMessage = `${error.message}`;
                   setSubmitting(false);
-                });
+                });  
+              } else if (values.btnClicked === 'FB') {
+                  auth.signInWithPopup(firebaseProducts.facebookProvider).then(function(result) {
+                    navigate('/app/dashboard', { replace: true });
+                  })
+                  .catch((error) => {
+                    loginErrorMessage = `${error.message}`;
+                    setSubmitting(false);
+                  });  
+                } else if (values.btnClicked === 'EP') {
+                  console.log('%c' + values, 'color:red');
+                    auth.signInWithEmailAndPassword(values.email, values.password)
+                    .then((userCredential) => {
+                      // Signed in
+                      // const user = userCredential.user;
+                      console.log(userCredential);
+                      navigate('/app/dashboard', { replace: true });
+                    })
+                    .catch((error) => {
+                      loginErrorMessage = `${error.message}`;
+                      setSubmitting(false);
+                    });
+              }
             }}
           >
-            {({
-              errors,
-              handleBlur,
-              handleChange,
-              handleSubmit,
-              isSubmitting,
-              touched,
-              values
-            }) => (
-              <form onSubmit={handleSubmit}>
+            { 
+              // https://github.com/formium/formik/issues/1865
+              (helpers) => { 
+                const { errors,handleBlur,handleChange,handleSubmit,isSubmitting,touched,values } = helpers;
+                
+                return (
+                  <form onSubmit={handleSubmit}>
                 <Box mb={3}>
                   <Typography
                     color="textPrimary"
@@ -111,16 +136,35 @@ const LoginView = () => {
                     md={6}
                   >
                     <Button
-                      disabled='true'
                       fullWidth
                       startIcon={<GoogleIcon />}
-                      onClick={handleSubmit}
+                      onClick={(e) => { helpers.setFieldValue('btnClicked','GOOGLE'); }}
                       size="large"
                       variant="contained"
+                      color="primary"
+                      type="submit"
                     >
                       Login with Google
                     </Button>
                   </Grid>
+
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                  >
+                    <Button
+                      fullWidth
+                      startIcon={<FacebookIcon />}
+                      onClick={(e) => { helpers.setFieldValue('btnClicked','FB'); }}
+                      size="large"
+                      variant="contained"
+                      type="submit"
+                    >
+                      Login with Facebook
+                    </Button>
+                  </Grid>
+
                 </Grid>
                 <Box
                   mt={3}
@@ -168,6 +212,8 @@ const LoginView = () => {
                     size="large"
                     type="submit"
                     variant="contained"
+                    onClick={(e) => { helpers.setFieldValue('btnClicked','EP'); }}
+                    type="submit"
                   >
                     Sign in now
                   </Button>
@@ -196,7 +242,8 @@ const LoginView = () => {
                   : 
                     null}
               </form>
-            )}
+                )}
+            }
           </Formik>
         </Container>
       </Box>

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import userContext from 'src/contexts/userContext';
+import AppContext from 'src/contexts/appContext';
 import {
   Avatar,
   Box,
@@ -110,8 +110,8 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const usr = useContext(userContext);
-  populateItems(usr);
+  const { isLoggedIn } = useContext(AppContext);
+  populateItems(isLoggedIn);
 
   useEffect(() => {
     if (openMobile && onMobileClose) {

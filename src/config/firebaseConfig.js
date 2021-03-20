@@ -16,10 +16,21 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+// Here auth is being used as a namespace
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.addScope('profile');
+googleProvider.addScope('email');
+
+const facebookProvider = new firebase.auth.FacebookAuthProvider();
+facebookProvider.addScope('user_birthday');
+
 const db = firebase.firestore();
+
+// Here auth is an object
 const auth = firebase.auth();
 console.dir(auth);
 
+// EMULATORS
 if (config.firestoreEmulator) {
   db.useEmulator('localhost', 8080);
   console.log('Firestore Emulator is being used');
@@ -31,9 +42,12 @@ if (config.authEmulator) {
   console.log('Auth Emulator is being used');
 }
 
+// EXPORT
 const firebaseProducts = {
   db,
-  auth
+  auth,
+  googleProvider,
+  facebookProvider
 };
 
 export default firebaseProducts;

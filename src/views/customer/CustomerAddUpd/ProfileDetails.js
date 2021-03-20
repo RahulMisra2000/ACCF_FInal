@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -17,6 +17,7 @@ import {
 import CustomerDataService from 'src/services/CustomerService';
 import { useSnackbar } from 'notistack';
 import Zoom from '@material-ui/core/Zoom';
+import AppContext from '../../../contexts/appContext';
 
 const states = [
   {
@@ -99,8 +100,9 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
+  const { addCustomerRecord, updCustomerRecord } = useContext(AppContext);
+
   useEffect(()=>{
-    console.error('Inside useEffect');
     if (cid){
       setIsLoading(true);
       CustomerDataService.get(cid)
@@ -108,6 +110,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         if (doc.exists) {
             console.log("Document data:", doc.data());
             setValues({
+              id: cid,
               name: doc.data().name,
               phone: doc.data().phone,
               email: doc.data().email,
@@ -194,6 +197,11 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         .then((docRef) => {
           console.log(`cust id just created in database is ${docRef.id}`);
           setSubmitted(`cust id just created in database is ${docRef.id}`);
+          
+          // add the record to cache 
+          data.id = docRef.id;
+          addCustomerRecord(data); 
+          
           // variant could be success, error, warning, info, or default
           enqueueSnackbar('Successfully added customer', {
             anchorOrigin: {
@@ -221,6 +229,11 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         .then(() => {
           console.log(`cust ${cid} was just updated in database`);
           setSubmitted(`cust ${cid} was just updated in database`);
+          
+          // upd the record in cache
+          data.id = cid;
+          updCustomerRecord(data); 
+          
           return makeEntryInGoogleSheet(data);
         })
         .then((response) => response.text())

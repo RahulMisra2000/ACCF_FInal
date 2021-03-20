@@ -15,7 +15,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from 'src/components/Logo';
-import userContext from 'src/contexts/userContext';
+import AppContext from 'src/contexts/appContext';
 import firebaseProducts from 'src/config/firebaseConfig';
 
 const useStyles = makeStyles(() => ({
@@ -33,7 +33,7 @@ const TopBar = ({
 }) => {
   const classes = useStyles();
   const [notifications] = useState([]);
-  const user = useContext(userContext);
+  const { user } = useContext(AppContext);
 
   const { auth } = firebaseProducts;
 

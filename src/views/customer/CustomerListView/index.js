@@ -31,6 +31,7 @@ const CustomerListView = () => {
 
   // Gets the data from Firestore
   const {isLoading, data: cdata, error} = useFirestore('customers', searchTerm);
+  console.log('right ************************************** after useFirestore');
 
   // Just changes the state so that this and all child components are re-rendered (aka component is re-executed from top to bottom)
   const handleSearchTerm = (q) => {
