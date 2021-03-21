@@ -29,35 +29,47 @@ import NavItem from './NavItem';
 // Logged-in user's credentials
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
+  jobTitle: '',
+  name: 'Unsigned',
+  email: ''
 };
 
 // menu-items for menu on the left-side
 let items = [];
 
-const populateItems = (usr) => {
+const fillUserCredentials = (usr) => {
+  user.jobTitle = usr?.custom?.title ? usr.custom.title : 'Navigator';
+  user.name = usr?.displayName;
+  user.avatar = usr?.photoURL;
+  user.email = usr?.email;
+};
+
+const populateItems = (loggedIn) => {
   items = [];
   items.push({
     href: '/app/dashboard',
     icon: BarChartIcon,
     title: 'Dashboard'
   });
-  items.push({
-    href: '/app/customers',
-    icon: UsersIcon,
-    title: 'Customers'
-  });
+  if (loggedIn) {
+    items.push({
+      href: '/app/customers',
+      icon: UsersIcon,
+      title: 'Customers'
+    });
+  }
   items.push({
     href: '/app/products',
     icon: ShoppingBagIcon,
     title: 'Products'
   });
-  items.push({
-    href: '/app/account',
-    icon: UserIcon,
-    title: 'Account'
-  });
+  if (loggedIn) {
+    items.push({
+      href: '/app/account',
+      icon: UserIcon,
+      title: 'Account'
+    });
+  }
   items.push({
     href: '/app/settings',
     icon: SettingsIcon,
@@ -70,7 +82,7 @@ const populateItems = (usr) => {
   });
 
   // Show logout only if user is already logged in
-  if (usr) {
+  if (loggedIn) {
     items.push({
       href: '/login',
       icon: UnLockIcon,
@@ -84,11 +96,14 @@ const populateItems = (usr) => {
     icon: UserPlusIcon,
     title: 'Register'
   });
-  items.push({
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'My Messages'
-  });
+
+  if (loggedIn) {
+    items.push({
+      href: '/404',
+      icon: AlertCircleIcon,
+      title: 'My Messages'
+    });
+  }
 };
 
 const useStyles = makeStyles(() => ({
@@ -111,6 +126,8 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
   const { isLoggedIn } = useContext(AppContext);
+
+  fillUserCredentials(isLoggedIn);
   populateItems(isLoggedIn);
 
   useEffect(() => {
@@ -151,6 +168,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           variant="body2"
         >
           {user.jobTitle}
+        </Typography>
+        <Typography
+          color="textSecondary"
+          variant="body2"
+        >
+          {user.email}
         </Typography>
       </Box>
 

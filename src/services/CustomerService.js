@@ -25,9 +25,13 @@ const get = (cid) => {
   return docRef.get();
 };
 
+// use useFirestore.js to get a list of customers from Firestore.
+// Not this
+/*
 const getAll = () => {
   return col;
 };
+*/
 
 // Returns a promise
 const create = (data) => {
@@ -46,7 +50,7 @@ const remove = (id) => {
 
 const CustomerService = {
   get,
-  getAll,
+  // getAll,
   create,
   update,
   remove

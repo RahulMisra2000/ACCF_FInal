@@ -79,7 +79,6 @@ const Results = ({ className, customers, ...rest }) => {
   };
 
   const customerInListClicked = (e, cid) => {
-    console.log(`Customer ID : ${cid} clicked - ${e}`);
     // Programmatic Navigation
     navigate(`/app/customers/upd/${cid}`);
   };

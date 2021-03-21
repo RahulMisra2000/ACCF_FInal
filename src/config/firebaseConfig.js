@@ -28,7 +28,6 @@ const db = firebase.firestore();
 
 // Here auth is an object
 const auth = firebase.auth();
-console.dir(auth);
 
 // EMULATORS
 if (config.firestoreEmulator) {
@@ -37,7 +36,6 @@ if (config.firestoreEmulator) {
 }
 
 if (config.authEmulator) {
-  console.log('1');
   auth.useEmulator('http://localhost:9099');
   console.log('Auth Emulator is being used');
 }

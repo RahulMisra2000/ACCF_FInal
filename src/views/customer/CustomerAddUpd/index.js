@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 const CustomerAddUpd = () => {
   const classes = useStyles();
   const { id: cid } = useParams();
-  console.log('cid is', cid);
 
   return (
     <Page

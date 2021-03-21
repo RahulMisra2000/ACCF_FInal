@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import firebaseProducts from 'src/config/firebaseConfig';
 import AppContext from 'src/contexts/appContext';
+import config from 'src/config/myConfig';
 
 const { db } = firebaseProducts;
 
@@ -11,27 +12,46 @@ const useFirestore = (collectionName, searchTerm) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
-  const coll = db.collection(collectionName);
+  let coll = db.collection(collectionName);
   // https://firebase.google.com/docs/firestore/query-data/get-data
-  const { cArray, populateCustomerArray } = useContext(AppContext);
+  const { isLoggedIn, cArray, populateCustomerArray } = useContext(AppContext);
 
   useEffect(() => {
-    // if there is data in the customer's array in the context then we need not go out
-    // and get the data from Firestore
+    // Get data from CACHE
     if (collectionName === 'customers' && cArray.length) {
       console.log('%cGetting Data From Cache, not Firestore', 'color:red');
       console.log(cArray);
       setIsLoading(false);
       setData([...cArray]);
       setError(null);
-    } else { // Get the data from Firestore
+    } else {
+    // Get the data from FIRESTORE
       setIsLoading(true);
 
       // setTimeout is ONLY FOR DELAY SIMULATION -- Remove it when GOING LIVE
       setTimeout(() => {
         const d = [];
 
-        (collectionName === 'customers' && searchTerm ? coll.where('name', '==', searchTerm) : coll).orderBy('createdAt', 'desc').get()
+        if (collectionName === 'customers') {
+          if (searchTerm) {
+            coll = coll.where('name', '==', searchTerm);
+          }
+        } else {
+          //
+        }
+
+        // V. IMP -- When querying multiple records (called list in Firestore) you need to make
+        // sure that what you specify IN security rule is also specified in the query
+
+        if (config.loggedInUserCanOnlySeeCustomersThatHeCreated) {
+          // Security Rule : request.auth.uid == resource.data.uid;
+          const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
+          console.log(whereClauseToMatchSecurityRule);
+          coll = coll.where('uid', '==', isLoggedIn.uid);
+        }
+
+        coll.orderBy('createdAt', 'desc')
+          .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               // doc.data() is never undefined for query doc snapshots

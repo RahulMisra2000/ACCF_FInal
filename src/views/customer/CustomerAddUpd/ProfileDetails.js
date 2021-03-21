@@ -14,6 +14,7 @@ import {
   makeStyles,
   Snackbar
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import CustomerDataService from 'src/services/CustomerService';
 import { useSnackbar } from 'notistack';
 import Zoom from '@material-ui/core/Zoom';
@@ -100,17 +101,20 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { addCustomerRecord, updCustomerRecord } = useContext(AppContext);
+  const { isLoggedIn, addCustomerRecord, updCustomerRecord } = useContext(AppContext);
 
   useEffect(()=>{
     if (cid){
       setIsLoading(true);
+
+      // READ RECORD FROM FIRESTORE
       CustomerDataService.get(cid)
       .then((doc) => {
         if (doc.exists) {
             console.log("Document data:", doc.data());
             setValues({
               id: cid,
+              // uid: TODO,
               name: doc.data().name,
               phone: doc.data().phone,
               email: doc.data().email,
@@ -120,7 +124,8 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
               street: doc.data().address.street,
               city: doc.data().address.city,
               state: doc.data().address.state,
-              country: doc.data().address.country
+              country: doc.data().address.country,
+              uid: doc.data().uid
             });
         } else {
             // doc.data() will be undefined in this case
@@ -186,13 +191,27 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         city: values.city,
         state: values.state,
         country: values.country
-      }      
+      },
+      uid: isLoggedIn.uid // user id of the logged-in user
     };
 
+    const user = isLoggedIn;
+
+    if (user != null) {
+      user.providerData.forEach(function (profile) {
+        console.log("Sign-in provider: " + profile.providerId);
+        console.log("  Provider-specific UID: " + profile.uid);
+        console.log("  Name: " + profile.displayName);
+        console.log("  Email: " + profile.email);
+        console.log("  Photo URL: " + profile.photoURL);
+      });
+    }
+
     if (!cid){
-      // insert customer record in database
+      // INSERT customer record in database
       data.createdAt = Date.now();
 
+      
       CustomerDataService.create(data)
         .then((docRef) => {
           console.log(`cust id just created in database is ${docRef.id}`);
@@ -222,15 +241,15 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         });
     }
     else {
-      // Update customer record in database
+      // UPDATE customer record in database
       data.updatedAt = Date.now();
 
       CustomerDataService.update(cid, data)
         .then(() => {
-          console.log(`cust ${cid} was just updated in database`);
-          setSubmitted(`cust ${cid} was just updated in database`);
+          console.log(`Customer ${cid} was just updated in database`);
+          setSubmitted(`Customer ${cid} was just updated in database`);
           
-          // upd the record in cache
+          // upd the record in CACHE
           data.id = cid;
           updCustomerRecord(data); 
           
@@ -239,20 +258,21 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         .then((response) => response.text())
         .then((result) => console.log(result))
         .catch((e) => {
-          console.log(e.message);
-          setIsError(e.message);
+          // https://firebase.google.com/docs/reference/js/firebase.firestore#firestoreerrorcode
+          console.log('%c' + `Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`, 'color:red');
+          setIsError(`Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`);
         });
     }
     setSaveButtonDisabled(false);
     
   }; // saveCustomer()
 
-  // RETURN AREA -------------------------------
+  // RETURN AREA --------------------------------------------------------------------
   // Loading
   if (isLoading){
     return (
       <div>
-        <strong>Loading data ...</strong>
+        <Alert severity="info">Loading data ...</Alert>
       </div>
     );
   }
@@ -261,7 +281,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
   if (isError){
     return (
       <div>
-       <strong>{isError}</strong>
+       <Alert severity="error">{isError}</Alert>
       </div>
     );
   }
@@ -270,7 +290,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
   if (submitted){
       return (
         <div>
-          <strong>{submitted}</strong>
+          <Alert severity="success">{submitted}</Alert>
         </div>        
       );
   }

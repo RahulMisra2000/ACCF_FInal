@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -34,15 +34,15 @@ const TopBar = ({
   const classes = useStyles();
   const [notifications] = useState([]);
   const { isLoggedIn, invalidateCache } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const { auth } = firebaseProducts;
 
   const rmClicked = () => {
     invalidateCache();
     auth.signOut();
+    navigate('/app/dashboard', { replace: true });
   };
-
-  console.error('isLoggedIn', isLoggedIn);
 
   return (
     <AppBar

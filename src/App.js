@@ -10,6 +10,8 @@ import firebaseProducts from 'src/config/firebaseConfig';
 import AppContext from 'src/contexts/appContext';
 import { SnackbarProvider } from 'notistack';
 
+console.log('%c1st line of App.js just executed', 'background-Color:black; color:white');
+
 const { auth } = firebaseProducts;
 
 // Initializing the Context --------------------------------------------
@@ -43,27 +45,23 @@ appContextData.invalidateCache = () => {
 };
 // Initializing the Context --------------------------------------------
 
-console.log('%cIn App.js but outside component', 'background-Color:black; color:white');
-
 // FROM TOP UP UNTIL THIS LINE IS EXECUTED JUST *** ONCE *** FOR THE ENTIRE RUN OF THE APPLICATION
 const App = () => {
-  console.log('%cMounting App', 'background-Color:red; color:white');
+  console.log('%cApp component code just executed', 'color:blue');
 
   const routing = useRoutes(routes);
+  // eslint-disable-next-line no-unused-vars
   const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      console.log('****', appContextData);
+      // user.uid will contain the unique user id or null
       appContextData = { ...appContextData, isLoggedIn: user };
       // Have to change state so that there is a cascade of re-rendering
       // I am placing the entire user object in isLoggedIn property and not just whether
       // the user is logged in or not (ie a boolean)
-      setIsLoggedIn(user); // user.id contains the unique user id
-
-      // This so that any component that consumes the context can get to these values
-      console.log('****', appContextData);
-      console.log(isLoggedIn);
+      // Remember that setting the state is an async execution
+      setIsLoggedIn(user); // async operation
     });
   });
 

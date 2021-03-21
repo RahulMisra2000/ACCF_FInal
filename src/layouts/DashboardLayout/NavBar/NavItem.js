@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { NavLink as RouterLink } from 'react-router-dom';
+import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
 import firebaseProducts from 'src/config/firebaseConfig';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -51,12 +51,14 @@ const NavItem = ({
 }) => {
   const classes = useStyles();
   const { invalidateCache } = useContext(AppContext);
+  const navigate = useNavigate();
 
   // logout the user
   const logOutTheUser = () => {
     const { auth } = firebaseProducts;
     invalidateCache();
     auth.signOut();
+    navigate('/app/dashboard', { replace: true });
   };
 
   // Special processing

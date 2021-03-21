@@ -15,6 +15,8 @@ import Toolbar from './Toolbar';
 import CustomerDataService from '../../../services/CustomerService';
 import useFirestore from 'src/services/useFirestore';
 
+console.log('%c1st line of CustomerListView(index).js just executed', 'background-Color:black; color:white');
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -25,13 +27,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomerListView = () => {
-  console.log('First line of CustomerListView Component');
+  
+  console.log('%cCustomerListView component code just executed','color:blue');
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState(null);
 
   // Gets the data from Firestore
   const {isLoading, data: cdata, error} = useFirestore('customers', searchTerm);
-  console.log('right ************************************** after useFirestore');
 
   // Just changes the state so that this and all child components are re-rendered (aka component is re-executed from top to bottom)
   const handleSearchTerm = (q) => {
@@ -43,7 +45,6 @@ const CustomerListView = () => {
     }
   };
 
-  console.log(error);
   
   return (
     <Page
