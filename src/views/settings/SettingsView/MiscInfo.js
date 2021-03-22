@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -21,7 +21,24 @@ const MiscInfo = ({ className, ...rest }) => {
     password: '',
     confirm: ''
   });
-  const { cArray } = useContext(AppContext);
+  const { isLoggedIn, cArray } = useContext(AppContext);
+  const [tokenDetails, setTokenDetails] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      isLoggedIn.getIdTokenResult()
+        .then((details) => {
+          // https://firebase.google.com/docs/reference/js/firebase.auth.IDTokenResult
+          // eslint-disable-next-line max-len
+          setTokenDetails({
+            token: details.token,
+            authTime: details.authTime,
+            signInProvider: details.signInProvider,
+            claims: details.claims
+          });
+        });
+    }
+  }, []);
 
   // eslint-disable-next-line no-unused-vars
   const handleChange = (event) => {
@@ -47,8 +64,42 @@ const MiscInfo = ({ className, ...rest }) => {
             color="textSecondary"
             variant="body1"
           >
-            # of Records in Cache (Customers) : {cArray?.length}
+            # of Records in Cache (Customers): {cArray?.length}
           </Typography>
+          <Divider />
+          <Typography
+            color="textSecondary"
+            variant="body1"
+          >
+            Token: {tokenDetails?.token}
+          </Typography>
+
+          <Typography
+            color="textSecondary"
+            variant="body1"
+          >
+            Auth Time: {tokenDetails?.authTime}
+          </Typography>
+
+          <Typography
+            color="textSecondary"
+            variant="body1"
+          >
+            SignIn Provider: {tokenDetails?.signInProvider}
+          </Typography>
+
+          {tokenDetails && Object.entries(tokenDetails?.claims).map((v) => {
+            return (
+              <Typography
+                color="textSecondary"
+                variant="body1"
+                key={v[0]}
+              >
+                { `${v[0]} : ${v[1]}` }
+              </Typography>
+            );
+          })}
+
         </CardContent>
         <Divider />
         {/*

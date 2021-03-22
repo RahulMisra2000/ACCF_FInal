@@ -4,6 +4,8 @@ import 'firebase/auth';
 // eslint-disable-next-line import/extensions
 import config from './myConfig';
 
+// TODO: https://firebase.google.com/docs/perf-mon/get-started-web?authuser=0#using-module-bundler
+
 const firebaseConfig = {
   apiKey: 'AIzaSyBgWB_v1TeSCMOSAOsb0PaZ5ZMjSBedf-0',
   authDomain: 'rm2000app.firebaseapp.com',

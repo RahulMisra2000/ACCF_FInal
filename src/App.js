@@ -14,7 +14,7 @@ console.log('%c1st line of App.js just executed', 'background-Color:black; color
 
 const { auth } = firebaseProducts;
 
-// Initializing the Context --------------------------------------------
+// ----------------- Initializing the Context --------------------------------------------
 // with data
 let appContextData = { isLoggedIn: null, cArray: [] };
 
@@ -43,7 +43,7 @@ appContextData.updCustomerRecord = (crec) => {
 appContextData.invalidateCache = () => {
   appContextData.cArray = [];
 };
-// Initializing the Context --------------------------------------------
+// ----------------- Initializing the Context --------------------------------------------
 
 // FROM TOP UP UNTIL THIS LINE IS EXECUTED JUST *** ONCE *** FOR THE ENTIRE RUN OF THE APPLICATION
 const App = () => {
@@ -56,6 +56,12 @@ const App = () => {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       // user.uid will contain the unique user id or null
+
+      // user.getIdTokenResult() returns an object which has
+      // properties (claims, issued time, expiration time, etc)
+      // https://firebase.google.com/docs/reference/js/firebase.auth.IDTokenResult
+      // Just remember that if the user is signed out then user is null
+
       appContextData = { ...appContextData, isLoggedIn: user };
       // Have to change state so that there is a cascade of re-rendering
       // I am placing the entire user object in isLoggedIn property and not just whether
