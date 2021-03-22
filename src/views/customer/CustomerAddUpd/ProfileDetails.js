@@ -182,6 +182,17 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
     }
   };
 
+  const showSnackbar = (msg) => {    
+    enqueueSnackbar(msg, {
+      anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+      },
+      TransitionComponent: Zoom,
+      variant: 'success' // success, error, warning, info, or default
+    });
+  };
+
   // if cid is falsy then this function will add a new customer record
   // if cid is truthy then this function will update an existing customer record whose id is cid
   const saveCustomer = ({event, naam, cid}) => {
@@ -228,16 +239,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
           // add the record to cache 
           data.id = docRef.id;
           addCustomerRecord(data); 
-          
-          // variant could be success, error, warning, info, or default
-          enqueueSnackbar('Successfully added customer', {
-            anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'center',
-            },
-            TransitionComponent: Zoom,
-            variant: 'success'
-          });
+          showSnackbar(`Successfully added customer ${docRef.id}`);
 
           return makeEntryInGoogleSheet('customers', data);
         })
@@ -254,13 +256,11 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
 
       CustomerDataService.update(cid, data)
         .then(() => {
-          console.log(`Customer ${cid} was just updated in database`);
           setSubmitted(`Customer ${cid} was just updated in database`);
-          
-          // upd the record in CACHE
-          data.id = cid;
+
+          data.id = cid; // upd the record in CACHE
           updCustomerRecord(data); 
-          
+          showSnackbar(`Successfully updated customer ${cid}`);
           return makeEntryInGoogleSheet(data);
         })
         .then((response) => response.text())

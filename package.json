@@ -5,11 +5,14 @@
   "version": "1.0.0",
   "private": false,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "set REACT_APP_SHELL_1=1 && react-scripts start",
+    "build": "set REACT_APP_SHELL_1=1 && react-scripts build",
+    "buildWithProfiling": "set REACT_APP_SHELL_1=1 && react-scripts build -- --profile",
+    "runBuild": "serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "runEmulators": "firebase emulators:start --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder"
+    "runEmulatorsWithData": "firebase emulators:start --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder",
+    "runEmulators": "firebase emulators:start"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -62,6 +65,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "serve": "^11.3.2"
   }
 }

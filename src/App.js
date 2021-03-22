@@ -11,6 +11,8 @@ import AppContext from 'src/contexts/appContext';
 import { SnackbarProvider } from 'notistack';
 
 console.log('%c1st line of App.js just executed', 'background-Color:black; color:white');
+console.log(process.env.REACT_APP_SHELL_1);
+console.log(process.env.REACT_APP_COMING_FROM_ENV_FILE);
 
 const { auth } = firebaseProducts;
 

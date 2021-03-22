@@ -64,6 +64,13 @@ const MiscInfo = ({ className, ...rest }) => {
             color="textSecondary"
             variant="body1"
           >
+            Environment (NODE_ENV): {process.env.NODE_ENV}
+          </Typography>
+          <Divider />
+          <Typography
+            color="textSecondary"
+            variant="body1"
+          >
             # of Records in Cache (Customers): {cArray?.length}
           </Typography>
           <Divider />
