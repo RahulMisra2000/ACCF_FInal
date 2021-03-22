@@ -75,11 +75,14 @@ const populateItems = (loggedIn) => {
     icon: SettingsIcon,
     title: 'Settings'
   });
-  items.push({
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  });
+
+  if (!loggedIn) {
+    items.push({
+      href: '/login',
+      icon: LockIcon,
+      title: 'Login'
+    });
+  }
 
   // Show logout only if user is already logged in
   if (loggedIn) {
