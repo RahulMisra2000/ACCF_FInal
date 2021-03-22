@@ -40,11 +40,19 @@ const useStyles = makeStyles(() => ({
 }));
 
 // UTILITY FUNCTION
-const makeEntryInGoogleSheet = (data) => {
+const makeEntryInGoogleSheet = (collectionName, data) => {
+  // This I got from Postman
   const myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
 
-  const raw = JSON.stringify(data);
+  const d = {...data};
+  
+  // Just adding some more informational data for the Spreadsheet
+  d.collectionName = collectionName;
+
+  console.dir(d);
+
+  const raw = JSON.stringify(d);
 
   const requestOptions = {
     method: 'POST',
@@ -59,7 +67,7 @@ const makeEntryInGoogleSheet = (data) => {
   // which needs to be prepended to the Google App Script, as shown below
   
   return fetch(
-    'https://rahulmisra2000cb.herokuapp.com/https://script.google.com/macros/s/AKfycbxx4Fnon9_oFKr-609FmiHUFc3K1sTGMXISYoLgrCRCuBad38-kplxxShgbo5fGyoq2AA/exec',
+    'https://rahulmisra2000cb.herokuapp.com/https://script.google.com/macros/s/AKfycbycpMf4R5bCeQ_kj3lMqYoqmhSeUy6IC_qD48D65mxmYh3Wxwyyy4G3oiZZtXZXkwzr4g/exec',
     requestOptions
   ).catch(() => {
     throw new Error('Error writing to Google App Script');
@@ -231,7 +239,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
             variant: 'success'
           });
 
-          return makeEntryInGoogleSheet(data);
+          return makeEntryInGoogleSheet('customers', data);
         })
         .then((response) => response.text())
         .then((result) => console.log(result))
@@ -295,6 +303,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
       );
   }
 
+  // SHOW THE FORM
   return (
     <>
         <form
