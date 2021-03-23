@@ -14,7 +14,12 @@ const useFirestore = (collectionName, searchTerm) => {
 
   let coll = db.collection(collectionName);
   // https://firebase.google.com/docs/firestore/query-data/get-data
-  const { isLoggedIn, cArray, populateCustomerArray } = useContext(AppContext);
+  const {
+    isLoggedIn,
+    claims,
+    cArray,
+    populateCustomerArray
+  } = useContext(AppContext);
 
   useEffect(() => {
     // Get data from CACHE
@@ -43,11 +48,14 @@ const useFirestore = (collectionName, searchTerm) => {
         // V. IMP -- When querying multiple records (called list in Firestore) you need to make
         // sure that what you specify IN security rule is also specified in the query
 
-        if (config.loggedInUserCanOnlySeeCustomersThatHeCreated) {
-          // Security Rule : request.auth.uid == resource.data.uid;
-          const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
-          console.log(whereClauseToMatchSecurityRule);
-          coll = coll.where('uid', '==', isLoggedIn.uid);
+        // Regular Users can only see their records
+        if (claims.role !== 'admin') {
+          if (config.loggedInUserCanOnlySeeCustomersThatHeCreated) {
+            // Security Rule : request.auth.uid == resource.data.uid;
+            const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
+            console.log(whereClauseToMatchSecurityRule);
+            coll = coll.where('uid', '==', isLoggedIn.uid);
+          }
         }
 
         coll.orderBy('createdAt', 'desc')

@@ -37,8 +37,9 @@ const user = {
 // menu-items for menu on the left-side
 let items = [];
 
-const fillUserCredentials = (usr) => {
-  user.jobTitle = usr?.custom?.title ? usr.custom.title : 'Navigator';
+const fillUserCredentials = (usr, claims) => {
+  // user.jobTitle = usr?.custom?.title ? usr.custom.title : 'Navigator';
+  user.jobTitle = claims?.role ? claims.role : '';
   user.name = usr?.displayName;
   user.avatar = usr?.photoURL;
   user.email = usr?.email;
@@ -128,9 +129,11 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const { isLoggedIn } = useContext(AppContext);
+  const { isLoggedIn, claims } = useContext(AppContext);
 
-  fillUserCredentials(isLoggedIn);
+  console.log(Date.now());
+  console.log('************************************************->', claims.role);
+  fillUserCredentials(isLoggedIn, claims);
   populateItems(isLoggedIn);
 
   useEffect(() => {

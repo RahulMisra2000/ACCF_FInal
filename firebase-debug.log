@@ -1,52 +1,148 @@
-[debug] [2021-03-22T20:00:40.538Z] ----------------------------------------------------------------------
-[debug] [2021-03-22T20:00:40.540Z] Command:       D:\Program Files\nodejs\node.exe C:\Users\rahul\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder
-[debug] [2021-03-22T20:00:40.541Z] CLI Version:   9.1.0
-[debug] [2021-03-22T20:00:40.541Z] Platform:      win32
-[debug] [2021-03-22T20:00:40.541Z] Node Version:  v12.13.0
-[debug] [2021-03-22T20:00:40.542Z] Time:          Mon Mar 22 2021 16:00:40 GMT-0400 (Eastern Daylight Time)
-[debug] [2021-03-22T20:00:40.542Z] ----------------------------------------------------------------------
-[debug] [2021-03-22T20:00:40.542Z] 
-[debug] [2021-03-22T20:00:40.573Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2021-03-22T20:00:40.575Z] > authorizing via signed-in user
+[debug] [2021-03-23T04:51:25.527Z] ----------------------------------------------------------------------
+[debug] [2021-03-23T04:51:25.529Z] Command:       D:\Program Files\nodejs\node.exe C:\Users\rahul\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --debug --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder
+[debug] [2021-03-23T04:51:25.529Z] CLI Version:   9.1.0
+[debug] [2021-03-23T04:51:25.529Z] Platform:      win32
+[debug] [2021-03-23T04:51:25.529Z] Node Version:  v12.13.0
+[debug] [2021-03-23T04:51:25.530Z] Time:          Tue Mar 23 2021 00:51:25 GMT-0400 (Eastern Daylight Time)
+[debug] [2021-03-23T04:51:25.530Z] ----------------------------------------------------------------------
+[debug] [2021-03-23T04:51:25.530Z] 
+[debug] [2021-03-23T04:51:25.538Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-23T04:51:25.541Z] > authorizing via signed-in user
 [info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
-[debug] [2021-03-22T20:00:42.635Z] [hub] writing locator at C:\Users\rahul\AppData\Local\Temp\hub-rm2000app.json
+[debug] [2021-03-23T04:51:27.597Z] [hub] writing locator at C:\Users\rahul\AppData\Local\Temp\hub-rm2000app.json
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[warn] !  firestore: Port 8081 is not open on localhost, could not start Firestore Emulator. {"metadata":{"emulator":{"name":"firestore"},"message":"Port 8081 is not open on localhost, could not start Firestore Emulator."}}
+[warn] !  firestore: To select a different host/port, specify that host/port in a firebase.json config file:
+      {
+        // ...
+        "emulators": {
+          "firestore": {
+            "host": "HOST",
+            "port": "PORT"
+          }
+        }
+      } {"metadata":{"emulator":{"name":"firestore"},"message":"To select a different host/port, specify that host/port in a firebase.json config file:\n      {\n        // ...\n        \"emulators\": {\n          \"firestore\": {\n            \"host\": \"\u001b[33mHOST\u001b[39m\",\n            \"port\": \"\u001b[33mPORT\u001b[39m\"\n          }\n        }\n      }"}}
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[error] 
+[error] Error: Could not start Firestore Emulator, port taken.
+[debug] [2021-03-23T04:54:42.747Z] ----------------------------------------------------------------------
+[debug] [2021-03-23T04:54:42.748Z] Command:       D:\Program Files\nodejs\node.exe C:\Users\rahul\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --debug --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder
+[debug] [2021-03-23T04:54:42.749Z] CLI Version:   9.1.0
+[debug] [2021-03-23T04:54:42.749Z] Platform:      win32
+[debug] [2021-03-23T04:54:42.749Z] Node Version:  v12.13.0
+[debug] [2021-03-23T04:54:42.750Z] Time:          Tue Mar 23 2021 00:54:42 GMT-0400 (Eastern Daylight Time)
+[debug] [2021-03-23T04:54:42.750Z] ----------------------------------------------------------------------
+[debug] [2021-03-23T04:54:42.750Z] 
+[debug] [2021-03-23T04:54:42.757Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-23T04:54:42.758Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
+[debug] [2021-03-23T04:54:44.806Z] [hub] writing locator at C:\Users\rahul\AppData\Local\Temp\hub-rm2000app.json
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[warn] !  firestore: Port 8081 is not open on localhost, could not start Firestore Emulator. {"metadata":{"emulator":{"name":"firestore"},"message":"Port 8081 is not open on localhost, could not start Firestore Emulator."}}
+[warn] !  firestore: To select a different host/port, specify that host/port in a firebase.json config file:
+      {
+        // ...
+        "emulators": {
+          "firestore": {
+            "host": "HOST",
+            "port": "PORT"
+          }
+        }
+      } {"metadata":{"emulator":{"name":"firestore"},"message":"To select a different host/port, specify that host/port in a firebase.json config file:\n      {\n        // ...\n        \"emulators\": {\n          \"firestore\": {\n            \"host\": \"\u001b[33mHOST\u001b[39m\",\n            \"port\": \"\u001b[33mPORT\u001b[39m\"\n          }\n        }\n      }"}}
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[error] 
+[error] Error: Could not start Firestore Emulator, port taken.
+[debug] [2021-03-23T04:58:21.286Z] ----------------------------------------------------------------------
+[debug] [2021-03-23T04:58:21.288Z] Command:       D:\Program Files\nodejs\node.exe C:\Users\rahul\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --debug --export-on-exit=./emulatorDataFolder --import=./emulatorDataFolder
+[debug] [2021-03-23T04:58:21.288Z] CLI Version:   9.1.0
+[debug] [2021-03-23T04:58:21.288Z] Platform:      win32
+[debug] [2021-03-23T04:58:21.288Z] Node Version:  v12.13.0
+[debug] [2021-03-23T04:58:21.290Z] Time:          Tue Mar 23 2021 00:58:21 GMT-0400 (Eastern Daylight Time)
+[debug] [2021-03-23T04:58:21.290Z] ----------------------------------------------------------------------
+[debug] [2021-03-23T04:58:21.290Z] 
+[debug] [2021-03-23T04:58:21.298Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-03-23T04:58:21.300Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: auth, firestore {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore"}}
+[debug] [2021-03-23T04:58:23.355Z] [hub] writing locator at C:\Users\rahul\AppData\Local\Temp\hub-rm2000app.json
 [info] i  firestore: Importing data from D:\DATA\REACT\ACCF_Final\emulatorDataFolder\firestore_export\firestore_export.overall_export_metadata {"metadata":{"emulator":{"name":"firestore"},"message":"Importing data from D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\firestore_export\\firestore_export.overall_export_metadata"}}
-[debug] [2021-03-22T20:00:44.694Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
-[debug] [2021-03-22T20:00:44.695Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
-[debug] [2021-03-22T20:00:44.695Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\rahul\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.11.11.jar","--host","localhost","--port",8081,"--seed_from_export","D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\firestore_export\\firestore_export.overall_export_metadata","--rules","D:\\DATA\\REACT\\ACCF_Final\\firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\rahul\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.11.11.jar\",\"--host\",\"localhost\",\"--port\",8081,\"--seed_from_export\",\"D:\\\\DATA\\\\REACT\\\\ACCF_Final\\\\emulatorDataFolder\\\\firestore_export\\\\firestore_export.overall_export_metadata\",\"--rules\",\"D:\\\\DATA\\\\REACT\\\\ACCF_Final\\\\firestore.rules\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
+[debug] [2021-03-23T04:58:25.403Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2021-03-23T04:58:25.404Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2021-03-23T04:58:25.405Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\rahul\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.11.11.jar","--host","localhost","--port",8081,"--seed_from_export","D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\firestore_export\\firestore_export.overall_export_metadata","--rules","D:\\DATA\\REACT\\ACCF_Final\\firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\rahul\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.11.11.jar\",\"--host\",\"localhost\",\"--port\",8081,\"--seed_from_export\",\"D:\\\\DATA\\\\REACT\\\\ACCF_Final\\\\emulatorDataFolder\\\\firestore_export\\\\firestore_export.overall_export_metadata\",\"--rules\",\"D:\\\\DATA\\\\REACT\\\\ACCF_Final\\\\firestore.rules\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"functions_emulator\",\"seed_from_export\"],\"joinArgs\":false}"}}
 [info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
-[debug] [2021-03-22T20:00:46.857Z] API endpoint: http://localhost:8081
- {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://localhost:8081\n"}}
-[debug] [2021-03-22T20:00:46.858Z] If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+[debug] [2021-03-23T04:58:27.636Z] API endpoint: http://localhost {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://localhost"}}
+[debug] [2021-03-23T04:58:27.637Z] :8081
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
 
    export FIRESTORE_EMULATOR_HOST=localhost:8081
 
 Dev App Server is now running.
 
- {"metadata":{"emulator":{"name":"firestore"},"message":"If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\r\n\n   export FIRESTORE_EMULATOR_HOST=localhost:8081\n\nDev App Server is now running.\n\r\n"}}
+ {"metadata":{"emulator":{"name":"firestore"},"message":":8081\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\r\n\n   export FIRESTORE_EMULATOR_HOST=localhost:8081\n\nDev App Server is now running.\n\r\n"}}
 [info] i  auth: Importing config from D:\DATA\REACT\ACCF_Final\emulatorDataFolder\auth_export\config.json {"metadata":{"emulator":{"name":"database"},"message":"Importing config from D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\auth_export\\config.json"}}
 [info] i  auth: Importing accounts from D:\DATA\REACT\ACCF_Final\emulatorDataFolder\auth_export\accounts.json {"metadata":{"emulator":{"name":"database"},"message":"Importing accounts from D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder\\auth_export\\accounts.json"}}
-[debug] [2021-03-22T20:00:56.175Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
-[debug] [2021-03-22T20:00:56.176Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
-[debug] [2021-03-22T20:00:56.176Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\rahul\\.cache\\firebase\\emulators\\ui-v1.4.1\\server.bundle.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\rahul\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.4.1\\\\server.bundle.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[warn] !  ui: Emulator UI unable to start on port 4000, starting on 4001 instead. {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI unable to start on port 4000, starting on 4001 instead."}}
+[debug] [2021-03-23T04:58:34.184Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2021-03-23T04:58:34.185Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2021-03-23T04:58:34.189Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\rahul\\.cache\\firebase\\emulators\\ui-v1.4.1\\server.bundle.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\rahul\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.4.1\\\\server.bundle.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
 [info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
-[debug] [2021-03-22T20:00:56.352Z] Web / API server started at http://localhost:4000
- {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at http://localhost:4000\n"}}
+[debug] [2021-03-23T04:58:34.388Z] Web / API server started at http://localhost:4001
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at http://localhost:4001\n"}}
 [info] 
 ┌─────────────────────────────────────────────────────────────┐
 │ ✔  All emulators ready! It is now safe to connect your app. │
-│ i  View Emulator UI at http://localhost:4000                │
+│ i  View Emulator UI at http://localhost:4001                │
 └─────────────────────────────────────────────────────────────┘
 
 ┌────────────────┬────────────────┬─────────────────────────────────┐
 │ Emulator       │ Host:Port      │ View in Emulator UI             │
 ├────────────────┼────────────────┼─────────────────────────────────┤
-│ Authentication │ localhost:9099 │ http://localhost:4000/auth      │
+│ Authentication │ localhost:9099 │ http://localhost:4001/auth      │
 ├────────────────┼────────────────┼─────────────────────────────────┤
-│ Firestore      │ localhost:8081 │ http://localhost:4000/firestore │
+│ Firestore      │ localhost:8081 │ http://localhost:4001/firestore │
 └────────────────┴────────────────┴─────────────────────────────────┘
   Emulator Hub running at localhost:4400
   Other reserved ports: 4500
 
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
+[debug] [2021-03-23T05:14:50.193Z] Mar 23, 2021 1:14:50 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Mar 23, 2021 1:14:50 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2021-03-23T05:14:50.465Z] Mar 23, 2021 1:14:50 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Mar 23, 2021 1:14:50 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected HTTP/2 connection.\r\n"}}
+[debug] [2021-03-23T05:19:39.321Z] Received signal SIGINT (Ctrl-C) 1
+[info]  
+[info] i  emulators: Received SIGINT (Ctrl-C) for the first time. Starting a clean shutdown. 
+[info] i  emulators: Please wait for a clean shutdown or send the SIGINT (Ctrl-C) signal again to stop right now. 
+[info] i  Automatically exporting data using --export-on-exit "./emulatorDataFolder" please wait for the export to finish... 
+[debug] [2021-03-23T05:19:39.327Z] >>> HTTP REQUEST GET http://localhost:4400/  
+ 
+[debug] [2021-03-23T05:19:39.336Z] <<< HTTP RESPONSE 200 {"x-powered-by":"Express","content-type":"application/json; charset=utf-8","content-length":"50","etag":"W/\"32-z6VqmD/wurf8duVDnxTPNgfxjQ8\"","date":"Tue, 23 Mar 2021 05:19:39 GMT","connection":"keep-alive"}
+[info] i  Found running emulator hub for project rm2000app at http://localhost:4400 
+[info] i  Deleting directory D:\DATA\REACT\ACCF_Final\emulatorDataFolder\firestore_export 
+[info] i  Exporting data to: D:\DATA\REACT\ACCF_Final\emulatorDataFolder 
+[debug] [2021-03-23T05:19:39.344Z] >>> HTTP REQUEST POST http://localhost:4400/_admin/export  
+ {"path":"D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder"}
+[info] i  emulators: Received export request. Exporting data to D:\DATA\REACT\ACCF_Final\emulatorDataFolder. 
+[debug] [2021-03-23T05:19:39.348Z] >>> HTTP REQUEST POST http://localhost:8081/emulator/v1/projects/rm2000app:export  
+ {"database":"projects/rm2000app/databases/(default)","export_directory":"D:\\DATA\\REACT\\ACCF_Final\\emulatorDataFolder","export_name":"firestore_export"}
+[debug] [2021-03-23T05:19:39.353Z] Mar 23, 2021 1:19:39 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Mar 23, 2021 1:19:39 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2021-03-23T05:19:39.403Z] <<< HTTP RESPONSE 200 {"content-type":"application/json","content-length":"4"}
+[debug] [2021-03-23T05:19:39.404Z] Exporting auth users in Project rm2000app to D:\DATA\REACT\ACCF_Final\emulatorDataFolder\auth_export\accounts.json
+[debug] [2021-03-23T05:19:39.416Z] Exporting project config in Project rm2000app to D:\DATA\REACT\ACCF_Final\emulatorDataFolder\auth_export\accounts.json
+[info] +  emulators: Export complete. 
+[debug] [2021-03-23T05:19:39.432Z] <<< HTTP RESPONSE 200 {"x-powered-by":"Express","content-type":"application/json; charset=utf-8","content-length":"16","etag":"W/\"10-MxB4y4MLcx6QDsp8b8vgp7iFMFo\"","date":"Tue, 23 Mar 2021 05:19:39 GMT","connection":"keep-alive"}
+[info] +  Export complete 
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  ui: Stopping Emulator UI {"metadata":{"emulator":{"name":"ui"},"message":"Stopping Emulator UI"}}
+[warn] !  Emulator UI has exited upon receiving signal: SIGINT 
+[info] i  firestore: Stopping Firestore Emulator {"metadata":{"emulator":{"name":"firestore"},"message":"Stopping Firestore Emulator"}}
+[warn] !  Firestore Emulator has exited upon receiving signal: SIGINT 
+[info] i  auth: Stopping Authentication Emulator {"metadata":{"emulator":{"name":"auth"},"message":"Stopping Authentication Emulator"}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[info] i  logging: Stopping Logging Emulator {"metadata":{"emulator":{"name":"logging"},"message":"Stopping Logging Emulator"}}

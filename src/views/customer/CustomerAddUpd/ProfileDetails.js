@@ -210,8 +210,7 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
         city: values.city,
         state: values.state,
         country: values.country
-      },
-      uid: isLoggedIn.uid // user id of the logged-in user
+      }      
     };
 
     const user = isLoggedIn;
@@ -226,10 +225,10 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
       });
     }
 
-    if (!cid){
-      // INSERT customer record in database
+    // INSERT customer record in database
+    if (!cid) {      
       data.createdAt = Date.now();
-
+      data.uid = isLoggedIn.uid; // user id of the logged-in user
       
       CustomerDataService.create(data)
         .then((docRef) => {

@@ -18,7 +18,7 @@ const { auth } = firebaseProducts;
 
 // ----------------- Initializing the Context --------------------------------------------
 // with data
-let appContextData = { isLoggedIn: null, cArray: [] };
+let appContextData = { isLoggedIn: null, claims: {}, cArray: [] };
 
 // with methods (Consumers of context can call these methods)
 appContextData.populateCustomerArray = (carray) => {
@@ -54,9 +54,11 @@ const App = () => {
   const routing = useRoutes(routes);
   // eslint-disable-next-line no-unused-vars
   const [isLoggedIn, setIsLoggedIn] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [forceRepaint, setForceRepaint] = useState(null);
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       // user.uid will contain the unique user id or null
 
       // user.getIdTokenResult() returns an object which has
@@ -69,9 +71,21 @@ const App = () => {
       // I am placing the entire user object in isLoggedIn property and not just whether
       // the user is logged in or not (ie a boolean)
       // Remember that setting the state is an async execution
-      setIsLoggedIn(user); // async operation
+
+      if (user) {
+        user.getIdTokenResult()
+          .then((details) => {
+            appContextData = { ...appContextData, claims: { ...details.claims } };
+            console.log(Date.now());
+            setIsLoggedIn(user); // async operation
+          });
+      } else {
+        appContextData = { ...appContextData, claims: {} };
+        setIsLoggedIn(user); // async operation
+      }
     });
-  });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <AppContext.Provider value={appContextData}>

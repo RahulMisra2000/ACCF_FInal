@@ -6,14 +6,14 @@ service cloud.firestore {
       // R OF CRUD   
       // Allow any authenticated user to read a single document
       // allow get: if isSignedIn();
-      // Only the authenticated user who authored the document to read
-      allow get: if isSignedIn() && loggedInUserOwnsTheDocument();
+      // Only the authenticated user who authored the document OR is admin to read
+      allow get: if isSignedIn() && (userOwnsDocument() || isAdmin());
 
       // Allow any authenticated user to read a list of documents
       // allow list: if isSignedIn();
-      // Only the authenticated user who authored the document can read
+      // Only the authenticated user who authored the document OR is admin can read
       // https://firebase.google.com/docs/firestore/security/rules-query#rules_are_not_filters
-      allow list: if isSignedIn() && loggedInUserOwnsTheDocument();
+      allow list: if isSignedIn() && (userOwnsDocument() || isAdmin());
 
 
       // CUD OF CRUD
@@ -23,19 +23,29 @@ service cloud.firestore {
       // Any authenticated user to update an existing document
       // allow update: if isSignedIn();
 
-      // Only the authenticated user who authored the document can update
-      allow update: if isSignedIn() && loggedInUserOwnsTheDocument();
+      // Only the authenticated user who authored the document OR is admin can update
+      allow update: if isSignedIn() && (isAdmin() || userOwnsDocument());
       
       // No one can delete documents
       allow delete: if false;
     }
-  }
+    function isAdmin() {
+      // 1. Custom Claims way of doing things
+      return request.auth.token.role == "admin";
+      // 
+      // 2. Users collection way of doing things
+      // return true;
+      // return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
 
-  function loggedInUserOwnsTheDocument() {
-    return request.auth.uid == resource.data.uid;
-  }
+    function userOwnsDocument() {
+      // request.auth.uid - uid in the TOKEN        resource.data.uid  - uid in the document
+      // https://firebase.google.com/docs/reference/rules/rules.firestore.Request
+      return request.auth.uid == resource.data.uid;
+    }
 
-  function isSignedIn() {
-    return request.auth != null;
+    function isSignedIn() {
+      return request.auth != null;
+    }
   }
 }

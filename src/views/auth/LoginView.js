@@ -53,7 +53,7 @@ const LoginView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'r@r.com',
+              email: 'b@b.com',
               password: '123456'
             }}
             validationSchema={Yup.object().shape({
@@ -65,7 +65,9 @@ const LoginView = () => {
               // https://formik.org/docs/guides/validation
               console.log(values);
             }}
-            onSubmit={(values, { setSubmitting, resetForm}) => {       
+            onSubmit={(values, { setSubmitting, resetForm}) => {
+              console.log('onSubmit');
+              
               if (values.btnClicked === 'GOOGLE') {
                 auth.signInWithPopup(firebaseProducts.googleProvider).then(function(result) {
                   // This gives you a Google Access Token.
