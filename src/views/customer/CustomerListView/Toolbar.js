@@ -52,10 +52,9 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
             color="primary"
             variant="contained"
           >
-            Add Case
+            Add New Case
           </Button>
         </Link>
-
       </Box>
       <Box mt={3}>
         <Card
@@ -105,6 +104,41 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                   : null
               }
             */}
+            </Box>
+          </CardContent>
+        </Card>
+        <Card
+        elevation={5}>
+          <CardContent>
+            <Box maxWidth={500}>
+              <TextField
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SvgIcon
+                        fontSize="small"
+                        color="action"
+                      >
+                        <SearchIcon />
+                      </SvgIcon>
+                    </InputAdornment>
+                  )
+                }}
+                placeholder="Type name and press <Enter>"
+                variant="outlined"
+                value={q}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setQ(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.keyCode === 13) {
+                    console.log('enter key pressed', q);
+                    searchFn(q);
+                  }
+                }}
+              />              
             </Box>
           </CardContent>
         </Card>

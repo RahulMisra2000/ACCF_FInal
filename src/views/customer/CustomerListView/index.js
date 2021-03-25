@@ -34,16 +34,16 @@ const CustomerListView = () => {
   
   // If the data is in cache it is got from there. If not then from Firestore. Then fills up the cache.
   const {isLoading, data: cdata, error} = useFirestore('customers');
-  const [dataToDisplay, setDataToDisplay] = useState([]);
+  const [searchedData, setSearchedData] = useState([]);
   
   // searching happens with data in the cache
   const handleSearchTerm = (q) => {    
     if (q) {      
-      setDataToDisplay(cdata.filter((v) => {
+      setSearchedData(cdata.filter((v) => {
         return (v.name.includes(q) || v.email.includes(q));  // searching in name or email ... can be expanded to include more fields
       }));
     } else {
-        setDataToDisplay([...cdata]);
+      setSearchedData([...cdata]);
     }
   };
 
@@ -59,7 +59,7 @@ const CustomerListView = () => {
           {error && <strong>Error: {JSON.stringify(error)}</strong>}
           {isLoading && <LinearProgress color="secondary" />}
           {!isLoading && cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
-          {!isLoading && cdata?.length ? (<Results customers={dataToDisplay.length? dataToDisplay : cdata} />) : null}
+          {!isLoading && cdata?.length ? (<Results customers={searchedData.length? searchedData : cdata} />) : null}
         </Box>
       </Container>
     </Page>

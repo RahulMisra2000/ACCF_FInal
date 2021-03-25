@@ -1,5 +1,6 @@
 /* eslint-disable */
 const referralAgency = [
+  {name: 'Select', code: 0},
   {name: 'Families First', code: 1},
   {name: 'Community Action', code: 2},
   {name: 'Toyota', code: 3},
@@ -24,6 +25,7 @@ const referralAgency = [
 ];
 
 const levelType = [
+  {name: 'Select', code: 0},
   {name: 'Achievement Coaching', code: 1},
   {name: 'Non ACCF', code: 2},
   {name: 'ACCF', code: 3},
@@ -31,6 +33,7 @@ const levelType = [
 ];
 
 const referralType = [
+  {name: 'Select', code: 0},
   {name: 'Behavioral', code: 1},
   {name: 'Rental Assistance', code: 2},
   {name: 'Car Payment', code: 3},
@@ -48,6 +51,7 @@ const referralType = [
   ];
 
 const referralReason = [
+  {name: 'Select', code: 0},
   {name: 'Assisted the client with completing the rental assistance application', code: 1},
   {name: 'Assisted the client with making a car payment', code: 2},
   {name: 'Searched for apartments and applied for affordable housing', code: 3},
@@ -76,11 +80,28 @@ const referralReason = [
   {name: 'Referred the client to ESP', code: 26}
 ];
 
+const childGradeLevel = [
+  {name: 'Select', code: 0},
+  {name: 'K1', code: 1},
+  {name: 'K2', code: 2},
+  {name: 'K3', code: 3}
+];
+
+const childSchool = [
+  {name: 'Select', code: 0},
+  {name: 'School 1', code: 1},
+  {name: 'School 2', code: 2},
+  {name: 'School 3', code: 3}
+];
+
+
 const data = {
   referralAgency,
   levelType,
   referralType,
-  referralReason
+  referralReason,
+  childGradeLevel,
+  childSchool
 };
 
 export default data;

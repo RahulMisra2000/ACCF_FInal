@@ -31,7 +31,7 @@ const useFirestore = (collectionName) => {
       setError(null);
     } else {
     // Get the data from FIRESTORE
-      console.log('Will try to access data from Firestore');
+      console.log('%cWill try to access data from Firestore', 'background-color:red; color:white');
       setIsLoading(true);
 
       // setTimeout is ONLY FOR DELAY SIMULATION -- Remove it when GOING LIVE

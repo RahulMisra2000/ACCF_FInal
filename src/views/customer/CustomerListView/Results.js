@@ -112,9 +112,6 @@ const Results = ({ className, customers, ...rest }) => {
                   Email
                 </TableCell>
                 <TableCell>
-                  Location
-                </TableCell>
-                <TableCell>
                   Phone
                 </TableCell>
                 <TableCell>
@@ -158,9 +155,6 @@ const Results = ({ className, customers, ...rest }) => {
                   </TableCell>
                   <TableCell>
                     {customer.email}
-                  </TableCell>
-                  <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                   </TableCell>
                   <TableCell>
                     {customer.phone}
