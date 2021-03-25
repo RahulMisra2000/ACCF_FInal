@@ -7,7 +7,7 @@ const { db } = firebaseProducts;
 
 // This custom hook is for reading multiple records from a collection
 //  It runs only once when the component that uses this hook is mounted
-const useFirestore = (collectionName, searchTerm) => {
+const useFirestore = (collectionName) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -31,16 +31,16 @@ const useFirestore = (collectionName, searchTerm) => {
       setError(null);
     } else {
     // Get the data from FIRESTORE
+      console.log('Will try to access data from Firestore');
       setIsLoading(true);
 
       // setTimeout is ONLY FOR DELAY SIMULATION -- Remove it when GOING LIVE
       setTimeout(() => {
         const d = [];
 
+        // BUILD WHERE CLAUSE FOR QUERY
         if (collectionName === 'customers') {
-          if (searchTerm) {
-            coll = coll.where('name', '==', searchTerm);
-          }
+          //
         } else {
           //
         }
@@ -58,13 +58,17 @@ const useFirestore = (collectionName, searchTerm) => {
           }
         }
 
-        coll.orderBy('createdAt', 'desc')
-          .get()
+        // BUILD THE ORDER BY CLAUSE
+        coll = coll.orderBy('createdAt', 'desc');
+
+        // NOW GET THE RECORDS
+        coll.get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               // doc.data() is never undefined for query doc snapshots
               d.push({ ...doc.data(), id: doc.id });
             });
+            console.log(d);
             setData(d);
             populateCustomerArray(d);
             setError(null);
@@ -74,15 +78,13 @@ const useFirestore = (collectionName, searchTerm) => {
           })
           .finally(() => {
             setIsLoading(false);
-            console.log('Accessed this data from Firestore');
-            console.log(d);
           });
       }, 1500);
     } // else
     return () => {
       console.log('unmounted');
     };
-  }, [searchTerm]);
+  }, []);
 
   return { isLoading, data, error };
 };

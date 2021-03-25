@@ -1,8 +1,9 @@
-import { createMuiTheme, colors } from '@material-ui/core';
+import { createMuiTheme, responsiveFontSizes, colors } from '@material-ui/core';
 import shadows from './shadows';
 import typography from './typography';
 
-const theme = createMuiTheme({
+// responsiveFontSizes makes the text inside the Typography component responsive
+const theme = responsiveFontSizes(createMuiTheme({
   palette: {
     background: {
       dark: '#F4F6F8',
@@ -10,7 +11,7 @@ const theme = createMuiTheme({
       paper: colors.common.white
     },
     primary: {
-      main: colors.indigo[500]
+      main: colors.indigo[800]
     },
     secondary: {
       main: colors.indigo[500]
@@ -22,6 +23,6 @@ const theme = createMuiTheme({
   },
   shadows,
   typography
-});
+}));
 
 export default theme;

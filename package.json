@@ -8,6 +8,7 @@
     "start": "set REACT_APP_SHELL_1=1 && react-scripts start",
     "build": "set REACT_APP_SHELL_1=1 && react-scripts build",
     "buildWithProfiling": "set REACT_APP_SHELL_1=1 && react-scripts build -- --profile",
+    "Xpostbuild": "rimraf build/**/*.map",
     "runBuild": "serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -66,6 +67,7 @@
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
     "prettier": "^1.19.1",
+    "rimraf": "^3.0.2",
     "serve": "^11.3.2"
   }
 }

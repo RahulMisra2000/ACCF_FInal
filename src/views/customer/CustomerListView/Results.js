@@ -85,6 +85,7 @@ const Results = ({ className, customers, ...rest }) => {
 
   return (
     <Card
+      elevation={5}
       className={clsx(classes.root, className)}
       {...rest}
     >

@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import moment from 'moment';
 import {
   Avatar,
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
   Divider,
   Typography,
@@ -15,12 +12,8 @@ import {
 } from '@material-ui/core';
 
 const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
+  avatar: '/static/images/avatars/avatar_cust.jpg',
+  name: 'Highlights'
 };
 
 const useStyles = makeStyles(() => ({
@@ -31,11 +24,12 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Profile = ({ className, ...rest }) => {
+const CustProfile = ({ className, ...rest }) => {
   const classes = useStyles();
 
   return (
     <Card
+      elevation={5}
       className={clsx(classes.root, className)}
       {...rest}
     >
@@ -56,22 +50,10 @@ const Profile = ({ className, ...rest }) => {
           >
             {user.name}
           </Typography>
-          <Typography
-            color="textSecondary"
-            variant="body1"
-          >
-            {`${user.city} ${user.country}`}
-          </Typography>
-          <Typography
-            className={classes.dateText}
-            color="textSecondary"
-            variant="body1"
-          >
-            {`${moment().format('hh:mm A')} ${user.timezone}`}
-          </Typography>
         </Box>
       </CardContent>
       <Divider />
+      {/*
       <CardActions>
         <Button
           color="primary"
@@ -81,12 +63,13 @@ const Profile = ({ className, ...rest }) => {
           Upload picture
         </Button>
       </CardActions>
+      */}
     </Card>
   );
 };
 
-Profile.propTypes = {
+CustProfile.propTypes = {
   className: PropTypes.string
 };
 
-export default Profile;
+export default CustProfile;

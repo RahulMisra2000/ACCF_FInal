@@ -31,17 +31,19 @@ const CustomerListView = () => {
   console.log('%cCustomerListView component code just executed','color:blue');
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState(null);
-
-  // Gets the data from Firestore
-  const {isLoading, data: cdata, error} = useFirestore('customers', searchTerm);
-
-  // Just changes the state so that this and all child components are re-rendered (aka component is re-executed from top to bottom)
-  const handleSearchTerm = (q) => {
-    if (q) {
-      setSearchTerm(q);
-    }
-    if (searchTerm && !q) {
-      setSearchTerm(q);
+  
+  // If the data is in cache it is got from there. If not then from Firestore. Then fills up the cache.
+  const {isLoading, data: cdata, error} = useFirestore('customers');
+  const [dataToDisplay, setDataToDisplay] = useState([]);
+  
+  // searching happens with data in the cache
+  const handleSearchTerm = (q) => {    
+    if (q) {      
+      setDataToDisplay(cdata.filter((v) => {
+        return (v.name.includes(q) || v.email.includes(q));  // searching in name or email ... can be expanded to include more fields
+      }));
+    } else {
+        setDataToDisplay([...cdata]);
     }
   };
 
@@ -57,7 +59,7 @@ const CustomerListView = () => {
           {error && <strong>Error: {JSON.stringify(error)}</strong>}
           {isLoading && <LinearProgress color="secondary" />}
           {!isLoading && cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
-          {!isLoading && cdata?.length ? (<Results customers={cdata} />) : null}
+          {!isLoading && cdata?.length ? (<Results customers={dataToDisplay.length? dataToDisplay : cdata} />) : null}
         </Box>
       </Container>
     </Page>

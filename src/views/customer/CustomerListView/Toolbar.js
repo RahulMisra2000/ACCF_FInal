@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   TextField,
+  Typography,
   InputAdornment,
   SvgIcon,
   makeStyles
@@ -36,27 +37,29 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
     >
       <Box
         display="flex"
-        justifyContent="flex-end"
+        justifyContent="space-between"
       >
-        <Button className={classes.importButton}>
-          Import
-        </Button>
+        <Typography variant="h3" component="h3">
+          CASE MANAGEMENT RECORDS
+        </Typography>
+        {/*
         <Button className={classes.exportButton}>
           Export
         </Button>
-
+        */}
         <Link to="/app/customers/add">
           <Button
             color="primary"
             variant="contained"
           >
-            Add customer
+            Add Case
           </Button>
         </Link>
 
       </Box>
       <Box mt={3}>
-        <Card>
+        <Card
+        elevation={5}>
           <CardContent>
             <Box maxWidth={500}>
               <TextField
@@ -73,14 +76,16 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Search customer"
+                placeholder="Type name and press <Enter>"
                 variant="outlined"
                 value={q}
                 onChange={(e) => {
+                  console.log(e.target.value);
                   setQ(e.target.value);
                 }}
                 onKeyUp={(e) => {
                   if (e.keyCode === 13) {
+                    console.log('enter key pressed', q);
                     searchFn(q);
                   }
                 }}

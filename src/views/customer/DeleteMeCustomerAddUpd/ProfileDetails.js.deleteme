@@ -19,6 +19,9 @@ import CustomerDataService from 'src/services/CustomerService';
 import { useSnackbar } from 'notistack';
 import Zoom from '@material-ui/core/Zoom';
 import AppContext from '../../../contexts/appContext';
+import dataForSelect from 'src/dataForSelect';
+
+console.dir(dataForSelect.levelType);
 
 const states = [
   {
@@ -228,8 +231,26 @@ const ProfileDetails = ({ cid, className, ...rest }) => {
     // INSERT customer record in database
     if (!cid) {      
       data.createdAt = Date.now();
-      data.uid = isLoggedIn.uid; // user id of the logged-in user
+      data.uid = isLoggedIn.uid;  // user id of the logged-in user
       
+      data.status = "A";          // Active
+      // data.strength
+      // data.stressor
+      data.ss = [
+        {date: null, strength: null, stressor: null},
+        {},
+        {}
+      ];
+      /*
+      data.kids = [
+        {name: 'kid1', age: 10},
+        {name: 'kid2', age: 11},
+        {name: 'kid3', age: 12},
+      ];
+      */
+      data.serviceCompletion = "N";
+      data.rating = null;
+
       CustomerDataService.create(data)
         .then((docRef) => {
           console.log(`cust id just created in database is ${docRef.id}`);
