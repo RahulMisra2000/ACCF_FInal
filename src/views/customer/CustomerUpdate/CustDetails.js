@@ -107,7 +107,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
   const [updButtonDisabled, setUpdButtonDisabled] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { isLoggedIn, addCustomerRecord, updCustomerRecord } = useContext(AppContext);
+  const { isLoggedIn, updCustomerRecord } = useContext(AppContext);
 
   useEffect(()=>{
     if (cid){
@@ -120,17 +120,12 @@ const CustDetails = ({ cid, className, ...rest }) => {
             console.log("Document data:", doc.data());
             setValues({
               id: cid,
-              // uid: TODO,
               name: doc.data().name,
+              crisis: doc.data().crisis,
               phone: doc.data().phone,
-              email: doc.data().email,
-              avatarUrl: doc.data().avatarUrl,
+              email: doc.data().email,              
               createdAt: new Date(doc.data().createdAt),
               updatedAt: doc.data()?.updatedAt ? doc.data().updatedAt : null,
-              street: doc.data().address.street,
-              city: doc.data().address.city,
-              state: doc.data().address.state,
-              country: doc.data().address.country,
               uid: doc.data().uid
             });
         } else {
@@ -182,19 +177,12 @@ const CustDetails = ({ cid, className, ...rest }) => {
     console.warn(`In updCustomer() - event is ${event} - naam is ${naam} - cid is ${cid}`);
     setUpdButtonDisabled(true);
 
-    // data to be written to Firestore --- checkout how we are dealing with address
+    // data to be written to Firestore
+    // Only these fields can be updated
     const data = {
-      name: naam ? naam : values.name,
       phone: values.phone,
       email: values.email,
-      avatarUrl: values.avatarUrl,
-      address : {
-        street: values.street,
-        city: values.city,
-        state: values.state,
-        country: values.country
-      }      
-    };
+     };
 
     const user = isLoggedIn;
 
@@ -284,7 +272,6 @@ const CustDetails = ({ cid, className, ...rest }) => {
           <Card
           elevation={5}>
           <CardHeader
-            subheader="The information can be edited"
             title="Case Details"
           />
           <Divider />
@@ -295,38 +282,41 @@ const CustDetails = ({ cid, className, ...rest }) => {
             >
             <Grid
               item
-              md={6}
+              sm={6}
               xs={12}
             >
               <TextField
-                fullWidth
-                helperText="Please specify the Name"
+                disabled
+                fullWidth                
                 label="Name"
                 name="name"
                 onChange={handleChange}
                 required
                 value={values.name}
                 variant="outlined"
+                size="small"
               />
             </Grid>
             <Grid
               item
-              md={6}
+              sm={6}
               xs={12}
             >
               <TextField
+                disabled
                 fullWidth
-                label="Street"
-                name="street"
+                label="Crisis"
+                name="crisis"
                 onChange={handleChange}
                 required
-                value={values.street}
+                value={values.crisis}
                 variant="outlined"
+                size="small"
               />
             </Grid>
             <Grid
               item
-              md={6}
+              sm={6}
               xs={12}
             >
               <TextField
@@ -337,6 +327,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
                 required
                 value={values.email}
                 variant="outlined"
+                size="small"
               />
             </Grid>
             <Grid
@@ -352,50 +343,10 @@ const CustDetails = ({ cid, className, ...rest }) => {
                 type="number"
                 value={values.phone}
                 variant="outlined"
+                size="small"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Country"
-                name="country"
-                onChange={handleChange}
-                required
-                value={values.country}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
-          </Grid>
+           </Grid>
         </CardContent>
         <Divider />
       

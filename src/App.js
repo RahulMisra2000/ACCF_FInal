@@ -22,24 +22,43 @@ let appContextData = { isLoggedIn: null, claims: {}, cArray: [] };
 
 // with methods (Consumers of context can call these methods)
 appContextData.populateCustomerArray = (carray) => {
-  appContextData.cArray = [...carray];
+  // appContextData.cArray = [...carray];
+  appContextData.cArray = carray.map((v) => {
+    const obj = { ...v }; // 1st level properties will be copied
+    // There are two arrays (children and ss) that will need to be handled
+    obj.children = v.children.map((v1) => {
+      return { ...v1 };
+    });
+    obj.ss = v.ss.map((v2) => {
+      return { ...v2 };
+    });
+    return obj;
+  });
+  console.log('%c****************', 'color:red');
+  console.dir(carray);
+  console.dir(appContextData.cArray);
 };
 
 appContextData.addCustomerRecord = (crec) => {
-  appContextData.cArray.unshift(crec);
+  const obj = { ...crec };
+  obj.children = crec.children.map((v1) => {
+    return { ...v1 };
+  });
+  obj.ss = crec.ss.map((v2) => {
+    return { ...v2 };
+  });
+  appContextData.cArray.unshift(obj);
 };
 
+// only phone and email fields can be updated for the customer (aka case management record)
 appContextData.updCustomerRecord = (crec) => {
-  let found = false;
-  const a = appContextData.cArray.filter((v) => {
-    found = true;
-    return !(crec.id === v.id);
+  const a = appContextData.cArray.map((v) => {
+    if (crec.id === v.id) {
+      return { ...v, phone: crec.phone, email: crec.email };
+    }
+    return { ...v };
   });
-
-  if (found) {
-    a.unshift(crec);
-    appContextData.cArray = [...a];
-  }
+  appContextData.cArray = [...a];
 };
 
 appContextData.invalidateCache = () => {

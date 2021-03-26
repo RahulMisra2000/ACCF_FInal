@@ -230,24 +230,9 @@ const CustDetails = ({ className, ...rest }) => {
     // Other data not coming from the form
     data.createdAt = creationMoment;
     data.uid = isLoggedIn.uid;  // user id of the logged-in user
-    data.status = "A";          // Active
+    data.status = "Open";          // Open
     data.serviceCompletion = "N";
     data.rating = null;
-
-    console.log(values);
-
-    /*
-    const user = isLoggedIn;
-    if (user != null) {
-      user.providerData.forEach(function (profile) {
-        console.log("Sign-in provider: " + profile.providerId);
-        console.log("  Provider-specific UID: " + profile.uid);
-        console.log("  Name: " + profile.displayName);
-        console.log("  Email: " + profile.email);
-        console.log("  Photo URL: " + profile.photoURL);
-      });
-    }
-    */
 
     // INSERT customer record in database   
       CustomerDataService.create(data)
@@ -257,7 +242,7 @@ const CustDetails = ({ className, ...rest }) => {
           
           // add the record to cache 
           data.id = docRef.id;
-          addCustomerRecord(data); 
+          addCustomerRecord(data);
           showSnackbar(`Successfully added customer ${docRef.id}`);
 
           return makeEntryInGoogleSheet('customers', {...data});
