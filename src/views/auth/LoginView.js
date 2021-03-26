@@ -112,114 +112,70 @@ const LoginView = () => {
                 
                 return (
                   <form onSubmit={handleSubmit}>
-                <Box mb={3}>
-                  <Typography
-                    color="textPrimary"
-                    variant="h2"
-                  >
-                    Sign in
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Sign in on the internal platform
-                  </Typography>
-                </Box>
-                <Grid
-                  container
-                  spacing={3}
-                >
-                  
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      fullWidth
-                      startIcon={<GoogleIcon />}
-                      onClick={(e) => { helpers.setFieldValue('btnClicked','GOOGLE'); }}
-                      size="large"
-                      variant="contained"
-                      color="primary"
-                      type="submit"
-                    >
-                      Login with Google
-                    </Button>
-                  </Grid>
+                    <Box mb={3}>
+                      <Typography color="textPrimary" variant="h2">Sign in</Typography>
+                      <Typography color="textSecondary" gutterBottom variant="body2">Sign in on the internal platform</Typography>
+                    </Box>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} md={6}>
+                          <Button fullWidth startIcon={<GoogleIcon />} size="large" variant="contained" color="primary" type="submit"
+                            onClick={(e) => { helpers.setFieldValue('btnClicked','GOOGLE'); }}                          
+                          >
+                            Login with Google
+                          </Button>
+                        </Grid>
 
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
+                        <Grid item xs={12} md={6}>
+                          <Button fullWidth startIcon={<FacebookIcon />} size="large" variant="contained" type="submit"
+                            onClick={(e) => { helpers.setFieldValue('btnClicked','FB'); }}                      
+                          >
+                            Login with Facebook
+                          </Button>
+                        </Grid>
+                    </Grid>
+                    <Box  mt={3} mb={1}>
+                      <Typography align="center" color="textSecondary" variant="body1" > or login with email address</Typography>
+                    </Box>
+                    <TextField
+                      error={Boolean(touched.email && errors.email)}
                       fullWidth
-                      startIcon={<FacebookIcon />}
-                      onClick={(e) => { helpers.setFieldValue('btnClicked','FB'); }}
-                      size="large"
-                      variant="contained"
-                      type="submit"
-                    >
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-
-                </Grid>
-                <Box
-                  mt={3}
-                  mb={1}
-                >
-                  <Typography
-                    align="center"
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    or login with email address
-                  </Typography>
-                </Box>
-                <TextField
-                  error={Boolean(touched.email && errors.email)}
-                  fullWidth
-                  helperText={touched.email && errors.email}
-                  label="Email Address"
-                  margin="normal"
-                  name="email"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="email"
-                  value={values.email}
-                  variant="outlined"
-                />
-                <TextField
-                  error={Boolean(touched.password && errors.password)}
-                  fullWidth
-                  helperText={touched.password && errors.password}
-                  label="Password"
-                  margin="normal"
-                  name="password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={values.password}
-                  variant="outlined"
-                />
-                <Box my={2}>
-                  <Button
-                    color="primary"
-                    disabled={isSubmitting}
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                    onClick={(e) => { helpers.setFieldValue('btnClicked','EP'); }}
-                    type="submit"
-                  >
-                    Sign in now
-                  </Button>
-                </Box>
+                      helperText={touched.email && errors.email}
+                      label="Email Address"
+                      margin="normal"
+                      name="email"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      type="email"
+                      value={values.email}
+                      variant="outlined"
+                    />
+                    <TextField
+                      error={Boolean(touched.password && errors.password)}
+                      fullWidth
+                      helperText={touched.password && errors.password}
+                      label="Password"
+                      margin="normal"
+                      name="password"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      type="password"
+                      value={values.password}
+                      variant="outlined"
+                    />
+                    <Box my={2}>
+                      <Button
+                        color="primary"
+                        disabled={isSubmitting}
+                        fullWidth
+                        size="large"
+                        type="submit"
+                        variant="contained"
+                        onClick={(e) => { helpers.setFieldValue('btnClicked','EP'); }}
+                        type="submit"
+                      >
+                        Sign in now
+                      </Button>
+                    </Box>
                 <Typography
                   color="textSecondary"
                   variant="body1"
@@ -234,15 +190,15 @@ const LoginView = () => {
                     Sign up
                   </Link>
                 </Typography>
-                {loginErrorMessage 
-                    ?
-                      (
-                        <div>
-                          { loginErrorMessage }
-                        </div>
-                      )
-                  : 
-                    null}
+                
+                {loginErrorMessage  ? (
+                                      <div>
+                                        { loginErrorMessage }
+                                      </div>
+                                      )
+                                    : 
+                                      null
+                }
               </form>
                 )}
             }
