@@ -34,15 +34,15 @@ const CustomerUpdate = () => {
         >
           <Grid
             item
-            lg={2}
+            lg={4}
             md={3}
             xs={12}
           >
-            <CustProfile />
+            <CustProfile cid={cid} />
           </Grid>
           <Grid
             item
-            lg={10}
+            lg={8}
             md={9}
             xs={12}
           >

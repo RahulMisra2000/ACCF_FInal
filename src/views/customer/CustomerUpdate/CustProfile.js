@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -8,7 +9,8 @@ import {
   CardContent,
   Divider,
   Typography,
-  makeStyles
+  makeStyles,
+  Button
 } from '@material-ui/core';
 
 const user = {
@@ -21,16 +23,20 @@ const useStyles = makeStyles(() => ({
   avatar: {
     height: 100,
     width: 100
+  },
+  rmcard: {
+    border: '2px solid #c5cae9'
   }
 }));
 
-const CustProfile = ({ className, ...rest }) => {
+const CustProfile = ({ cid, className, ...rest }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   return (
     <Card
       elevation={5}
-      className={clsx(classes.root, className)}
+      className={clsx(classes.root, className, classes.rmcard)}
       {...rest}
     >
       <CardContent>
@@ -46,9 +52,24 @@ const CustProfile = ({ className, ...rest }) => {
           <Typography
             color="textPrimary"
             gutterBottom
+            variant="h6"
+          >
+            {cid}
+            <Divider />
+          </Typography>
+          <Typography
+            color="textPrimary"
+            gutterBottom
             variant="h3"
           >
-            {user.name}
+            <Button color="primary" variant="outlined" size="small" onClick={() => { navigate(`/app/customers/${cid}/activities`); }}>My Activities</Button>
+          </Typography>
+          <Typography
+            color="textPrimary"
+            gutterBottom
+            variant="h3"
+          >
+            <Button color="primary" variant="outlined" size="small" onClick={() => { navigate(`/app/customers/${cid}/referrals`); }}>My Referrals</Button>
           </Typography>
         </Box>
       </CardContent>
@@ -69,7 +90,8 @@ const CustProfile = ({ className, ...rest }) => {
 };
 
 CustProfile.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  cid: PropTypes.string
 };
 
 export default CustProfile;

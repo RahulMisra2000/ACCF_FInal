@@ -4,49 +4,24 @@ export default [
   {
     id: uuid(),
     createdAt: '27/03/2019',
-    description: 'Dropbox is a file hosting service that offers cloud storage, file synchronization, a personal cloud.',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     media: '/static/images/products/product_1.png',
-    title: 'Dropbox',
+    title: 'Workshops',
     totalDownloads: '594'
   },
   {
     id: uuid(),
     createdAt: '31/03/2019',
-    description: 'Medium is an online publishing platform developed by Evan Williams, and launched in August 2012.',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Diam sollicitudin tempor id eu. Sit amet nisl suscipit adipiscing bibendum est ultricies integer. Lobortis elementum nibh tellus molestie. Scelerisque varius morbi enim nunc faucibus. Nulla facilisi morbi tempus iaculis urna id volutpat. Mi tempus imperdiet nulla malesuada pellentesque elit. Iaculis eu non diam phasellus vestibulum lorem sed risus. Ipsum dolor sit amet consectetur adipiscing elit. ',
     media: '/static/images/products/product_2.png',
-    title: 'Medium Corporation',
+    title: 'Events',
     totalDownloads: '625'
   },
   {
     id: uuid(),
     createdAt: '03/04/2019',
-    description: 'Slack is a cloud-based set of team collaboration tools and services, founded by Stewart Butterfield.',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla posuere sollicitudin aliquam ultrices sagittis. Justo nec ultrices dui sapien eget mi proin. Elit ullamcorper dignissim cras tincidunt lobortis feugiat vivamus at augue. Rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant. Nibh cras pulvinar mattis nunc sed blandit. In egestas erat imperdiet sed euismod nisi porta lorem. Nullam vehicula ipsum a arcu cursus vitae. ',
     media: '/static/images/products/product_3.png',
-    title: 'Slack',
+    title: 'Parent Support Group',
     totalDownloads: '857'
-  },
-  {
-    id: uuid(),
-    createdAt: '04/04/2019',
-    description: 'Lyft is an on-demand transportation company based in San Francisco, California.',
-    media: '/static/images/products/product_4.png',
-    title: 'Lyft',
-    totalDownloads: '406'
-  },
-  {
-    id: uuid(),
-    createdAt: '04/04/2019',
-    description: 'GitHub is a web-based hosting service for version control of code using Git.',
-    media: '/static/images/products/product_5.png',
-    title: 'GitHub',
-    totalDownloads: '835'
-  },
-  {
-    id: uuid(),
-    createdAt: '04/04/2019',
-    description: 'Squarespace provides software as a service for website building and hosting. Headquartered in NYC.',
-    media: '/static/images/products/product_6.png',
-    title: 'Squarespace',
-    totalDownloads: '835'
-  }
-];
+  }];

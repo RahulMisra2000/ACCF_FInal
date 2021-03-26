@@ -113,8 +113,7 @@ const CustDetails = ({ className, ...rest }) => {
 
   // HANDLERS
   const handleChange = (event) => {    
-    const { name, value } = event.target;
-    console.log('onChange called:', name, value);
+    const { name, value } = event.target;    
     setValues({
       ...values,
       [name]: value

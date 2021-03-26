@@ -22,6 +22,7 @@ const routes = [
       { path: 'customers', element: <CustomerListView /> },
       { path: 'customers/add', element: <CustomerAdd /> },
       { path: 'customers/upd/:id', element: <CustomerUpdate /> },
+      { path: 'customers/:id/activities', element: <SettingsView /> },
       { path: 'dashboard', element: <DashboardView /> },
       { path: 'products', element: <ProductListView /> },
       { path: 'settings', element: <SettingsView /> },

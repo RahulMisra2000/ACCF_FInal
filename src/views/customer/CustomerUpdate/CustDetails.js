@@ -12,7 +12,9 @@ import {
   Grid,
   TextField,
   makeStyles,
-  Snackbar
+  Snackbar,
+  Typography,
+  Paper
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import CustomerDataService from 'src/services/CustomerService';
@@ -39,7 +41,16 @@ const states = [
 ];
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
+  rmcard: {
+    border: "2px solid #c5cae9"
+  },
+  rmtypography: {
+    display: 'inline-block'
+  },
+  rm1: {
+    marginTop: '14px'
+  }
 }));
 
 // UTILITY FUNCTION
@@ -104,21 +115,25 @@ const CustDetails = ({ cid, className, ...rest }) => {
   const [values, setValues] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [updButtonDisabled, setUpdButtonDisabled] = useState(false);
+  const [updButtonDisable, setUpdButtonDisable] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { isLoggedIn, updCustomerRecord } = useContext(AppContext);
+  const { isLoggedIn, addStrengthStressorPair, updCustomerRecord } = useContext(AppContext);
+
+  console.log('%cCustDetails component code (in CustomerUpdate) just executed', 'color:blue');
 
   useEffect(()=>{
     if (cid){
       setIsLoading(true);
 
       // READ RECORD FROM FIRESTORE
+      console.log('%cReading Record ' + cid + ' from FIRESTORE', 'background-Color:red; color:white');
       CustomerDataService.get(cid)
       .then((doc) => {
         if (doc.exists) {
             console.log("Document data:", doc.data());
             setValues({
+              // Scalar structures
               id: cid,
               name: doc.data().name,
               crisis: doc.data().crisis,
@@ -126,7 +141,27 @@ const CustDetails = ({ cid, className, ...rest }) => {
               email: doc.data().email,              
               createdAt: new Date(doc.data().createdAt),
               updatedAt: doc.data()?.updatedAt ? doc.data().updatedAt : null,
-              uid: doc.data().uid
+              uid: doc.data().uid,
+              status: doc.data().status,
+              serviceCompletion: doc.data().serviceCompletion,
+              rating: doc.data().rating,
+
+              // Nested structures
+              children: doc.data()?.children ? doc.data().children : [],
+              ss: doc.data()?.ss ? doc.data().ss : [],
+              
+              // For Adding New Strength and Stressors
+              strengthScore: '',
+              stressorScore: '',
+
+              // For Adding One Child
+              childName: '',
+              childAge: '',
+              childGrade: '',
+              childSchool: '',
+
+              // Errors - validation
+              errors: {}
             });
         } else {
             // doc.data() will be undefined in this case
@@ -146,6 +181,10 @@ const CustDetails = ({ cid, className, ...rest }) => {
   
   // HANDLERS
   const handleChange = (event) => {
+    if (updButtonDisable) {
+      setUpdButtonDisable(false);
+    }
+
     const { name, value } = event.target;
     setValues({
       ...values,
@@ -175,7 +214,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
 
   const updCustomer = ({event, naam, cid}) => {
     console.warn(`In updCustomer() - event is ${event} - naam is ${naam} - cid is ${cid}`);
-    setUpdButtonDisabled(true);
+    setUpdButtonDisable(true);
 
     // data to be written to Firestore
     // Only these fields can be updated
@@ -215,9 +254,61 @@ const CustDetails = ({ cid, className, ...rest }) => {
           console.log('%c' + `Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`, 'color:red');
           setIsError(`Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`);
         });
-    setUpdButtonDisabled(false);
+    setUpdButtonDisable(false);
     
   }; // updCustomer()
+
+
+  // Add Strength and Stressor
+  const addStrengthStressor = ({event, cid}) => {    
+    const now = Date.now();
+    let atLeastOneValidationFailed = false;
+    let errorsObject = {};
+    
+    console.log(event, cid);
+    // validate strength and stressor
+    if (!Number(values.strengthScore) || Number(values.strengthScore) < 0) {
+      errorsObject.strengthScore = 'Only Positive Numbers';      
+      atLeastOneValidationFailed = true;
+    }
+
+    if (!Number(values.stressorScore) || Number(values.stressorScore) < 0) { // validate stressorScore
+      errorsObject.stressorScore = 'Only Positive Numbers';      
+      atLeastOneValidationFailed = true;
+    }
+
+    if (atLeastOneValidationFailed){
+      setValues({...values, errors : {...errorsObject}}); // add all the errors to the state      
+      return;
+    }    
+    
+    console.log('TIME TO UPDATE');
+    const strengthStressorPairThatNeedsToBeAdded = {date: now, strength: values.strengthScore, stressor: values.stressorScore};
+    const newCompleteSSArray = [...values.ss, strengthStressorPairThatNeedsToBeAdded ];
+    
+    console.dir(values.ss);
+    console.dir(newCompleteSSArray);
+    
+    // 1. update the firestore record
+    // I think when you want to update an array in Firestore you need to send the entire complete array and not just the element that 
+    // you want added into the array
+    CustomerDataService.update(cid, {ss: newCompleteSSArray})
+      .then(() => {
+        addStrengthStressorPair(cid, strengthStressorPairThatNeedsToBeAdded);  // 2. update the cache
+        setSubmitted(`Customer ${cid} was just updated in database`);
+        showSnackbar(`Successfully updated customer ${cid}`);        
+      })
+      .then((result) => console.log(result))
+      .catch((e) => {
+        console.log('%c' + `Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`, 'color:red');
+        setIsError(`Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`);
+      });   
+    ; // updCustomer()
+
+    // The side effect of this will be a re-rendering and therefore the new record just added will be visible 
+    // on the list of records also
+      setValues({...values, errors : {}});                // clear out the errors in the state
+  };
 
   // RETURN AREA --------------------------------------------------------------------
   // Loading
@@ -256,23 +347,62 @@ const CustDetails = ({ cid, className, ...rest }) => {
           className={clsx(classes.root, className)}
           {...rest}
         >
-          <Card 
-            elevation={5}>
-          <CardHeader
-            subheader="Info only"
-            title="Case Summary"
+          <Card elevation={5} className={classes.rmcard}>
+          <CardHeader            
+            title="CASE SUMMARY"
           />
           <Divider />
           <CardContent>
-            <div>{ 'Created On: ' + new Date(values.createdAt).toLocaleString() }</div>
-            { values.updatedAt ? <span>{'Last Modified On: ' + new Date(values.updatedAt).toLocaleString()}</span> : null }
+            <Grid container spacing={1}>
+              <Grid item sm={5} xs={12}>
+                <Typography className={classes.rmtypography} color="textPrimary" variant="body1">Created:&nbsp;</Typography>
+                <Typography className={classes.rmtypography} color="textSecondary" variant="body2">
+                  { new Date(values.createdAt).toLocaleString() }
+                </Typography>
+
+              </Grid>
+              <Grid item sm={4} xs={12}>
+              </Grid>
+              <Grid item sm={3} xs={12}>
+                <Typography className={classes.rmtypography} color="textPrimary" variant="body1">Status:&nbsp;</Typography>
+                <Typography className={classes.rmtypography} color="textSecondary" variant="body2">
+                  { values.status }
+                </Typography>
+              </Grid>
+
+              <Grid item sm={5} xs={12}>
+                <Typography className={classes.rmtypography} color="textPrimary" variant="body1">Last Modified On:&nbsp;</Typography>
+                <Typography className={classes.rmtypography} color="textSecondary" variant="body2">
+                  { values.updatedAt ? new Date(values.updatedAt).toLocaleString() : null }
+                </Typography>
+              </Grid>
+              <Grid item sm={4} xs={12}>
+              </Grid>
+              <Grid item sm={3} xs={12}>                
+                <Typography className={classes.rmtypography} color="textPrimary" variant="body1">Service Completions:&nbsp;</Typography>
+                <Typography className={classes.rmtypography} color="textSecondary" variant="body2">
+                { `${values.serviceCompletion}` }
+                </Typography>
+              </Grid>
+
+              <Grid item sm={5} xs={12}>                
+              </Grid>
+              <Grid item sm={4} xs={12}>
+              </Grid>
+              <Grid item sm={3} xs={12}>
+                <Typography className={classes.rmtypography} color="textPrimary" variant="body1">Rating:&nbsp;</Typography>
+                <Typography className={classes.rmtypography} color="textSecondary" variant="body2">
+                    { ` ${values.rating ? values.rating : 'None'} `}
+                </Typography>
+              </Grid>                      
+            </Grid>
           </CardContent>
           </Card>
+
           &nbsp;
-          <Card
-          elevation={5}>
+          <Card elevation={5} className={classes.rmcard}>
           <CardHeader
-            title="Case Details"
+            title="CASE DETAILS"
           />
           <Divider />
           <CardContent>
@@ -332,7 +462,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
             </Grid>
             <Grid
               item
-              md={6}
+              sm={6}
               xs={12}
             >
               <TextField
@@ -358,7 +488,8 @@ const CustDetails = ({ cid, className, ...rest }) => {
           <Button
             color="primary"
             variant="contained"
-            disabled={updButtonDisabled}
+            disabled={updButtonDisable}
+            size="small" 
             onClick={ (event)=>{updCustomer({event, cid, naam:null});} }
           >
             Update Case
@@ -367,12 +498,141 @@ const CustDetails = ({ cid, className, ...rest }) => {
           <Button
             color="primary"
             variant="contained"
+            size="small" 
             onClick={add50Customers}
           >
             Add 50 Customers (Testing)
           </Button>
         </Box>
       </Card>
+    
+
+      &nbsp;
+      {/* Strength & Stressor */}
+      <Card elevation={5} className={classes.rmcard}>
+        <CardHeader subheader="Strength & Stressor Scores" />
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} > 
+              { values?.ss && values.ss.map((v,i) => 
+                (
+                  <React.Fragment key={i}>
+                    <Grid item sm={4} xs={12} >                    
+                      <TextField fullWidth label="Date"
+                        value={`${new Date(v.date).toDateString()} ${new Date(v.date).toLocaleTimeString()}`}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                      />
+                    </Grid>
+                    <Grid item sm={4} xs={12} >
+                    <TextField fullWidth label="Strength"
+                        value={v.strength}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                      />
+                    </Grid>
+                    <Grid item sm={4} xs={12} >
+                    <TextField fullWidth label="Stressor"
+                        value={v.stressor}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                      />
+                    </Grid>
+                  </React.Fragment>
+                ))
+              }
+              
+              <Grid item xs={6} className={classes.rm1} >
+                <TextField fullWidth label="Strength Score" name="strengthScore" onChange={handleChange} required value={values.strengthScore} variant="outlined" size="small" 
+                  error={values?.errors?.strengthScore ? true : false}
+                  helperText={values?.errors?.strengthScore ? values?.errors?.strengthScore : ''}
+                />
+              </Grid>
+              <Grid item xs={6} className={classes.rm1}>
+                <TextField fullWidth label="Stressor Score" name="stressorScore" onChange={handleChange} required value={values.stressorScore} variant="outlined" size="small" 
+                  error={values?.errors?.stressorScore ? true : false}
+                  helperText={values?.errors?.stressorScore ? values?.errors?.stressorScore : ''}
+                />
+
+              </Grid>
+          </Grid>
+        </CardContent>
+        <Divider />     
+      
+        <Box display="flex" justifyContent="flex-end" p={2}>
+            <Button color="primary" variant="contained" size="small" onClick={ (event)=>{addStrengthStressor({event, cid});} }>
+              Add Strength / Stressors
+            </Button>
+        </Box>
+      </Card>          
+      
+      &nbsp;
+      {/* Children */}
+      <Card elevation={5} className={classes.rmcard}>
+        <CardHeader subheader="Children" />
+        <Divider />
+        <CardContent>
+          <Grid container spacing={3} > 
+              { values?.children && values.children.map((v,i) => 
+                (
+                  <React.Fragment key={i}>
+                    <Grid item sm={3} xs={12} >                    
+                      <TextField fullWidth label="Name"
+                        value={v.name}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                      />
+                    </Grid>
+                    <Grid item sm={2} xs={12} >
+                    <TextField fullWidth label="Age"
+                        value={v.age}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                      />
+                    </Grid>
+                    <Grid item sm={2} xs={12} >
+                    <TextField fullWidth label="Grade"
+                        value={v.grade}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                      />
+                    </Grid>
+                    <Grid item sm={5} xs={12} >
+                    <TextField fullWidth label="School"
+                        value={v.school}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                      />
+                    </Grid>
+                  </React.Fragment>
+                ))
+              }
+          </Grid>
+        </CardContent>
+        <Divider />      
+        <Box
+            display="flex"
+            justifyContent="flex-end"
+            p={2}
+        >
+            <Button
+              color="primary"
+              variant="contained"
+              size="small"   
+              onClick={ (event)=>{updCustomer({event, cid, naam:null});} }
+            >
+              Add Child
+            </Button>
+        </Box>
+      </Card>   
+
     </form>
   </>
   );

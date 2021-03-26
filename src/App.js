@@ -34,9 +34,6 @@ appContextData.populateCustomerArray = (carray) => {
     });
     return obj;
   });
-  console.log('%c****************', 'color:red');
-  console.dir(carray);
-  console.dir(appContextData.cArray);
 };
 
 appContextData.addCustomerRecord = (crec) => {
@@ -61,6 +58,22 @@ appContextData.updCustomerRecord = (crec) => {
   appContextData.cArray = [...a];
 };
 
+// Add strength and stressor pair(objToAdd) into the ss array of the customer record(cid)
+appContextData.addStrengthStressorPair = (cid, objToAdd) => {
+  console.log('here');
+  console.dir(objToAdd);
+  const a = appContextData.cArray.map((v) => {
+    if (cid === v.id) {
+      return { ...v, ss: [...v.ss, { ...objToAdd }] };
+    }
+    return { ...v };
+  });
+  appContextData.cArray = [...a];
+
+  console.dir(appContextData.cArray);
+};
+
+//
 appContextData.invalidateCache = () => {
   appContextData.cArray = [];
 };

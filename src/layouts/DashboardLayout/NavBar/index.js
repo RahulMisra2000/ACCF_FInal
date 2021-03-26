@@ -56,7 +56,7 @@ const populateItems = (loggedIn) => {
     items.push({
       href: '/app/customers',
       icon: UsersIcon,
-      title: 'Case Records'
+      title: 'Case Management'
     });
   }
   items.push({

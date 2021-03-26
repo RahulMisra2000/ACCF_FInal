@@ -1,4 +1,10 @@
 export default {
+  fontFamily: 'QuickSand',
+  fontSize: 15,
+  fontWeightLight: 400,
+  fontWeightRegular: 500,
+  fontWeightMedium: 600,
+  fontWeightBold: 700,
   h1: {
     fontWeight: 500,
     fontSize: 35,
