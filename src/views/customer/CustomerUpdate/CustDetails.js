@@ -118,7 +118,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
   const [updButtonDisable, setUpdButtonDisable] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { isLoggedIn, addStrengthStressorPair, updCustomerRecord } = useContext(AppContext);
+  const { isLoggedIn, addStrengthStressorPair, addChildInCache, updCustomerRecord } = useContext(AppContext);
 
   console.log('%cCustDetails component code (in CustomerUpdate) just executed', 'color:blue');
 
@@ -305,10 +305,63 @@ const CustDetails = ({ cid, className, ...rest }) => {
       });   
     ; // updCustomer()
 
-    // The side effect of this will be a re-rendering and therefore the new record just added will be visible 
-    // on the list of records also
+    // The side effect of this will be a re-rendering
       setValues({...values, errors : {}});                // clear out the errors in the state
   };
+
+  // Add Child
+  const addChild = ({event, cid}) => {    
+    const now = Date.now();
+    let atLeastOneValidationFailed = false;
+    let errorsObject = {};
+    
+    console.log(event, cid);
+    // validate child
+    
+    if (!values.childName) {
+      errorsObject.childName = `Enter age, grade and school for ${values.childName}`;      
+      atLeastOneValidationFailed = true;
+      console.log('a');
+    }
+
+    if (values.childName && (!Number(values.childAge) || !values.childGrade || !values.childSchool || values.childGrade == 'Select' || values.childSchool == 'Select')){
+      errorsObject.childName = `Enter age, grade and school for ${values.childName}`;      
+      atLeastOneValidationFailed = true;
+      console.log('b');
+    }
+
+    if (atLeastOneValidationFailed){
+      setValues({...values, errors : {...errorsObject}}); // add all the errors to the state      
+      return;
+    }    
+    
+    console.log('TIME TO UPDATE');
+    const childThatNeedsToBeAdded = {name: values.childName, age: values.childAge, grade: values.childGrade, school: values.childSchool};
+    const newCompleteChildrenArray = [...values.children, childThatNeedsToBeAdded ];
+    
+    console.dir(values.children);
+    console.dir(newCompleteChildrenArray);
+    
+    // 1. update the firestore record
+    // I think when you want to update an array in Firestore you need to send the entire complete array and not just the element that 
+    // you want added into the array
+    CustomerDataService.update(cid, {children: newCompleteChildrenArray})
+      .then(() => {
+        addChildInCache(cid, childThatNeedsToBeAdded);  // 2. update the cache
+        setSubmitted(`Customer ${cid} was just updated in database`);
+        showSnackbar(`Successfully added child to customer ${cid}`);        
+      })
+      .then((result) => console.log(result))
+      .catch((e) => {
+        console.log('%c' + `Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`, 'color:red');
+        setIsError(`Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`);
+      });   
+   
+    // The side effect of this will be a re-rendering
+      setValues({...values, errors : {}});                // clear out the errors in the state
+  };
+
+
 
   // RETURN AREA --------------------------------------------------------------------
   // Loading
@@ -575,7 +628,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
         <CardHeader subheader="Children" />
         <Divider />
         <CardContent>
-          <Grid container spacing={3} > 
+          <Grid container spacing={3}> 
               { values?.children && values.children.map((v,i) => 
                 (
                   <React.Fragment key={i}>
@@ -614,6 +667,38 @@ const CustDetails = ({ cid, className, ...rest }) => {
                   </React.Fragment>
                 ))
               }
+
+              {/* Adding a child */}
+              <Grid item sm={3} xs={12}  className={classes.rm1} >
+                <TextField fullWidth label="Name" name="childName" onChange={handleChange} value={values.childName} variant="outlined" size="small"
+                  error={values?.errors?.childName ? true : false}
+                  helperText={values?.errors?.childName ? values?.errors?.childName : ''}
+                />
+              </Grid>
+              <Grid item sm={2} xs={12}  className={classes.rm1} >
+                <TextField fullWidth label="Age" name="childAge" onChange={handleChange} value={values.childAge} variant="outlined" size="small" />
+              </Grid>
+              <Grid item sm={2} xs={12}  className={classes.rm1} >
+                <TextField fullWidth label="Grade" name="childGrade" onChange={handleChange}  
+                  select SelectProps={{ native: true }} value={values.childGrade} variant="outlined" size="small" > 
+                  {dataForSelect.childGradeLevel.map((option) => (
+                    <option key={option.code} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </TextField>              
+              </Grid>
+              <Grid item sm={5} xs={12}  className={classes.rm1} >
+                <TextField fullWidth label="School" name="childSchool" onChange={handleChange} 
+                  select SelectProps={{ native: true }} value={values.childSchool} variant="outlined" size="small"             
+                > 
+                  {dataForSelect.childSchool.map((option) => (
+                    <option key={option.code} value={option.name} >
+                      {option.name}
+                    </option>
+                  ))}
+                </TextField>
+              </Grid>
           </Grid>
         </CardContent>
         <Divider />      
@@ -626,7 +711,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
               color="primary"
               variant="contained"
               size="small"   
-              onClick={ (event)=>{updCustomer({event, cid, naam:null});} }
+              onClick= { (event)=>{addChild({event, cid});} }
             >
               Add Child
             </Button>

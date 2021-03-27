@@ -15,7 +15,8 @@ import {
   TablePagination,
   TableRow,
   Typography,
-  makeStyles
+  makeStyles,
+  Hidden
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 import { useNavigate } from 'react-router-dom';
@@ -90,7 +91,7 @@ const Results = ({ className, customers, ...rest }) => {
       {...rest}
     >
       <PerfectScrollbar>
-        <Box minWidth={1050}>
+        <Box minWidth={360}>
           <Table>
             <TableHead>
               <TableRow>
@@ -109,14 +110,16 @@ const Results = ({ className, customers, ...rest }) => {
                   Name
                 </TableCell>
                 <TableCell>
-                  Email
-                </TableCell>
-                <TableCell>
                   Phone
                 </TableCell>
-                <TableCell>
-                  Created At
-                </TableCell>
+                <Hidden only={['xs', 'sm']}>
+                  <TableCell>
+                    Email
+                  </TableCell>
+                  <TableCell>
+                    Created At
+                  </TableCell>
+                </Hidden>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -154,14 +157,18 @@ const Results = ({ className, customers, ...rest }) => {
                     </Box>
                   </TableCell>
                   <TableCell>
-                    {customer.email}
-                  </TableCell>
-                  <TableCell>
                     {customer.phone}
                   </TableCell>
-                  <TableCell>
-                    {moment(customer.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-                  </TableCell>
+                  <Hidden only={['xs', 'sm']}>
+                    <TableCell>
+                      {customer.email}
+                    </TableCell>
+                  </Hidden>
+                  <Hidden only={['xs', 'sm']}>
+                    <TableCell>
+                      {moment(customer.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                    </TableCell>
+                  </Hidden>
                 </TableRow>
               ))}
             </TableBody>

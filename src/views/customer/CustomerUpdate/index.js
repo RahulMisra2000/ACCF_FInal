@@ -27,23 +27,21 @@ const CustomerUpdate = () => {
       className={classes.root}
       title="Customer"
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Grid
           container
           spacing={3}
         >
           <Grid
             item
-            lg={4}
-            md={3}
+            sm={3}
             xs={12}
           >
             <CustProfile cid={cid} />
           </Grid>
           <Grid
             item
-            lg={8}
-            md={9}
+            sm={9}
             xs={12}
           >
             <CustDetails cid={cid} />

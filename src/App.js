@@ -73,6 +73,21 @@ appContextData.addStrengthStressorPair = (cid, objToAdd) => {
   console.dir(appContextData.cArray);
 };
 
+// Add Child to children array
+appContextData.addChildInCache = (cid, objToAdd) => {
+  console.log('here');
+  console.dir(objToAdd);
+  const a = appContextData.cArray.map((v) => {
+    if (cid === v.id) {
+      return { ...v, children: [...v.children, { ...objToAdd }] };
+    }
+    return { ...v };
+  });
+  appContextData.cArray = [...a];
+
+  console.dir(appContextData.cArray);
+};
+
 //
 appContextData.invalidateCache = () => {
   appContextData.cArray = [];
