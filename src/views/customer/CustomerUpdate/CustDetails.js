@@ -25,21 +25,6 @@ import dataForSelect from 'src/dataForSelect';
 
 console.dir(dataForSelect.levelType);
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
-
 const useStyles = makeStyles(() => ({
   root: {},
   rmcard: {
@@ -142,6 +127,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
               createdAt: new Date(doc.data().createdAt),
               updatedAt: doc.data()?.updatedAt ? doc.data().updatedAt : null,
               uid: doc.data().uid,
+              uidEmail: doc.data().uidEmail,
               status: doc.data().status,
               serviceCompletion: doc.data().serviceCompletion,
               rating: doc.data().rating,
@@ -223,37 +209,26 @@ const CustDetails = ({ cid, className, ...rest }) => {
       email: values.email,
      };
 
-    const user = isLoggedIn;
+    // UPDATE customer record in database
+    data.updatedAt = Date.now();
 
-    if (user != null) {
-      user.providerData.forEach(function (profile) {
-        console.log("Sign-in provider: " + profile.providerId);
-        console.log("  Provider-specific UID: " + profile.uid);
-        console.log("  Name: " + profile.displayName);
-        console.log("  Email: " + profile.email);
-        console.log("  Photo URL: " + profile.photoURL);
+    CustomerDataService.update(cid, data)
+      .then(() => {
+        setSubmitted(`Customer ${cid} was just updated in database`);
+
+        data.id = cid; // upd the record in CACHE
+        updCustomerRecord(data); 
+        showSnackbar(`Successfully updated customer ${cid}`);
+        return makeEntryInGoogleSheet(data);
+      })
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((e) => {
+        // https://firebase.google.com/docs/reference/js/firebase.firestore#firestoreerrorcode
+        console.log('%c' + `Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`, 'color:red');
+        setIsError(`Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`);
       });
-    }
 
-      // UPDATE customer record in database
-      data.updatedAt = Date.now();
-
-      CustomerDataService.update(cid, data)
-        .then(() => {
-          setSubmitted(`Customer ${cid} was just updated in database`);
-
-          data.id = cid; // upd the record in CACHE
-          updCustomerRecord(data); 
-          showSnackbar(`Successfully updated customer ${cid}`);
-          return makeEntryInGoogleSheet(data);
-        })
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((e) => {
-          // https://firebase.google.com/docs/reference/js/firebase.firestore#firestoreerrorcode
-          console.log('%c' + `Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`, 'color:red');
-          setIsError(`Error Name: ${e.name} Code: ${e.code} Message: ${e.message}`);
-        });
     setUpdButtonDisable(false);
     
   }; // updCustomer()
@@ -415,6 +390,10 @@ const CustDetails = ({ cid, className, ...rest }) => {
 
               </Grid>
               <Grid item sm={4} xs={12}>
+                <Typography className={classes.rmtypography} color="textPrimary" variant="body1">By:&nbsp;</Typography>
+                <Typography className={classes.rmtypography} color="textSecondary" variant="body2">
+                  { values.uidEmail }
+                </Typography>
               </Grid>
               <Grid item sm={3} xs={12}>
                 <Typography className={classes.rmtypography} color="textPrimary" variant="body1">Status:&nbsp;</Typography>

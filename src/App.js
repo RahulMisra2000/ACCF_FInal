@@ -18,7 +18,13 @@ const { auth } = firebaseProducts;
 
 // ----------------- Initializing the Context --------------------------------------------
 // with data
-let appContextData = { isLoggedIn: null, claims: {}, cArray: [] };
+let appContextData = {
+  isLoggedIn: null,
+  signedInUsersEmail: null,
+  claimsInJwt: {},
+  proprietaryClaims: {},
+  cArray: []
+};
 
 // with methods (Consumers of context can call these methods)
 appContextData.populateCustomerArray = (carray) => {
@@ -36,7 +42,7 @@ appContextData.populateCustomerArray = (carray) => {
   });
 };
 
-appContextData.addCustomerRecord = (crec) => {
+appContextData.addCustomerRecordToCache = (crec) => {
   const obj = { ...crec };
   obj.children = crec.children.map((v1) => {
     return { ...v1 };
@@ -117,17 +123,33 @@ const App = () => {
       // Have to change state so that there is a cascade of re-rendering
       // I am placing the entire user object in isLoggedIn property and not just whether
       // the user is logged in or not (ie a boolean)
-      // Remember that setting the state is an async execution
+      // ALWAYS Remember that setting the state is an async execution
 
       if (user) {
+        // Get the email of the signed-in user REGARDLESS of which Provider
+        // he may have used to signin
+        user.providerData.forEach((profile) => {
+          console.log(`Sign-in provider: ${profile.providerId}`);
+          console.log(`Provider-specific UID: ${profile.uid}`);
+          console.log(`Name: ${profile.displayName}`);
+          console.log(`Email: ${profile.email}`);
+          console.log(`Photo URL: ${profile.photoURL}`);
+          appContextData = { ...appContextData, signedInUsersEmail: profile.email };
+        });
+
+        // Get proprietary claims fot signed-in user from proprietary Users collection-TO BE DONE
+        // eslint-disable-next-line max-len
+        // appContextData = { ...appContextData, proprietaryClaims: { ...{object with claims in it coming from user in users collection } } };
+
+        // Get standard claims from JWT
         user.getIdTokenResult()
           .then((details) => {
-            appContextData = { ...appContextData, claims: { ...details.claims } };
+            appContextData = { ...appContextData, claimsInJwt: { ...details.claims } };
             console.log(Date.now());
             setIsLoggedIn(user); // async operation
           });
       } else {
-        appContextData = { ...appContextData, claims: {} };
+        appContextData = { ...appContextData, claimsInJwt: {} };
         setIsLoggedIn(user); // async operation
       }
     });

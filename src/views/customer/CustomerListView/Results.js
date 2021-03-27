@@ -35,7 +35,6 @@ const Results = ({ className, customers, ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(0);
-
   const navigate = useNavigate();
 
   // HANDLERS
@@ -114,7 +113,10 @@ const Results = ({ className, customers, ...rest }) => {
                 </TableCell>
                 <Hidden only={['xs', 'sm']}>
                   <TableCell>
-                    Email
+                    Navigator
+                  </TableCell>
+                  <TableCell>
+                    Case
                   </TableCell>
                   <TableCell>
                     Created At
@@ -160,6 +162,9 @@ const Results = ({ className, customers, ...rest }) => {
                     {customer.phone}
                   </TableCell>
                   <Hidden only={['xs', 'sm']}>
+                    <TableCell>
+                      {customer.uidEmail}
+                    </TableCell>
                     <TableCell>
                       {customer.email}
                     </TableCell>

@@ -129,7 +129,7 @@ const useStyles = makeStyles(() => ({
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
-  const { isLoggedIn, claims } = useContext(AppContext);
+  const { isLoggedIn, claimsInJwt: claims } = useContext(AppContext);
 
   console.log(Date.now());
   console.log('************************************************->', claims.role);

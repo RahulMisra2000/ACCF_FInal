@@ -20,30 +20,15 @@ import { useSnackbar } from 'notistack';
 import Zoom from '@material-ui/core/Zoom';
 import AppContext from '../../../contexts/appContext';
 import dataForSelect from 'src/dataForSelect';
-import { date } from 'yup';
 
-console.dir(dataForSelect.levelType);
-
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
-
+//#region STYLES
 const useStyles = makeStyles(() => ({
   root: {}
 }));
+//#endregion
 
-// UTILITY FUNCTION
+//#region Utility (optional)
+// UTILITY FUNCTIONS that have nothing to do with the component
 const makeEntryInGoogleSheet = (collectionName, d) => {
   // This I got from Postman
   const myHeaders = new Headers();
@@ -73,23 +58,28 @@ const makeEntryInGoogleSheet = (collectionName, d) => {
     throw new Error('Error writing to Google App Script');
   });
 };
+//#endregion
 
 const CustDetails = ({ className, ...rest }) => {
   const classes = useStyles();
  
-  // if the record was successfully written to database
-  const [submitted, setSubmitted] = useState(null);
+  //#region CONTEXT
+  const { isLoggedIn, signedInUsersEmail, addCustomerRecordToCache } = useContext(AppContext);
+  //#endregion
 
-  const [values, setValues] = useState({});
-  const [isError, setIsError] = useState(false);
-  const [addButtonDisabled, setAddButtonDisabled] = useState(false);
-  const [validationErrors, setValidationErrors] = useState({});
-  const [formValid, setFormValid] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-
-  const { isLoggedIn, addCustomerRecord } = useContext(AppContext);
-
-  // UTILITY FUNCTIONS
+  //#region UTILITY FNs
+  
+  const showSnackbar = (msg) => {    
+    enqueueSnackbar(msg, {
+      anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+      },
+      TransitionComponent: Zoom,
+      variant: 'success' // success, error, warning, info, or default
+    });
+  };
+  
   const getDefaultValuesForForm = () => {
     return {
       name: '',
@@ -104,31 +94,6 @@ const CustDetails = ({ className, ...rest }) => {
       stressorScore: '',
       errors: {}
     };
-  };
-
-  
-  useEffect(()=>{
-    setValues(getDefaultValuesForForm());    
-  },[]);
-
-  // HANDLERS
-  const handleChange = (event) => {    
-    const { name, value } = event.target;    
-    setValues({
-      ...values,
-      [name]: value
-    });
-  };
-
-  const showSnackbar = (msg) => {    
-    enqueueSnackbar(msg, {
-      anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'center',
-      },
-      TransitionComponent: Zoom,
-      variant: 'success' // success, error, warning, info, or default
-    });
   };
 
   const formFailsValidation = () => {
@@ -196,6 +161,45 @@ const CustDetails = ({ className, ...rest }) => {
     return atLeastOneValidationFailed ? true : false;
   };
 
+  //#endregion
+
+  //#region STATE 
+  // set with a message after record is successfully to the Firestore
+  const [submitted, setSubmitted] = useState(null);
+
+  // Inside values is ALSO an errors object, which contains form validation errors
+  const [values, setValues] = useState({});
+
+  // set with a message if there is a problem writing to Firestore
+  const [isError, setIsError] = useState(false);
+
+  // to prevent several Add button clicks
+  const [addButtonDisabled, setAddButtonDisabled] = useState(false);
+
+  //#endregion
+  
+  //#region UseEffect HOOK
+  useEffect(()=>{
+    setValues(getDefaultValuesForForm());   
+    return () =>{
+      //
+    }; 
+  },[]);
+  //#endregion
+
+  //#region OTHER HOOKS
+  const { enqueueSnackbar } = useSnackbar();
+  //#endregion
+
+  //#region EVENT HANDLERS FOR FORMS
+  const handleChange = (event) => {    
+    const { name, value } = event.target;    
+    setValues({
+      ...values,
+      [name]: value
+    });
+  };
+
   const addCustomer = ({event, naam}) => {
     setAddButtonDisabled(true); // To prevent them from firing this multiple times
 
@@ -229,34 +233,42 @@ const CustDetails = ({ className, ...rest }) => {
     // Other data not coming from the form
     data.createdAt = creationMoment;
     data.uid = isLoggedIn.uid;  // user id of the logged-in user
+    data.uidEmail = signedInUsersEmail; // Email of the logged-in user
     data.status = "Open";          // Open
-    data.serviceCompletion = "N";
+    data.serviceCompletion = "No";
     data.rating = null;
 
     // INSERT customer record in database   
       CustomerDataService.create(data)
         .then((docRef) => {
           console.log(`cust id just created in database is ${docRef.id}`);
-          setSubmitted(`cust id just created in database is ${docRef.id}`);
+
+          // WILL LATER (since state updates are async) SHOW ON-SCREEN MESSAGE
+          setSubmitted(`Case ${docRef.id} registered`);
           
-          // add the record to cache 
+          // ADD TO CACHE
           data.id = docRef.id;
-          addCustomerRecord(data);
-          showSnackbar(`Successfully added customer ${docRef.id}`);
+          addCustomerRecordToCache(data);
 
-          return makeEntryInGoogleSheet('customers', {...data});
+          // SHOW POPUP NOTIFICATION
+          showSnackbar(`Case ${docRef.id} registered`);
+
+          // WRITE TO SPREADSHEET
+          // If you enable this then you will need to do these two before the catch if 
+          // you want to log out the response from the App Script
+          // .then((response) => response.text())
+          // .then((result) => console.log(result))  
+          // return makeEntryInGoogleSheet('customers', {...data});
         })
-        .then((response) => response.text())
-        .then((result) => console.log(result))
         .catch((e) => {
-          console.log(e.message);
-          setIsError(e.message);
+          setIsError('Error registering case. Please try again.');
         });
-    setAddButtonDisabled(false);
-    
-  }; // addCustomer()
 
-  // RETURN AREA --------------------------------------------------------------------
+    setAddButtonDisabled(false);
+  };
+  //#endregion
+  
+  //#region RETURN AREA
 
   // Error
   if (isError){
@@ -275,9 +287,6 @@ const CustDetails = ({ className, ...rest }) => {
         </div>        
       );
   }
-console.log('----------------------------------------------------');
-
-console.dir(values);
 
   // SHOW THE FORM
   return (
@@ -295,27 +304,30 @@ console.dir(values);
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item sm={6} xs={12}>
-                  <TextField fullWidth label="Name" name="name" onChange={handleChange} required value={values.name} variant="outlined" size="small" 
+                  {/* DOCUMENTATION */}
+                  {/* If the result of error is truthy then field border and helperText become red */}
+                  {/* helperText is always shown unless we place a condition as shown below */}
+                  <TextField fullWidth label="Name" name="name" onChange={handleChange} required value={values.name} variant="outlined" size="small"                     
                     error={values?.errors?.name ? true : false}
-                    helperText={values?.errors?.name ? values?.errors?.name : ''}
+                    helperText={values.errors?.name ? values.errors?.name : ''}
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
                   <TextField fullWidth label="Crisis" name="crisis" onChange={handleChange} required value={values.crisis} variant="outlined" size="small" 
                     error={values?.errors?.crisis ? true : false}
-                    helperText={values?.errors?.crisis ? values?.errors?.crisis : ''}
+                    helperText={values.errors?.crisis ? values.errors?.crisis : ''}
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
                   <TextField fullWidth label="Email" name="email" onChange={handleChange} required value={values.email} variant="outlined" size="small"
                     error={values?.errors?.email ? true : false}
-                    helperText={values?.errors?.email ? values?.errors?.email : ''}
+                    helperText={values.errors?.email ? values.errors?.email : ''}
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
                   <TextField fullWidth label="Phone Number" name="phone" onChange={handleChange} value={values.phone} variant="outlined" size="small"
                    error={values?.errors?.phone ? true : false}
-                   helperText={values?.errors?.phone ? values?.errors?.phone : ''}
+                   helperText={values.errors?.phone ? values.errors?.phone : ''}
                   />
                 </Grid>
               </Grid>
@@ -332,13 +344,13 @@ console.dir(values);
                 <Grid item sm={6} xs={12} >
                   <TextField fullWidth label="Strength Score" name="strengthScore" onChange={handleChange} required value={values.strengthScore} variant="outlined" size="small" 
                     error={values?.errors?.strengthScore ? true : false}
-                    helperText={values?.errors?.strengthScore ? values?.errors?.strengthScore : ''}
+                    helperText={values.errors?.strengthScore ? values.errors?.strengthScore : ''}
                   />
                 </Grid>
                 <Grid item sm={6} xs={12} >
                   <TextField fullWidth label="Stressor Score" name="stressorScore" onChange={handleChange} required value={values.stressorScore} variant="outlined" size="small" 
                     error={values?.errors?.stressorScore ? true : false}
-                    helperText={values?.errors?.stressorScore ? values?.errors?.stressorScore : ''}
+                    helperText={values.errors?.stressorScore ? values.errors?.stressorScore : ''}
                   />
                 </Grid>              
              </Grid>
@@ -357,7 +369,7 @@ console.dir(values);
                 <Grid item sm={3} xs={12} >
                   <TextField fullWidth label="Name" name="k1name" onChange={handleChange} value={values.k1name} variant="outlined" size="small"
                     error={values?.errors?.k1name ? true : false}
-                    helperText={values?.errors?.k1name ? values?.errors?.k1name : ''}
+                    helperText={values.errors?.k1name ? values.errors?.k1name : ''}
                   />
                 </Grid>
                 <Grid item sm={3} xs={12} >
@@ -388,8 +400,8 @@ console.dir(values);
                 {/* 2nd child */}
                 <Grid item sm={3} xs={12} >
                   <TextField fullWidth label="Name" name="k2name" onChange={handleChange} value={values.k2name} variant="outlined" size="small"
-                    error={values?.errors?.k2name ? true : false}
-                    helperText={values?.errors?.k2name ? values?.errors?.k2name : ''}
+                    error={values.errors?.k2name ? true : false}
+                    helperText={values.errors?.k2name ? values.errors?.k2name : ''}
                   />
                 </Grid>
                 <Grid item sm={3} xs={12} >
@@ -420,8 +432,8 @@ console.dir(values);
                 {/* 3rd child */}
                 <Grid item sm={3} xs={12} >
                   <TextField fullWidth label="Name" name="k3name" onChange={handleChange}  value={values.k3name} variant="outlined" size="small"
-                    error={values?.errors?.k3name ? true : false}
-                    helperText={values?.errors?.k3name ? values?.errors?.k3name : ''}
+                    error={values.errors?.k3name ? true : false}
+                    helperText={values.errors?.k3name ? values.errors?.k3name : ''}
                   />
                 </Grid>
                 <Grid item sm={3} xs={12} >
@@ -452,8 +464,8 @@ console.dir(values);
                 {/* 4th child */}
                 <Grid item sm={3} xs={12} >
                   <TextField fullWidth label="Name" name="k4name" onChange={handleChange}  value={values.k4name} variant="outlined" size="small"
-                    error={values?.errors?.k4name ? true : false}
-                    helperText={values?.errors?.k4name ? values?.errors?.k4name : ''}
+                    error={values.errors?.k4name ? true : false}
+                    helperText={values.errors?.k4name ? values.errors?.k4name : ''}
                   />
                 </Grid>
                 <Grid item sm={3} xs={12} >
@@ -493,10 +505,14 @@ console.dir(values);
       </form>
   </>
   );
+  //#endregion
+
 };
 
+//#region propTypes
 CustDetails.propTypes = {
   className: PropTypes.string
 };
+//#endregion 
 
 export default CustDetails;

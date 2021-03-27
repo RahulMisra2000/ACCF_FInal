@@ -38,6 +38,10 @@ const MiscInfo = ({ className, ...rest }) => {
           });
         });
     }
+
+    // Console out the Cache
+    // 1. The cArray in the cache
+    console.dir(cArray);
   }, []);
 
   // eslint-disable-next-line no-unused-vars

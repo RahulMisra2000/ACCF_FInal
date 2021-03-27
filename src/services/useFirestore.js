@@ -16,7 +16,7 @@ const useFirestore = (collectionName) => {
   // https://firebase.google.com/docs/firestore/query-data/get-data
   const {
     isLoggedIn,
-    claims,
+    claimsInJwt: claims,
     cArray,
     populateCustomerArray
   } = useContext(AppContext);
