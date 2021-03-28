@@ -41,10 +41,9 @@ const TopBar = ({
   const rmClicked = () => {
     invalidateCache();
     auth.signOut();
-    navigate('/app/dashboard', { replace: true });
+    navigate('/', { replace: true });
   };
 
-  console.log('topbar - XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
   console.dir(isLoggedIn);
 
   return (

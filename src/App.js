@@ -1,14 +1,16 @@
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import React, { useState, useEffect } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core';
 import GlobalStyles from 'src/components/GlobalStyles';
 import 'src/mixins/chartjs';
 import theme from 'src/theme';
-import routes from 'src/routes';
+// import routes from 'src/routes';
 import firebaseProducts from 'src/config/firebaseConfig';
 import AppContext from 'src/contexts/appContext';
 import { SnackbarProvider } from 'notistack';
+import DashboardLayout from './layouts/DashboardLayout';
+import MainLayout from './layouts/MainLayout';
 
 console.log('%c1st line of App.js just executed', 'background-Color:black; color:white');
 console.log(process.env.REACT_APP_SHELL_1);
@@ -96,7 +98,7 @@ appContextData.invalidateCache = () => {
 const App = () => {
   console.log('%cApp component code just executed', 'background-Color:blue; color:white');
 
-  const routing = useRoutes(routes);
+  // const routing = useRoutes(routes);
 
   // Entire purpose of the forceRender state definition is so that the entire component tree can
   // re-render when the state changes.
@@ -171,7 +173,10 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <SnackbarProvider maxSnack={3}>
-          {routing}
+          <Routes>
+            <Route path="/*" element={<MainLayout />} />
+            <Route path="app/*" element={<DashboardLayout />} />
+          </Routes>
         </SnackbarProvider>
       </ThemeProvider>
     </AppContext.Provider>

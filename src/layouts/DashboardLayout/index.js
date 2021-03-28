@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
+
+import AccountView from 'src/views/account/AccountView';
+import CustomerListView from 'src/views/customer/CustomerListView';
+import DashboardView from 'src/views/reports/DashboardView';
+import ProductListView from 'src/views/product/ProductListView';
+import SettingsView from 'src/views/settings/SettingsView';
+import CustomerAddView from 'src/views/customer/CustomerAddView';
+import CustomerUpdateView from 'src/views/customer/CustomerUpdateView';
+import HackViewForDashboardLayout from 'src/HACK/HackViewForDashboardLayout';
+
 import NavBar from './NavBar';
 import TopBar from './TopBar';
 
@@ -47,7 +57,18 @@ const DashboardLayout = () => {
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
           <div className={classes.content}>
-            <Outlet />
+            <Routes>
+              <Route path="" element={<DashboardView />} />
+              <Route path="dashboard" element={<DashboardView />} />
+              <Route path="account" element={<AccountView />} />
+              <Route path="products" element={<ProductListView />} />
+              <Route path="settings" element={<SettingsView />} />
+              <Route path="customers" element={<CustomerListView />} />
+              <Route path="customers/add" element={<CustomerAddView />} />
+              <Route path="customers/upd/:id" element={<CustomerUpdateView />} />
+              <Route path="customers/activities/:id" element={<SettingsView />} />
+              <Route path="*" element={<HackViewForDashboardLayout loc="/404" />} />
+            </Routes>
           </div>
         </div>
       </div>

@@ -1,6 +1,11 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
+
+import LoginView from 'src/views/auth/LoginView';
+import NotFoundView from 'src/views/errors/NotFoundView';
+import RegisterView from 'src/views/auth/RegisterView';
+import HackViewForMainLayout from 'src/HACK/HackViewForMainLayout';
 import TopBar from './TopBar';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +43,14 @@ const MainLayout = () => {
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>
           <div className={classes.content}>
-            <Outlet />
+            <Routes>
+              {/* Wrote HackView because I couldn't get Link from react-router-dom ver 6 to work */}
+              <Route path="" element={<HackViewForMainLayout loc="/app/dashboard" />} />
+              <Route path="login" element={<LoginView />} />
+              <Route path="register" element={<RegisterView />} />
+              <Route path="404" element={<NotFoundView />} />
+              <Route path="*" element={<HackViewForMainLayout loc="/404" />} />
+            </Routes>
           </div>
         </div>
       </div>
