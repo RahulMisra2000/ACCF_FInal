@@ -178,7 +178,7 @@ const CustDetails = ({ className, ...rest }) => {
 
   //#endregion
   
-  //#region UseEffect HOOK
+  //#region UseEffect HOOK - Put default values in Form
   useEffect(()=>{
     setValues(getDefaultValuesForForm());   
     return () =>{
@@ -192,6 +192,7 @@ const CustDetails = ({ className, ...rest }) => {
   //#endregion
 
   //#region EVENT HANDLERS FOR FORMS
+  // onChange event handler for Form Fields that we want React to control
   const handleChange = (event) => {    
     const { name, value } = event.target;    
     setValues({
@@ -200,6 +201,7 @@ const CustDetails = ({ className, ...rest }) => {
     });
   };
 
+  // Add Button click event handler
   const addCustomer = ({event, naam}) => {
     setAddButtonDisabled(true); // To prevent them from firing this multiple times
 
@@ -238,9 +240,9 @@ const CustDetails = ({ className, ...rest }) => {
     data.serviceCompletion = "No";
     data.rating = null;
 
-    // INSERT customer record in database   
-      CustomerDataService.create(data)
-        .then((docRef) => {
+    // INSERT customer record in Firestore 
+    CustomerDataService.create(data)
+      .then((docRef) => {
           console.log(`cust id just created in database is ${docRef.id}`);
 
           // WILL LATER (since state updates are async) SHOW ON-SCREEN MESSAGE
@@ -259,10 +261,10 @@ const CustDetails = ({ className, ...rest }) => {
           // .then((response) => response.text())
           // .then((result) => console.log(result))  
           // return makeEntryInGoogleSheet('customers', {...data});
-        })
-        .catch((e) => {
+      })
+      .catch((e) => {
           setIsError('Error registering case. Please try again.');
-        });
+      });
 
     setAddButtonDisabled(false);
   };

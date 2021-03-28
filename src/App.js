@@ -20,14 +20,14 @@ const { auth } = firebaseProducts;
 // with data
 let appContextData = {
   isLoggedIn: null,
-  signedInUsersEmail: null,
+  signedInUsersEmail: '',
   claimsInJwt: {},
   proprietaryClaims: {},
   cArray: []
 };
 
 // with methods (Consumers of context can call these methods)
-appContextData.populateCustomerArray = (carray) => {
+appContextData.populateCustomerArrayToCache = (carray) => {
   // appContextData.cArray = [...carray];
   appContextData.cArray = carray.map((v) => {
     const obj = { ...v }; // 1st level properties will be copied
@@ -54,7 +54,7 @@ appContextData.addCustomerRecordToCache = (crec) => {
 };
 
 // only phone and email fields can be updated for the customer (aka case management record)
-appContextData.updCustomerRecord = (crec) => {
+appContextData.updCustomerRecordToCache = (crec) => {
   const a = appContextData.cArray.map((v) => {
     if (crec.id === v.id) {
       return { ...v, phone: crec.phone, email: crec.email };
@@ -65,9 +65,7 @@ appContextData.updCustomerRecord = (crec) => {
 };
 
 // Add strength and stressor pair(objToAdd) into the ss array of the customer record(cid)
-appContextData.addStrengthStressorPair = (cid, objToAdd) => {
-  console.log('here');
-  console.dir(objToAdd);
+appContextData.addStrengthStressorToCache = (cid, objToAdd) => {
   const a = appContextData.cArray.map((v) => {
     if (cid === v.id) {
       return { ...v, ss: [...v.ss, { ...objToAdd }] };
@@ -75,14 +73,10 @@ appContextData.addStrengthStressorPair = (cid, objToAdd) => {
     return { ...v };
   });
   appContextData.cArray = [...a];
-
-  console.dir(appContextData.cArray);
 };
 
 // Add Child to children array
 appContextData.addChildInCache = (cid, objToAdd) => {
-  console.log('here');
-  console.dir(objToAdd);
   const a = appContextData.cArray.map((v) => {
     if (cid === v.id) {
       return { ...v, children: [...v.children, { ...objToAdd }] };
@@ -90,8 +84,6 @@ appContextData.addChildInCache = (cid, objToAdd) => {
     return { ...v };
   });
   appContextData.cArray = [...a];
-
-  console.dir(appContextData.cArray);
 };
 
 //
@@ -102,16 +94,19 @@ appContextData.invalidateCache = () => {
 
 // FROM TOP UP UNTIL THIS LINE IS EXECUTED JUST *** ONCE *** FOR THE ENTIRE RUN OF THE APPLICATION
 const App = () => {
-  console.log('%cApp component code just executed', 'color:blue');
+  console.log('%cApp component code just executed', 'background-Color:blue; color:white');
 
   const routing = useRoutes(routes);
+
+  // Entire purpose of the forceRender state definition is so that the entire component tree can
+  // re-render when the state changes.
   // eslint-disable-next-line no-unused-vars
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
-  // eslint-disable-next-line no-unused-vars
-  const [forceRepaint, setForceRepaint] = useState(null);
+  const [forceRender, setForceRender] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe1 = auth.onAuthStateChanged((user) => {
+      // Make sure that you fill up the appContext with all the values and ONLY THEN set the
+      // forceRender state so that all downstream components can get the latest appContext values
       // user.uid will contain the unique user id or null
 
       // user.getIdTokenResult() returns an object which has
@@ -129,11 +124,13 @@ const App = () => {
         // Get the email of the signed-in user REGARDLESS of which Provider
         // he may have used to signin
         user.providerData.forEach((profile) => {
+          /*
           console.log(`Sign-in provider: ${profile.providerId}`);
           console.log(`Provider-specific UID: ${profile.uid}`);
           console.log(`Name: ${profile.displayName}`);
           console.log(`Email: ${profile.email}`);
           console.log(`Photo URL: ${profile.photoURL}`);
+          */
           appContextData = { ...appContextData, signedInUsersEmail: profile.email };
         });
 
@@ -145,15 +142,28 @@ const App = () => {
         user.getIdTokenResult()
           .then((details) => {
             appContextData = { ...appContextData, claimsInJwt: { ...details.claims } };
-            console.log(Date.now());
-            setIsLoggedIn(user); // async operation
+            setForceRender(user); // async operation
+          })
+          .catch((e) => {
+            console.log(`Error getIdTokenResult ${e.message} ${Date.now()}`);
           });
       } else {
-        appContextData = { ...appContextData, claimsInJwt: {} };
-        setIsLoggedIn(user); // async operation
+        appContextData = { ...appContextData, claimsInJwt: {}, proprietaryClaims: {} };
+        setForceRender(user); // async operation
       }
     });
-    return () => unsubscribe();
+
+    const unsubscribe2 = window.setInterval(() => {
+      console.log('%cCustomer\'s Array Cached Content Follows', 'color:green');
+      console.log(appContextData.cArray);
+      console.log('%cApplication\'s AppContextData Follow', 'color:green');
+      console.dir(appContextData);
+    }, 10000);
+
+    return () => {
+      unsubscribe1();
+      window.clearInterval(unsubscribe2);
+    };
   }, []);
 
   return (

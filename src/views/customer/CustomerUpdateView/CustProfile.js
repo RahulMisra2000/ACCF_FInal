@@ -62,7 +62,7 @@ const CustProfile = ({ cid, className, ...rest }) => {
             gutterBottom
             variant="h3"
           >
-            <Button color="primary" variant="outlined" size="small" onClick={() => { navigate(`/app/customers/${cid}/activities`); }}>My Activities</Button>
+            <Button color="primary" variant="outlined" size="small" onClick={() => { navigate(`/app/customers/activities/${cid}`); }}>My Activities</Button>
           </Typography>
           <Typography
             color="textPrimary"

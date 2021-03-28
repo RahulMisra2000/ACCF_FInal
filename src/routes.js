@@ -10,8 +10,9 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
-import CustomerAdd from './views/customer/CustomerAdd';
-import CustomerUpdate from './views/customer/CustomerUpdate';
+
+import CustomerAddView from './views/customer/CustomerAddView';
+import CustomerUpdateView from './views/customer/CustomerUpdateView';
 
 const routes = [
   {
@@ -20,9 +21,9 @@ const routes = [
     children: [
       { path: 'account', element: <AccountView /> },
       { path: 'customers', element: <CustomerListView /> },
-      { path: 'customers/add', element: <CustomerAdd /> },
-      { path: 'customers/upd/:id', element: <CustomerUpdate /> },
-      { path: 'customers/:id/activities', element: <SettingsView /> },
+      { path: 'customers/add', element: <CustomerAddView /> },
+      { path: 'customers/upd/:id', element: <CustomerUpdateView /> },
+      { path: 'customers/activities/:id', element: <SettingsView /> },
       { path: 'dashboard', element: <DashboardView /> },
       { path: 'products', element: <ProductListView /> },
       { path: 'settings', element: <SettingsView /> },

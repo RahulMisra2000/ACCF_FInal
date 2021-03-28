@@ -18,14 +18,14 @@ const useFirestore = (collectionName) => {
     isLoggedIn,
     claimsInJwt: claims,
     cArray,
-    populateCustomerArray
+    populateCustomerArrayToCache
   } = useContext(AppContext);
 
   useEffect(() => {
+    const d = [];
     // Get data from CACHE
     if (collectionName === 'customers' && cArray.length) {
-      console.log('%cGetting Data From Cache, not Firestore', 'color:red');
-      console.log(cArray);
+      console.log('%cGetting Data From Cache, not Firestore', 'background-color:green; color:white');
       setIsLoading(false);
       setData([...cArray]);
       setError(null);
@@ -36,8 +36,6 @@ const useFirestore = (collectionName) => {
 
       // setTimeout is ONLY FOR DELAY SIMULATION -- Remove it when GOING LIVE
       setTimeout(() => {
-        const d = [];
-
         // BUILD WHERE CLAUSE FOR QUERY
         if (collectionName === 'customers') {
           //
@@ -70,7 +68,7 @@ const useFirestore = (collectionName) => {
             });
             console.log(d);
             setData(d);
-            populateCustomerArray(d);
+            populateCustomerArrayToCache(d);
             setError(null);
           })
           .catch((err) => {
@@ -82,7 +80,7 @@ const useFirestore = (collectionName) => {
       }, 1500);
     } // else
     return () => {
-      console.log('unmounted');
+      console.log('Component that uses this hook (useFirestore) has just unmounted');
     };
   }, []);
 

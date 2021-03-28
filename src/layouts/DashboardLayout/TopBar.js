@@ -44,6 +44,9 @@ const TopBar = ({
     navigate('/app/dashboard', { replace: true });
   };
 
+  console.log('topbar - XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+  console.dir(isLoggedIn);
+
   return (
     <AppBar
       className={clsx(classes.root, className)}

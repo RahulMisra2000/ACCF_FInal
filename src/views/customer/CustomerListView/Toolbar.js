@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Toolbar = ({ className, searchFn, ...rest }) => {
   const classes = useStyles();
-  const [q, setQ] = useState(null);
+  const [q, setQ] = useState('');
 
   return (
     <div
