@@ -7,7 +7,7 @@ const { db } = firebaseProducts;
 
 // This custom hook is for reading multiple records from a collection
 //  It runs only once when the component that uses this hook is mounted
-const useFirestore = (collectionName) => {
+const useFirestore = ({ collectionName }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -18,66 +18,76 @@ const useFirestore = (collectionName) => {
     isLoggedIn,
     claimsInJwt: claims,
     cArray,
-    populateCustomerArrayToCache
+    populateCustomerArrayToCache,
+    rArray,
+    populateReferralArrayToCache,
   } = useContext(AppContext);
 
   useEffect(() => {
     const d = [];
-    // Get data from CACHE
+    // TRY TO GET DATA FROM CACHE
     if (collectionName === 'customers' && cArray.length) {
-      console.log('%cGetting Data From Cache, not Firestore', 'background-color:green; color:white');
+      console.log(`%cGetting ${collectionName} data From Cache, not Firestore`, 'background-color:green; color:white');
       setIsLoading(false);
       setData([...cArray]);
       setError(null);
+    } else if (collectionName === 'referrals' && rArray.length) {
+      console.log(`%cGetting ${collectionName} data From Cache, not Firestore`, 'background-color:green; color:white');
+      setIsLoading(false);
+      setData([...rArray]);
+      setError(null);
     } else {
-    // Get the data from FIRESTORE
-      console.log('%cWill try to access data from Firestore', 'background-color:red; color:white');
+    // CACHE DOES NOT HAVE IT SO, GET FROM FIRESTORE
+      console.log(`%cWill try to access ${collectionName} data from Firestore`, 'background-color:red; color:white');
       setIsLoading(true);
 
-      // setTimeout is ONLY FOR DELAY SIMULATION -- Remove it when GOING LIVE
-      setTimeout(() => {
-        // BUILD WHERE CLAUSE FOR QUERY
-        if (collectionName === 'customers') {
-          //
-        } else {
-          //
+      // BUILD COLLECTION-SPECIFIC WHERE CLAUSE FOR QUERY
+      if (collectionName === 'customers') {
+        //
+      } else if (collectionName === 'referrals') {
+        //
+      }
+
+      // V. IMP -- When querying multiple records (called list in Firestore) you need to make
+      // sure that what you specify IN security rule is also specified in the query
+
+      // Regular Users can only see their records
+      // UNIVERSAL WHERE CLAUSE (for all collections)
+      if (claims.role !== 'admin') {
+        if (config.loggedInUserCanOnlySeeCustomersThatHeCreated) {
+          // Security Rule : request.auth.uid == resource.data.uid;
+          const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
+          console.log(whereClauseToMatchSecurityRule);
+          coll = coll.where('uid', '==', isLoggedIn.uid);
         }
+      }
 
-        // V. IMP -- When querying multiple records (called list in Firestore) you need to make
-        // sure that what you specify IN security rule is also specified in the query
+      // BUILD THE ORDER BY CLAUSE
+      coll = coll.orderBy('createdAt', 'desc');
 
-        // Regular Users can only see their records
-        if (claims.role !== 'admin') {
-          if (config.loggedInUserCanOnlySeeCustomersThatHeCreated) {
-            // Security Rule : request.auth.uid == resource.data.uid;
-            const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
-            console.log(whereClauseToMatchSecurityRule);
-            coll = coll.where('uid', '==', isLoggedIn.uid);
-          }
-        }
-
-        // BUILD THE ORDER BY CLAUSE
-        coll = coll.orderBy('createdAt', 'desc');
-
-        // NOW GET THE RECORDS
-        coll.get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              // doc.data() is never undefined for query doc snapshots
-              d.push({ ...doc.data(), id: doc.id });
-            });
-            console.log(d);
-            setData(d);
-            populateCustomerArrayToCache(d);
-            setError(null);
-          })
-          .catch((err) => {
-            setError(`Error accessing ${collectionName} from Firestore : ${err.message}`);
-          })
-          .finally(() => {
-            setIsLoading(false);
+      // NOW GET THE RECORDS
+      coll.get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            d.push({ ...doc.data(), id: doc.id });
           });
-      }, 1500);
+          console.log(d);
+          setData(d);
+          if (collectionName === 'customers') {
+            populateCustomerArrayToCache(d);
+          } else if (collectionName === 'referrals') {
+            populateReferralArrayToCache(d);
+          }
+          setError(null);
+        })
+        .catch((err) => {
+          setError(`Error accessing ${collectionName} from Firestore : ${err.message}`);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    // }, 1500);
     } // else
     return () => {
       console.log('Component that uses this hook (useFirestore) has just unmounted');

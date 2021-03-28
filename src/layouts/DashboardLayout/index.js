@@ -9,6 +9,9 @@ import ProductListView from 'src/views/product/ProductListView';
 import SettingsView from 'src/views/settings/SettingsView';
 import CustomerAddView from 'src/views/customer/CustomerAddView';
 import CustomerUpdateView from 'src/views/customer/CustomerUpdateView';
+import ReferralListView from 'src/views/referrals/ReferralListView';
+import ReferralAddView from 'src/views/referrals/ReferralAddView';
+import ReferralUpdateView from 'src/views/referrals/ReferralUpdateView';
 import HackViewForDashboardLayout from 'src/HACK/HackViewForDashboardLayout';
 
 import NavBar from './NavBar';
@@ -60,10 +63,13 @@ const DashboardLayout = () => {
             <Routes>
               <Route path="" element={<DashboardView />} />
               <Route path="dashboard" element={<DashboardView />} />
+              <Route path="customers" element={<CustomerListView />} />
+              <Route path="referrals" element={<ReferralListView />} />
+              <Route path="referrals/add" element={<ReferralAddView />} />
+              <Route path="referrals/upd/:id" element={<ReferralUpdateView />} />
               <Route path="account" element={<AccountView />} />
               <Route path="products" element={<ProductListView />} />
               <Route path="settings" element={<SettingsView />} />
-              <Route path="customers" element={<CustomerListView />} />
               <Route path="customers/add" element={<CustomerAddView />} />
               <Route path="customers/upd/:id" element={<CustomerUpdateView />} />
               <Route path="customers/activities/:id" element={<SettingsView />} />

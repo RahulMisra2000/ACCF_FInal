@@ -59,6 +59,13 @@ const populateItems = (loggedIn) => {
       title: 'Case Management'
     });
   }
+  if (loggedIn) {
+    items.push({
+      href: '/app/referrals',
+      icon: UsersIcon,
+      title: 'Referrals'
+    });
+  }
   items.push({
     href: '/app/products',
     icon: ShoppingBagIcon,

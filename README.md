@@ -6,6 +6,14 @@ console.log('%cCustomerListView component code just executed','color:blue');
 // eslint-disable-next-line no-unused-vars
 
 
+
+PlNGcgU6a1fKTT6vviJcPXgpcKn1     gmail		navigator
+dfs5yVxFhrOyCJu5SIQD7QWHjur2	b@b.com		admin
+BryybVXvhcS25cZ0BRxLbm5yEBz1	a@a.com		navigator
+
+customer
+4lDH1oL853nQMpmmFHAQ  amexone
+
 ## NOTES
 firebase init		(1-time only)
 		Here we enable the hosting

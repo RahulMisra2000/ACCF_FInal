@@ -7,13 +7,13 @@ service cloud.firestore {
       // Allow any authenticated user to read a single document
       // allow get: if isSignedIn();
       // Only the authenticated user who authored the document OR is admin to read
-      allow get: if isSignedIn() && (userOwnsDocument() || isAdmin());
+      allow get: if isSignedIn() && (isAdmin() || userOwnsDocument());
 
       // Allow any authenticated user to read a list of documents
       // allow list: if isSignedIn();
       // Only the authenticated user who authored the document OR is admin can read
       // https://firebase.google.com/docs/firestore/security/rules-query#rules_are_not_filters
-      allow list: if isSignedIn() && (userOwnsDocument() || isAdmin());
+      allow list: if isSignedIn() && (isAdmin() || userOwnsDocument());
 
 
       // CUD OF CRUD
@@ -31,11 +31,10 @@ service cloud.firestore {
     }
     function isAdmin() {
       // 1. Custom Claims way of doing things
-      return request.auth.token.role == "admin";
-      // 
+      // return request.auth.token.role == "admin";
+      
       // 2. Users collection way of doing things
-      // return true;
-      // return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
     }
 
     function userOwnsDocument() {

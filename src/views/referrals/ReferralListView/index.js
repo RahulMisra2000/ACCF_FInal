@@ -9,7 +9,7 @@ import Toolbar from './Toolbar';
 import useFirestore from 'src/services/useFirestore';
 import AppContext from 'src/contexts/appContext';
 
-console.log('%c1st line of CustomerListView(index).js just executed', 'background-Color:black; color:white');
+console.log('%c1st line of ReferralListView(index).js just executed', 'background-Color:black; color:white');
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const CustomerListView = () => {
+const ReferralListView = () => {
   // GUARD - only authenticated users can continue
   const { isLoggedIn } = useContext(AppContext);
   if (!isLoggedIn) {    
@@ -28,24 +28,24 @@ const CustomerListView = () => {
   }
   // GUARD
 
-  console.log('%cCustomerListView component code just executed','color:blue');
+  console.log('%cReferralsListView component code just executed','color:blue');
   const classes = useStyles();
   
   // If the data is in cache it is got from there. If not then from Firestore. Then fills up the cache.
-  const {isLoading, data: cdata, error} = useFirestore({collectionName: 'customers'});
+  const {isLoading, data: rdata, error} = useFirestore({collectionName: 'referrals'});
   const [searchedData, setSearchedData] = useState([]);
   
   // searching happens with data in the cache
   const handleSearchTerm = (q) => {    
     if (q) {      
-      setSearchedData(cdata.filter((v) => {
+      setSearchedData(rdata.filter((v) => {
         return (v.name.includes(q) || 
                 v.email.includes(q) ||
                 v.uidEmail.includes(q)
                 );  // searching in name or email ... can be expanded to include more fields
       }));
     } else {
-      setSearchedData([...cdata]);
+      setSearchedData([...rdata]);
     }
   };
 
@@ -53,19 +53,19 @@ const CustomerListView = () => {
   return (
     <Page
       className={classes.root}
-      title="Customers"
+      title="Referrals"
     >
       <Container maxWidth={false}>
         <Toolbar searchFn={(q) => { handleSearchTerm(q); }}/>
         <Box mt={3}>
           {error && <strong>Error: {JSON.stringify(error)}</strong>}
           {isLoading && <LinearProgress color="secondary" />}
-          {!isLoading && cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
-          {!isLoading && cdata?.length ? (<Results customers={searchedData.length? searchedData : cdata} />) : null}
+          {!isLoading && rdata?.length == 0 ? <strong>No Referrals Record(s)</strong> : null}
+          {!isLoading && rdata?.length ? (<Results referrals={searchedData.length? searchedData : rdata} />) : null}
         </Box>
       </Container>
     </Page>
   );
 };
 
-export default CustomerListView;
+export default ReferralListView;

@@ -24,13 +24,43 @@ let appContextData = {
   isLoggedIn: null,
   signedInUsersEmail: '',
   claimsInJwt: {},
-  proprietaryClaims: {},
-  cArray: []
+  cArray: [],
+  rArray: []
 };
 
-// with methods (Consumers of context can call these methods)
+// WITH METHODS
+// REFERRALS
+appContextData.populateReferralArrayToCache = (rarray) => {
+  appContextData.rArray = rarray.map((v) => {
+    const obj = { ...v }; // 1st level properties will be copied
+    // There is one array (followup) that will need to be handled
+    obj.followup = v.followup.map((v1) => {
+      return { ...v1 };
+    });
+    return obj;
+  });
+};
+
+appContextData.addReferralRecordToCache = (rrec) => {
+  const obj = { ...rrec };
+  obj.followup = rrec.followup.map((v1) => {
+    return { ...v1 };
+  });
+  appContextData.rArray.unshift(obj);
+};
+
+appContextData.addFollowupInCache = (rid, objToAdd) => {
+  const a = appContextData.rArray.map((v) => {
+    if (rid === v.id) {
+      return { ...v, followup: [...v.followup, { ...objToAdd }] };
+    }
+    return { ...v };
+  });
+  appContextData.rArray = [...a];
+};
+
+// CUSTOMERS
 appContextData.populateCustomerArrayToCache = (carray) => {
-  // appContextData.cArray = [...carray];
   appContextData.cArray = carray.map((v) => {
     const obj = { ...v }; // 1st level properties will be copied
     // There are two arrays (children and ss) that will need to be handled
@@ -91,6 +121,7 @@ appContextData.addChildInCache = (cid, objToAdd) => {
 //
 appContextData.invalidateCache = () => {
   appContextData.cArray = [];
+  appContextData.rArray = [];
 };
 // ----------------- Initializing the Context --------------------------------------------
 
@@ -136,11 +167,7 @@ const App = () => {
           appContextData = { ...appContextData, signedInUsersEmail: profile.email };
         });
 
-        // Get proprietary claims fot signed-in user from proprietary Users collection-TO BE DONE
-        // eslint-disable-next-line max-len
-        // appContextData = { ...appContextData, proprietaryClaims: { ...{object with claims in it coming from user in users collection } } };
-
-        // Get standard claims from JWT
+        // Get claims from JWT
         user.getIdTokenResult()
           .then((details) => {
             appContextData = { ...appContextData, claimsInJwt: { ...details.claims } };
@@ -150,7 +177,7 @@ const App = () => {
             console.log(`Error getIdTokenResult ${e.message} ${Date.now()}`);
           });
       } else {
-        appContextData = { ...appContextData, claimsInJwt: {}, proprietaryClaims: {} };
+        appContextData = { ...appContextData, claimsInJwt: {} };
         setForceRender(user); // async operation
       }
     });
@@ -158,6 +185,8 @@ const App = () => {
     const unsubscribe2 = window.setInterval(() => {
       console.log('%cCustomer\'s Array Cached Content Follows', 'color:green');
       console.log(appContextData.cArray);
+      console.log('%cCustomer\'s Referral Array Cached Content Follows', 'color:green');
+      console.log(appContextData.rArray);
       console.log('%cApplication\'s AppContextData Follow', 'color:green');
       console.dir(appContextData);
     }, 10000);
