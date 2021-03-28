@@ -45,7 +45,7 @@ const MainLayout = () => {
           <div className={classes.content}>
             <Routes>
               {/* Wrote HackView because I couldn't get Link from react-router-dom ver 6 to work */}
-              <Route path="" element={<HackViewForMainLayout loc="/app/dashboard" />} />
+              <Route path="" element={<HackViewForMainLayout loc="/login" />} />
               <Route path="login" element={<LoginView />} />
               <Route path="register" element={<RegisterView />} />
               <Route path="404" element={<NotFoundView />} />

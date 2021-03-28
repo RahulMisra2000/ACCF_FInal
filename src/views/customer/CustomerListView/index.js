@@ -1,19 +1,13 @@
 /* eslint-disable */
-import React, { useState } from 'react';
-import {
-  Box,
-  Container,
-  makeStyles,
-  LinearProgress
-} from '@material-ui/core';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import React, { useState, useContext } from 'react';
+import { Box, Container, makeStyles, LinearProgress } from '@material-ui/core';
+import { Navigate } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import Results from './Results';
 import Toolbar from './Toolbar';
-// import data from './data';
-import CustomerDataService from '../../../services/CustomerService';
 import useFirestore from 'src/services/useFirestore';
+import AppContext from 'src/contexts/appContext';
 
 console.log('%c1st line of CustomerListView(index).js just executed', 'background-Color:black; color:white');
 
@@ -27,10 +21,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomerListView = () => {
-  
+  // GUARD - only authenticated users can continue
+  const { isLoggedIn } = useContext(AppContext);
+  if (!isLoggedIn) {    
+    return (<Navigate to='/app/dashboard' />);
+  }
+  // GUARD
+
   console.log('%cCustomerListView component code just executed','color:blue');
   const classes = useStyles();
-  const [searchTerm, setSearchTerm] = useState(null);
   
   // If the data is in cache it is got from there. If not then from Firestore. Then fills up the cache.
   const {isLoading, data: cdata, error} = useFirestore('customers');

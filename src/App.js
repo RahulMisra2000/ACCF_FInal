@@ -176,6 +176,7 @@ const App = () => {
           <Routes>
             <Route path="/*" element={<MainLayout />} />
             <Route path="app/*" element={<DashboardLayout />} />
+            {/* <Route path="app/*" render={() => (<DashboardLayout />)} /> */}
           </Routes>
         </SnackbarProvider>
       </ThemeProvider>

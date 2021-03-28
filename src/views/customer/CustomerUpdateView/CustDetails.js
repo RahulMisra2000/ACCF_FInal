@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import CustomerDataService from 'src/services/CustomerService';
-import AppContext from '../../../contexts/appContext';
+import AppContext from 'src/contexts/appContext';
 import dataForSelect from 'src/dataForSelect';
 
 //#region STYLES
