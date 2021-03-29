@@ -34,7 +34,7 @@ const useFirestore = ({ collectionName, recordsForThisId }) => {
     } else if (collectionName === 'referrals' && rArray.length) {
       console.log(`%cGetting ${collectionName} data From Cache, not Firestore`, 'background-color:green; color:white');
       setIsLoading(false);
-      // If there is a filter (recordsForThisId) then only return records for that id
+      // If there is a filter (recordsForThisId) then only return records for recordsForThisId
       // ie Return only those referral records whose cid is the same as recordsForThisId
       setData(recordsForThisId
         ? [...rArray.filter((v) => { return v.cid === recordsForThisId; })]
@@ -78,14 +78,14 @@ const useFirestore = ({ collectionName, recordsForThisId }) => {
             // doc.data() is never undefined for query doc snapshots
             d.push({ ...doc.data(), id: doc.id });
           });
-          console.log(d);
-          setData(d);
           if (collectionName === 'customers') {
             populateCustomerArrayToCache(d);
           } else if (collectionName === 'referrals') {
             populateReferralArrayToCache(d);
           }
+          // Because setting state is async, try doing all the work before setting it
           setError(null);
+          setData(d);      
         })
         .catch((err) => {
           setError(`Error accessing ${collectionName} from Firestore : ${err.message}`);

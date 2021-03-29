@@ -8,6 +8,7 @@ import {
   Box,
   Card,
   Checkbox,
+  TableContainer,
   Table,
   TableBody,
   TableCell,
@@ -16,7 +17,8 @@ import {
   TableRow,
   Typography,
   makeStyles,
-  Hidden
+  Hidden,
+  Paper
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 import { useNavigate } from 'react-router-dom';
@@ -91,95 +93,97 @@ const Results = ({ className, customers, ...rest }) => {
     >
       <PerfectScrollbar>
         <Box minWidth={360}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedCustomerIds.length === customers.length}
-                    color="primary"
-                    indeterminate={
-                      selectedCustomerIds.length > 0
-                      && selectedCustomerIds.length < customers.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell>
-                <TableCell>
-                  Name
-                </TableCell>
-                <TableCell>
-                  Phone
-                </TableCell>
-                <Hidden only={['xs', 'sm']}>
-                  <TableCell>
-                    Navigator
-                  </TableCell>
-                  <TableCell>
-                    Case
-                  </TableCell>
-                  <TableCell>
-                    Created At
-                  </TableCell>
-                </Hidden>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {customers.slice(page * limit, page * limit + limit).map((customer) => (
-                <TableRow
-                  onClick={(e) => { customerInListClicked(e, customer.id); }}
-                  hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
-                >
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
-                      value="true"
+                      checked={selectedCustomerIds.length === customers.length}
+                      color="primary"
+                      indeterminate={
+                        selectedCustomerIds.length > 0
+                        && selectedCustomerIds.length < customers.length
+                      }
+                      onChange={handleSelectAll}
                     />
                   </TableCell>
                   <TableCell>
-                    <Box
-                      alignItems="center"
-                      display="flex"
-                    >
-                      <Avatar
-                        className={classes.avatar}
-                        src={customer.avatarUrl}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
-                      <Typography
-                        color="textPrimary"
-                        variant="body1"
-                      >
-                        {customer.name}
-                      </Typography>
-                    </Box>
+                    Name
                   </TableCell>
                   <TableCell>
-                    {customer.phone}
+                    Phone
                   </TableCell>
                   <Hidden only={['xs', 'sm']}>
                     <TableCell>
-                      {customer.uidEmail}
+                      Navigator
                     </TableCell>
                     <TableCell>
-                      {customer.email}
+                      Case
                     </TableCell>
-                  </Hidden>
-                  <Hidden only={['xs', 'sm']}>
                     <TableCell>
-                      {moment(customer.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                      Created At
                     </TableCell>
                   </Hidden>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {customers.slice(page * limit, page * limit + limit).map((customer) => (
+                  <TableRow
+                    onClick={(e) => { customerInListClicked(e, customer.id); }}
+                    hover
+                    key={customer.id}
+                    selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedCustomerIds.indexOf(customer.id) !== -1}
+                        onChange={(event) => handleSelectOne(event, customer.id)}
+                        value="true"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        alignItems="center"
+                        display="flex"
+                      >
+                        <Avatar
+                          className={classes.avatar}
+                          src={customer.avatarUrl}
+                        >
+                          {getInitials(customer.name)}
+                        </Avatar>
+                        <Typography
+                          color="textPrimary"
+                          variant="body1"
+                        >
+                          {customer.name}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      {customer.phone}
+                    </TableCell>
+                    <Hidden only={['xs', 'sm']}>
+                      <TableCell>
+                        {customer.uidEmail}
+                      </TableCell>
+                      <TableCell>
+                        {customer.email}
+                      </TableCell>
+                    </Hidden>
+                    <Hidden only={['xs', 'sm']}>
+                      <TableCell>
+                        {moment(customer.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                      </TableCell>
+                    </Hidden>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
-      </PerfectScrollbar>
+      </PerfectScrollbar>      
       <TablePagination
         component="div"
         count={customers.length}

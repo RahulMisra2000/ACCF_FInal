@@ -14,7 +14,9 @@ import {
   TablePagination,
   TableRow,
   makeStyles,
-  Hidden
+  Hidden,
+  Paper,
+  TableContainer
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
@@ -88,100 +90,102 @@ const Results = ({ className, referrals, ...rest }) => {
     >
       <PerfectScrollbar>
         <Box minWidth={360}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedReferralIds.length === referrals.length}
-                    color="primary"
-                    indeterminate={
-                      selectedReferralIds.length > 0
-                      && selectedReferralIds.length < referrals.length
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableCell>
-                <TableCell>
-                  Create Date
-                </TableCell>
-                <TableCell>
-                  By
-                </TableCell>
-                <TableCell>
-                  Reason
-                </TableCell>
-                <Hidden only={['xs', 'sm']}>
-                  <TableCell>
-                    Referral Date
-                  </TableCell>
-                  <TableCell>
-                    Status
-                  </TableCell>
-                  <TableCell>
-                    Rec Status
-                  </TableCell>
-                  <TableCell>
-                    Part cid
-                  </TableCell>
-                </Hidden>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {referrals.slice(page * limit, page * limit + limit).map((referral) => (
-                <TableRow
-                  onClick={(e) => { referralInListClicked(e, referral.id); }}
-                  hover
-                  key={referral.id}
-                  selected={selectedReferralIds.indexOf(referral.id) !== -1}
-                >
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedReferralIds.indexOf(referral.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, referral.id)}
-                      value="true"
+                      checked={selectedReferralIds.length === referrals.length}
+                      color="primary"
+                      indeterminate={
+                        selectedReferralIds.length > 0
+                        && selectedReferralIds.length < referrals.length
+                      }
+                      onChange={handleSelectAll}
                     />
                   </TableCell>
                   <TableCell>
-                    <Box
-                      alignItems="center"
-                      display="flex"
-                    >
-                      {moment(referral.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-                      {/*
-                      <Typography
-                          color="textPrimary"
-                          variant="body1"
-                      >
-                        {referral.name}
-                      </Typography>
-                     */}
-                    </Box>
+                    Create Date
                   </TableCell>
                   <TableCell>
-                    {referral.uidEmail}
+                    By
                   </TableCell>
                   <TableCell>
-                    {referral.reason}
+                    Reason
                   </TableCell>
                   <Hidden only={['xs', 'sm']}>
                     <TableCell>
-                      {moment(referral.referredFor).format('MMMM Do YYYY, h:mm:ss a')}
+                      Referral Date
                     </TableCell>
                     <TableCell>
-                      {referral.status}
+                      Status
                     </TableCell>
                     <TableCell>
-                      {referral.recStatus}
+                      Rec Status
                     </TableCell>
                     <TableCell>
-                      {referral.cid.slice(0, 5)}
+                      Part cid
                     </TableCell>
                   </Hidden>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {referrals.slice(page * limit, page * limit + limit).map((referral) => (
+                  <TableRow
+                    onClick={(e) => { referralInListClicked(e, referral.id); }}
+                    hover
+                    key={referral.id}
+                    selected={selectedReferralIds.indexOf(referral.id) !== -1}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedReferralIds.indexOf(referral.id) !== -1}
+                        onChange={(event) => handleSelectOne(event, referral.id)}
+                        value="true"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        alignItems="center"
+                        display="flex"
+                      >
+                        {moment(referral.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                        {/*
+                        <Typography
+                            color="textPrimary"
+                            variant="body1"
+                        >
+                          {referral.name}
+                        </Typography>
+                      */}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      {referral.uidEmail}
+                    </TableCell>
+                    <TableCell>
+                      {referral.reason}
+                    </TableCell>
+                    <Hidden only={['xs', 'sm']}>
+                      <TableCell>
+                        {moment(referral.referredFor).format('MMMM Do YYYY, h:mm:ss a')}
+                      </TableCell>
+                      <TableCell>
+                        {referral.status}
+                      </TableCell>
+                      <TableCell>
+                        {referral.recStatus}
+                      </TableCell>
+                      <TableCell>
+                        {referral.cid.slice(0, 5)}
+                      </TableCell>
+                    </Hidden>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </PerfectScrollbar>
       <TablePagination

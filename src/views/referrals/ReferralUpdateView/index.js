@@ -6,8 +6,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import CustProfile from './ReferralProfile';
-import CustDetails from './ReferralDetails';
+import ReferralDetails from './ReferralDetails';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,33 +17,35 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const CustomerUpdate = () => {
+const ReferralUpdate = () => {
   const classes = useStyles();
-  const { id: cid } = useParams();
+  const { id: rid } = useParams();
 
   return (
     <Page
       className={classes.root}
-      title="Customer"
+      title="Referral"
     >
       <Container maxWidth="xl">
         <Grid
           container
           spacing={3}
         >
+          {/*
           <Grid
             item
             sm={3}
             xs={12}
           >
-            <CustProfile cid={cid} />
+            <ReferralProfile rid={rid} />
           </Grid>
+          */}
           <Grid
             item
             sm={9}
             xs={12}
           >
-            <CustDetails cid={cid} />
+            <ReferralDetails rid={rid} />
           </Grid>
         </Grid>
       </Container>
@@ -52,4 +53,4 @@ const CustomerUpdate = () => {
   );
 };
 
-export default CustomerUpdate;
+export default ReferralUpdate;

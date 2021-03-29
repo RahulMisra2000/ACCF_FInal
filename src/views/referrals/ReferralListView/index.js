@@ -43,10 +43,7 @@ const ReferralListView = () => {
   const handleSearchTerm = (q) => {    
     if (q) {      
       setSearchedData(rdata.filter((v) => {
-        return (v.name.includes(q) || 
-                v.email.includes(q) ||
-                v.uidEmail.includes(q)
-                );  // searching in name or email ... can be expanded to include more fields
+        return (v.reason.includes(q));  // searching in reason ... can be expanded to include more fields
       }));
     } else {
       setSearchedData([...rdata]);

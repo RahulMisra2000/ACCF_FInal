@@ -67,8 +67,8 @@ function getRandomInt(min, max) {
 }
 //#endregion
 
-const CustDetails = ({ cid, className, ...rest }) => {
-  console.log('%cCustDetails component code (in CustomerUpdate) just executed', 'color:blue');
+const ReferralDetails = ({ cid, className, ...rest }) => {
+  console.log('%ReferralDetails component code (in ReferralUpdate) just executed', 'color:blue');
   const classes = useStyles();
 
   //#region CONTEXT
@@ -725,8 +725,8 @@ const CustDetails = ({ cid, className, ...rest }) => {
   //#endregion
 };
 
-CustDetails.propTypes = {
+ReferralDetails.propTypes = {
   className: PropTypes.string
 };
 
-export default CustDetails;
+export default ReferralDetails;
