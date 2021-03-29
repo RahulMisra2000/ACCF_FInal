@@ -32,13 +32,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto'
   },
   active: {
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.main,    
     '& $title': {
-      fontWeight: theme.typography.fontWeightMedium
+      fontWeight: theme.typography.fontWeightBold
     },
     '& $icon': {
       color: theme.palette.primary.main
-    }
+    },
+    border: '1px solid'
   }
 }));
 
@@ -61,15 +62,18 @@ const NavItem = ({
     navigate('/app/dashboard', { replace: true });
   };
 
+  // console.log(location.pathname);
+  // console.log(href);
+
   // Special processing
-  if (rest?.type === 1) {
+  if (rest?.type === 1) {    
     return (
-      <ListItem
+      <ListItem        
         className={clsx(classes.item, className)}
         disableGutters
       >
         <Button
-          activeclassname={classes.active}
+          activeClassName={classes.active}
           className={classes.button}
           onClick={logOutTheUser}
         >
@@ -88,13 +92,13 @@ const NavItem = ({
   }
 
   return (
-    <ListItem
+    <ListItem      
       className={clsx(classes.item, className)}
       disableGutters
       {...rest}
     >
-      <Button
-        activeclassname={classes.active}
+      <Button        
+        activeClassName={classes.active}
         className={classes.button}
         component={RouterLink}
         to={href}

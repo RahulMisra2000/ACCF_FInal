@@ -1,7 +1,7 @@
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, CircularProgress } from '@material-ui/core';
 import GlobalStyles from 'src/components/GlobalStyles';
 import 'src/mixins/chartjs';
 import theme from 'src/theme';
@@ -9,8 +9,22 @@ import theme from 'src/theme';
 import firebaseProducts from 'src/config/firebaseConfig';
 import AppContext from 'src/contexts/appContext';
 import { SnackbarProvider } from 'notistack';
+
 import DashboardLayout from './layouts/DashboardLayout';
-import MainLayout from './layouts/MainLayout';
+
+// No code-splitting this way
+// import MainLayout from './layouts/MainLayout';
+
+// Code-splitting
+const MainLayout = React.lazy(async () => {
+  let mod;
+  try {
+    mod = await import('./layouts/MainLayout');
+  } catch (e) {
+    console.log(`%c Error: ${e.message}`, 'color:red');
+  }
+  return mod;
+}); 
 
 console.log('%c1st line of App.js just executed', 'background-Color:black; color:white');
 console.log(process.env.REACT_APP_SHELL_1);
@@ -203,8 +217,10 @@ const App = () => {
         <GlobalStyles />
         <SnackbarProvider maxSnack={3}>
           <Routes>
-            <Route path="/*" element={<MainLayout />} />
-            <Route path="app/*" element={<DashboardLayout />} />
+            <React.Suspense fallback={<CircularProgress color="secondary" />}>
+              <Route path="/*" element={<MainLayout />} />        
+            </React.Suspense>    
+            <Route path="app/*" element={<DashboardLayout />} />            
             {/* <Route path="app/*" render={() => (<DashboardLayout />)} /> */}
           </Routes>
         </SnackbarProvider>
