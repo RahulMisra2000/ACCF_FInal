@@ -77,6 +77,10 @@ const Results = ({ className, customers, ...rest }) => {
   };
 
   const handlePageChange = (event, newPage) => {
+    // page : page number before the next/prev arrow is clicked
+    // newPage : page number after the next prev arrow is clicked
+    console.log(page);
+    console.log(newPage);
     setPage(newPage);
   };
 

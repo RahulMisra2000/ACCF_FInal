@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import firebaseProducts from 'src/config/firebaseConfig';
 import AppContext from 'src/contexts/appContext';
-import config from 'src/config/myConfig';
 
 const { db } = firebaseProducts;
 
@@ -60,12 +59,10 @@ const useFirestore = ({ collectionName, recordsForThisId }) => {
       // Regular Users can only see their records
       // UNIVERSAL WHERE CLAUSE (for all collections)
       if (claims.role !== 'admin') {
-        if (config.loggedInUserCanOnlySeeCustomersThatHeCreated) {
-          // Security Rule : request.auth.uid == resource.data.uid;
-          const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
-          console.log(whereClauseToMatchSecurityRule);
-          coll = coll.where('uid', '==', isLoggedIn.uid);
-        }
+        // Security Rule : request.auth.uid == resource.data.uid;
+        const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
+        console.log(whereClauseToMatchSecurityRule);
+        coll = coll.where('uid', '==', isLoggedIn.uid);
       }
 
       // BUILD THE ORDER BY CLAUSE
