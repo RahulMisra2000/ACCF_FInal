@@ -7,7 +7,7 @@ const { db } = firebaseProducts;
 
 // This custom hook is for reading multiple records from a collection
 //  It runs only once when the component that uses this hook is mounted
-const useFirestore = ({ collectionName }) => {
+const useFirestore = ({ collectionName, recordsForThisId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -34,7 +34,11 @@ const useFirestore = ({ collectionName }) => {
     } else if (collectionName === 'referrals' && rArray.length) {
       console.log(`%cGetting ${collectionName} data From Cache, not Firestore`, 'background-color:green; color:white');
       setIsLoading(false);
-      setData([...rArray]);
+      // If there is a filter (recordsForThisId) then only return records for that id
+      // ie Return only those referral records whose cid is the same as recordsForThisId
+      setData(recordsForThisId
+        ? [...rArray.filter((v) => { return v.cid === recordsForThisId; })]
+        : [...rArray]);
       setError(null);
     } else {
     // CACHE DOES NOT HAVE IT SO, GET FROM FIRESTORE
@@ -45,7 +49,9 @@ const useFirestore = ({ collectionName }) => {
       if (collectionName === 'customers') {
         //
       } else if (collectionName === 'referrals') {
-        //
+        if (recordsForThisId) {
+          coll = coll.where('cid', '==', recordsForThisId);
+        }
       }
 
       // V. IMP -- When querying multiple records (called list in Firestore) you need to make

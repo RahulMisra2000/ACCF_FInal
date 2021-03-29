@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useContext } from 'react';
 import { Box, Container, makeStyles, LinearProgress } from '@material-ui/core';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import Results from './Results';
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3)
   }
 }));
-
+ 
 const ReferralListView = () => {
   // GUARD - only authenticated users can continue
   const { isLoggedIn } = useContext(AppContext);
@@ -28,11 +28,15 @@ const ReferralListView = () => {
   }
   // GUARD
 
+  let whereClause = null;
+  // Depending on which path brings to this component, cid will be null or it will have some customer id 
+  const { id: cid } = useParams(); 
+  
   console.log('%cReferralsListView component code just executed','color:blue');
   const classes = useStyles();
   
   // If the data is in cache it is got from there. If not then from Firestore. Then fills up the cache.
-  const {isLoading, data: rdata, error} = useFirestore({collectionName: 'referrals'});
+  const {isLoading, data: rdata, error} = useFirestore({collectionName: 'referrals', recordsForThisId: cid});
   const [searchedData, setSearchedData] = useState([]);
   
   // searching happens with data in the cache

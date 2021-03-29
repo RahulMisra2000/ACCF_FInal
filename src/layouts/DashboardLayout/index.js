@@ -63,15 +63,19 @@ const DashboardLayout = () => {
             <Routes>
               <Route path="" element={<DashboardView />} />
               <Route path="dashboard" element={<DashboardView />} />
+
               <Route path="customers" element={<CustomerListView />} />
+              <Route path="customers/add" element={<CustomerAddView />} />
+              <Route path="customers/upd/:id" element={<CustomerUpdateView />} />
+              <Route path="customers/:id/referrals" element={<ReferralListView />} />
+
               <Route path="referrals" element={<ReferralListView />} />
               <Route path="referrals/add" element={<ReferralAddView />} />
               <Route path="referrals/upd/:id" element={<ReferralUpdateView />} />
+
               <Route path="account" element={<AccountView />} />
               <Route path="products" element={<ProductListView />} />
               <Route path="settings" element={<SettingsView />} />
-              <Route path="customers/add" element={<CustomerAddView />} />
-              <Route path="customers/upd/:id" element={<CustomerUpdateView />} />
               <Route path="customers/activities/:id" element={<SettingsView />} />
               <Route path="*" element={<HackViewForDashboardLayout loc="/404" />} />
             </Routes>

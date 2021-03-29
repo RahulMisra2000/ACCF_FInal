@@ -121,6 +121,9 @@ const Results = ({ className, referrals, ...rest }) => {
                   <TableCell>
                     Rec Status
                   </TableCell>
+                  <TableCell>
+                    Part cid
+                  </TableCell>
                 </Hidden>
               </TableRow>
             </TableHead>
@@ -170,6 +173,9 @@ const Results = ({ className, referrals, ...rest }) => {
                     </TableCell>
                     <TableCell>
                       {referral.recStatus}
+                    </TableCell>
+                    <TableCell>
+                      {referral.cid.slice(0, 5)}
                     </TableCell>
                   </Hidden>
                 </TableRow>
