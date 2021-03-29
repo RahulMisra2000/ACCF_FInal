@@ -5,7 +5,6 @@ import AppContext from 'src/contexts/appContext';
 const { db } = firebaseProducts;
 
 // This custom hook is for reading multiple records from a collection
-//  It runs only once when the component that uses this hook is mounted
 const useFirestore = ({ collectionName, recordsForThisId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
