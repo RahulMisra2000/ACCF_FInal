@@ -5,11 +5,38 @@ import AppContext from 'src/contexts/appContext';
 
 const { db } = firebaseProducts;
 
+const newSearchTermReceived = (lastQ, q) => {
+  // Loop thru the 2 objects and make sure that they are identical
+
+  // For now just doing this
+  if (lastQ?.current?.name !== q?.name) {
+    return true;
+  }
+
+  return false;
+
+};
+
 // FOR READING MULTIPLE RECORDS USING PAGINATION
-const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page, recordsForThisId }) => {
+const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page, recStatusToFilter, q, recordsForThisId }) => {
   let firstRecOnScreenR = useRef(null);
   let lastRecOnScreenR = useRef(null);
   let d = useRef([]);
+  let lastQ = useRef(null);
+
+  if (newSearchTermReceived(lastQ, q)) {
+    // Build the where clause
+
+    // Reset Markers
+    firstRecOnScreenR.current = null;
+    lastRecOnScreenR.current = null;
+
+    // Housekeeping
+    lastQ.current = {...q};
+  }
+
+  console.log("In useFirestore *****************************************************");
+
 
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -27,6 +54,23 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
 
     setIsLoading(true);
 
+    // UNIVERSAL WHERE CLAUSES
+    // 1.
+    if (claims.role !== 'admin') {
+      // Security Rule : request.auth.uid == resource.data.uid;
+      const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
+      coll = coll.where('uid', '==', isLoggedIn.uid);
+    }
+    // 2.
+    if (recStatusToFilter) {
+      if (recStatusToFilter === 'Archive') {       // only archive
+        coll = coll.where('recStatus', '==', 'Archive');
+      } else if (recStatusToFilter === 'Live') {  // only live
+        coll = coll.where('recStatus', '==', 'Live');
+      }
+    }
+
+    // 3. 
     // BUILD COLLECTION-SPECIFIC WHERE CLAUSE FOR QUERY
     if (collectionName === 'customers') {
       //
@@ -36,12 +80,6 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
       }
     }
 
-    // UNIVERSAL WHERE CLAUSE
-    if (claims.role !== 'admin') {
-      // Security Rule : request.auth.uid == resource.data.uid;
-      const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
-      coll = coll.where('uid', '==', isLoggedIn.uid);
-    }
 
     // BUILD THE ORDER BY CLAUSE
     coll = coll.orderBy('createdAt', 'desc');
@@ -76,7 +114,6 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
         });
         
         if (noRecsFound) {
-          console.log("querysnapshot says no records ***************************");
           if (page == 1) {
             setError('999');  // No records at all
           } else {

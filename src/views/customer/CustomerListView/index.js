@@ -32,17 +32,20 @@ const CustomerListView = () => {
   const classes = useStyles();
   
   // STATE
-  const [searchedData, setSearchedData] = useState([]);
+  const [q, setQ] = useState(null);
   
   const [options, setOptions] = useState({
     collectionName: 'customers',
+    recStatusToFilter: 'Live',
     direction: 'forward', 
     recordsToReadAtOneTime: 4,
-    page: 1
+    page: 1,
+    q
   });
   const {isLoading, data: cdata, error} = useFirestorePagination(options);
+
   const [enableNext, setEnableNext] = useState(true);
-  const [enablePrev, setEnablePrev] = useState(false);
+  const [enablePrev, setEnablePrev] = useState(false);  
 
   const nextClicked = () => {
     // Early Exit
@@ -84,17 +87,16 @@ const CustomerListView = () => {
   };
 
   // searching happens with data in the cache
-  const handleSearchTerm = (q) => {    
-    if (q) {      
-      setSearchedData(cdata.filter((v) => {
-        return (v.name.includes(q) || 
-                v.email.includes(q) ||
-                v.uidEmail.includes(q)
-                );  // searching in name or email ... can be expanded to include more fields
-      }));
-    } else {
-      setSearchedData([...cdata]);
-    }
+  const handleSearchObject = (q) => {        
+    setOptions((prevstate) => {      
+      return {
+        ...prevstate, 
+        page: 1,
+        direction: 'forward'
+      };
+    });
+    setQ(q);
+
   };
 
   //#region RETURN AREA
@@ -118,14 +120,14 @@ const CustomerListView = () => {
       title="Customers"
     >
       <Container maxWidth={false}>
-        <Toolbar searchFn={(q) => { handleSearchTerm(q); }}/>
+        <Toolbar searchFn={(q) => { handleSearchObject(q); }}/>
         <Box mt={3}>
           {isLoading && <LinearProgress color="secondary" />}
           {networkError() && <Alert severity="error">{error}</Alert>}
           {noRecordsAtAll() ? <Alert severity="error">No Customer Records</Alert> : null}
                     
           {!isLoading && !noRecordsAtAll() && !networkError()
-            ? (<Results customers={searchedData.length? searchedData : cdata} 
+            ? (<Results customers={cdata} 
                         prevClicked={prevClicked} 
                         nextClicked={nextClicked}
                         enablePrev={options.page > 1 ? true : false}

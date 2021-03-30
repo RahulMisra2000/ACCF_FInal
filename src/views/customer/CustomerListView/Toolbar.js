@@ -29,7 +29,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Toolbar = ({ className, searchFn, ...rest }) => {
   const classes = useStyles();
-  const [q, setQ] = useState('');
+  const [name, setName] = useState('');
+  const [city, setCity] = useState('');
+
+
+  const constructSearchObjectAndCallParentComponent = (e) => {
+    searchFn({name, city});
+  };
 
   return (
     <div
@@ -64,68 +70,36 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
             <Box maxWidth={600} display='flex'>
               <TextField
                 fullWidth
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SvgIcon
-                        fontSize="small"
-                        color="action"
-                      >
-                        <SearchIcon />
-                      </SvgIcon>
-                    </InputAdornment>
-                  )
-                }}
+                size="small"                
                 placeholder="<Name>"
                 variant="outlined"
-                value={q}
+                value={name}
                 onChange={(e) => {
                   console.log(e.target.value);
-                  setQ(e.target.value);
-                }}
-                onKeyUp={(e) => {
-                  if (e.keyCode === 13) {
-                    console.log('enter key pressed', q);
-                    searchFn(q);
-                  }
-                }}
+                  setName(e.target.value);
+                }}                
               />
               <TextField
                 fullWidth
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SvgIcon
-                        fontSize="small"
-                        color="action"
-                      >
-                        <SearchIcon />
-                      </SvgIcon>
-                    </InputAdornment>
-                  )
-                }}
+                size="small"                
                 placeholder="<City>"
                 variant="outlined"
-                value={q}
+                value={city}
                 onChange={(e) => {
                   console.log(e.target.value);
-                  setQ(e.target.value);
-                }}
-                onKeyUp={(e) => {
-                  if (e.keyCode === 13) {
-                    console.log('enter key pressed', q);
-                    searchFn(q);
-                  }
+                  setCity(e.target.value);
                 }}
               />
               <Button              
+                fullwidth
                 variant="contained"
                 size="small"
                 color="secondary"
                 className={classes.button}
                 startIcon={<SearchIcon />}
+                onClick={(e) => {
+                  constructSearchObjectAndCallParentComponent(e);
+                }}
               >
                 Search
               </Button>
