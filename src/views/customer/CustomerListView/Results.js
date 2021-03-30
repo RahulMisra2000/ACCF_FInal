@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -5,15 +6,17 @@ import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
   Avatar,
+  Button,
   Box,
   Card,
+  CardContent,
+  CardActions,
   Checkbox,
   TableContainer,
   Table,
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
   Typography,
   makeStyles,
@@ -30,13 +33,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Results = ({ className, customers, ...rest }) => {
+const Results = ({ className, customers, prevClicked, nextClicked, ...rest }) => {
   const classes = useStyles();
 
   // STATE
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
-  const [limit, setLimit] = useState(5);
-  const [page, setPage] = useState(0);
+  // const [limit, setLimit] = useState(5);
+  // const [page, setPage] = useState(0);
   const navigate = useNavigate();
 
   // HANDLERS
@@ -72,6 +75,7 @@ const Results = ({ className, customers, ...rest }) => {
     setSelectedCustomerIds(newSelectedCustomerIds);
   };
 
+  /*
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
   };
@@ -83,6 +87,7 @@ const Results = ({ className, customers, ...rest }) => {
     console.log(newPage);
     setPage(newPage);
   };
+  */
 
   const customerInListClicked = (e, cid) => {
     // Programmatic Navigation
@@ -95,7 +100,8 @@ const Results = ({ className, customers, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      <PerfectScrollbar>
+      <CardContent>
+        <PerfectScrollbar>
         <Box minWidth={360}>
           <TableContainer component={Paper}>
             <Table size="small">
@@ -128,11 +134,14 @@ const Results = ({ className, customers, ...rest }) => {
                     <TableCell>
                       Created At
                     </TableCell>
+                    <TableCell>
+                      cid
+                    </TableCell>
                   </Hidden>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {customers.slice(page * limit, page * limit + limit).map((customer) => (
+                {customers.slice(0 * 5, 0 * 5 + 5).map((customer) => (
                   <TableRow
                     onClick={(e) => { customerInListClicked(e, customer.id); }}
                     hover
@@ -180,6 +189,10 @@ const Results = ({ className, customers, ...rest }) => {
                       <TableCell>
                         {moment(customer.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                       </TableCell>
+                      <TableCell>
+                        {customer.id}
+                      </TableCell>
+
                     </Hidden>
                   </TableRow>
                 ))}
@@ -188,22 +201,20 @@ const Results = ({ className, customers, ...rest }) => {
           </TableContainer>
         </Box>
       </PerfectScrollbar>      
-      <TablePagination
-        component="div"
-        count={customers.length}
-        onChangePage={handlePageChange}
-        onChangeRowsPerPage={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
+      </CardContent>
+      <CardActions>
+      <Button size="small" onClick={prevClicked}>PREV</Button>
+      <Button size="small" onClick={nextClicked}>NEXT</Button>
+      </CardActions>
     </Card>
   );
 };
 
 Results.propTypes = {
   className: PropTypes.string,
-  customers: PropTypes.array.isRequired
+  customers: PropTypes.array.isRequired,
+  prevClicked: PropTypes.func,
+  nextClicked: PropTypes.func
 };
 
 export default Results;

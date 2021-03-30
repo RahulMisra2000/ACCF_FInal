@@ -74,6 +74,7 @@ const useFirestore = ({ collectionName, recordsForThisId }) => {
             // doc.data() is never undefined for query doc snapshots
             d.push({ ...doc.data(), id: doc.id });
           });
+          
           if (collectionName === 'customers') {
             populateCustomerArrayToCache(d);
           } else if (collectionName === 'referrals') {

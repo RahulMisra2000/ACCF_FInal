@@ -1,12 +1,13 @@
 /* eslint-disable */
 import React, { useState, useContext } from 'react';
 import { Box, Container, makeStyles, LinearProgress } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { Navigate } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import Results from './Results';
 import Toolbar from './Toolbar';
-import useFirestore from 'src/services/useFirestore';
+import useFirestorePagination from 'src/services/useFirestorePagination';
 import AppContext from 'src/contexts/appContext';
 
 console.log('%c1st line of CustomerListView(index).js just executed', 'background-Color:black; color:white');
@@ -21,20 +22,61 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CustomerListView = () => {
-  // GUARD - only authenticated users can continue
+  // GUARD - only authenticated users
   const { isLoggedIn } = useContext(AppContext);
   if (!isLoggedIn) {    
     return (<Navigate to='/app/dashboard' />);
   }
-  // GUARD
-
+  
   console.log('%cCustomerListView component code just executed','color:blue');
   const classes = useStyles();
   
-  // If the data is in cache it is got from there. If not then from Firestore. Then fills up the cache.
-  const {isLoading, data: cdata, error} = useFirestore({collectionName: 'customers'});
+  // STATE
   const [searchedData, setSearchedData] = useState([]);
   
+  const [options, setOptions] = useState({
+    collectionName: 'customers',
+    direction: 'forward', 
+    recordsToReadAtOneTime: 4,
+    page: 1
+  });
+
+  const {isLoading, data: cdata, error} = useFirestorePagination(options);
+
+  const nextClicked = () => {
+    // Early Exit
+    if (!cdata || cdata.length == 0 || cdata.length < options.recordsToReadAtOneTime) {
+      console.log("There isn't more data");
+      return;
+    }
+    
+    setOptions((prevstate) => {
+      // NEVER MUTATE STATE IN REACT, ALWAYS RETURN A NEW OBJECT
+      return {
+        ...prevstate, 
+        page: prevstate.page + 1,
+        direction: 'forward'
+      };
+    });
+  };
+
+  const prevClicked = () => {
+    // Early Exit
+    if (options.page <= 1) {
+      console.log("No previous data");
+      return;
+    }
+
+    setOptions((prevstate) => {
+      // NEVER MUTATE STATE IN REACT, ALWAYS RETURN A NEW OBJECT
+      return {
+        ...prevstate, 
+        page: prevstate.page - 1,
+        direction: 'backward'
+      };
+    });
+  };
+
   // searching happens with data in the cache
   const handleSearchTerm = (q) => {    
     if (q) {      
@@ -49,7 +91,7 @@ const CustomerListView = () => {
     }
   };
 
-  
+  //#region RETURN AREA
   return (
     <Page
       className={classes.root}
@@ -58,14 +100,20 @@ const CustomerListView = () => {
       <Container maxWidth={false}>
         <Toolbar searchFn={(q) => { handleSearchTerm(q); }}/>
         <Box mt={3}>
-          {error && <strong>Error: {JSON.stringify(error)}</strong>}
           {isLoading && <LinearProgress color="secondary" />}
-          {!isLoading && cdata?.length == 0 ? <strong>No Customer Record(s)</strong> : null}
-          {!isLoading && cdata?.length ? (<Results customers={searchedData.length? searchedData : cdata} />) : null}
+          {error && <Alert severity="error">{error}</Alert>}
+          {!isLoading && cdata?.length == 0 ? <Alert severity="error">No Customer Records</Alert> : null}
+          {!isLoading && cdata?.length 
+            ? (<Results customers={searchedData.length? searchedData : cdata} 
+                        prevClicked={prevClicked} 
+                        nextClicked={nextClicked}/>) 
+            : null
+          }
         </Box>
       </Container>
     </Page>
   );
+  //#endregion
 };
 
 export default CustomerListView;
