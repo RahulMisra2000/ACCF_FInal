@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import CustomerDataService from 'src/services/CustomerService';
+import CRUDService from 'src/services/CRUDService';
 import AppContext from 'src/contexts/appContext';
 import dataForSelect from 'src/dataForSelect';
 
@@ -250,7 +250,7 @@ const ReferralDetails = ({ cid, className, ...rest }) => {
      };
 
     // UPDATE FIRESTORE - only send what needs to be updated
-    CustomerDataService.update(cid, data)
+    CRUDService.update('referrals', cid, data)
       .then(() => {
         // WILL LATER (since state updates are async) SHOW ON-SCREEN MESSAGE
         setSubmitted(`Customer ${cid} was just updated in database`);

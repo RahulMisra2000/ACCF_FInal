@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import CustomerDataService from 'src/services/CustomerService';
+import CRUDService from 'src/services/CRUDService';
 import AppContext from 'src/contexts/appContext';
 import dataForSelect from 'src/dataForSelect';
 
@@ -190,7 +190,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
 
       // READ RECORD FROM FIRESTORE
       console.log('%cReading Record ' + cid + ' from FIRESTORE', 'background-Color:red; color:white');
-      CustomerDataService.get(cid)
+      CRUDService.get('customers', cid)
       .then((doc) => {
         if (doc.exists) {
             updateStateWithCustomerDataFromFirestore(doc);            
@@ -250,7 +250,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
      };
 
     // UPDATE FIRESTORE - only send what needs to be updated
-    CustomerDataService.update(cid, data)
+    CRUDService.update('customers', cid, data)
       .then(() => {
         // WILL LATER (since state updates are async) SHOW ON-SCREEN MESSAGE
         setSubmitted(`Customer ${cid} was just updated in database`);
@@ -299,7 +299,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
     // UPDATE FIRESTORE
     // I think when you want to update an array in Firestore you need to send the entire complete array and not just the element that 
     // you want added into the array
-    CustomerDataService.update(cid, {ss: newCompleteSSArray})
+    CRUDService.update('customers', cid, {ss: newCompleteSSArray})
       .then(() => {
         // UPDATE CACHE
         addStrengthStressorToCache(cid, strengthStressorPairThatNeedsToBeAdded);
@@ -340,7 +340,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
     // UPDATE FIRESTORE    
     // I think when you want to update an array in Firestore you need to send the entire complete array and not just the element that 
     // you want added into the array
-    CustomerDataService.update(cid, {children: newCompleteChildrenArray})
+    CRUDService.update('customers', cid, {children: newCompleteChildrenArray})
       .then(() => {
 
         // UPDATE CACHE

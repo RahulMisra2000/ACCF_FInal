@@ -15,7 +15,7 @@ import {
   Snackbar
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-import CustomerDataService from 'src/services/CustomerService';
+import CRUDService from 'src/services/CRUDService';
 import { useSnackbar } from 'notistack';
 import Zoom from '@material-ui/core/Zoom';
 import AppContext from '../../../contexts/appContext';
@@ -241,7 +241,7 @@ const CustDetails = ({ className, ...rest }) => {
     data.rating = null;
 
     // INSERT customer record in Firestore 
-    CustomerDataService.create(data)
+    CRUDService.create('customers', data)
       .then((docRef) => {
           console.log(`cust id just created in database is ${docRef.id}`);
 

@@ -6,7 +6,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import Page from 'src/components/Page';
 import Results from './Results';
 import Toolbar from './Toolbar';
-import useFirestore from 'src/services/useFirestore';
+import useFirestoreForSmallCollections from 'src/services/useFirestoreForSmallCollections';
 import AppContext from 'src/contexts/appContext';
 
 console.log('%c1st line of ReferralListView(index).js just executed', 'background-Color:black; color:white');
@@ -36,7 +36,7 @@ const ReferralListView = () => {
   const classes = useStyles();
   
   // If the data is in cache it is got from there. If not then from Firestore. Then fills up the cache.
-  const {isLoading, data: rdata, error} = useFirestore({collectionName: 'referrals', recordsForThisId: cid});
+  const {isLoading, data: rdata, error} = useFirestoreForSmallCollections({collectionName: 'referrals', recordsForThisId: cid});
   const [searchedData, setSearchedData] = useState([]);
   
   // searching happens with data in the cache

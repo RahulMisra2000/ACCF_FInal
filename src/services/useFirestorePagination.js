@@ -5,10 +5,11 @@ import AppContext from 'src/contexts/appContext';
 
 const { db } = firebaseProducts;
 
-// This custom hook is for reading multiple records from a collection
+// FOR READING MULTIPLE RECORDS USING PAGINATION
 const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page, recordsForThisId }) => {
   let firstRecOnScreenR = useRef(null);
   let lastRecOnScreenR = useRef(null);
+  let d = useRef([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -21,8 +22,7 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
     claimsInJwt: claims,
   } = useContext(AppContext);
 
-  useEffect(() => {
-    const d = [];
+  useEffect(() => {    
     console.log(`%cWill try to access ${collectionName} data from Firestore`, 'background-color:red; color:white');
 
     setIsLoading(true);
@@ -49,12 +49,12 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
     // RESTRICT NUMBER OF RECORDS READ and STARTING OR ENDING MARKER
     if (direction === 'forward') {        
       if (lastRecOnScreenR?.current) {
-        coll = coll.startAfter(lastRecOnScreenR?.current);
+        coll = coll.startAt(lastRecOnScreenR?.current);
       }
       coll = coll.limit(recordsToReadAtOneTime);
     } else if (direction === 'backward') {
       if (firstRecOnScreenR?.current) {
-        coll = coll.endBefore(firstRecOnScreenR?.current);
+        coll = coll.endAt(firstRecOnScreenR?.current);
       }
       coll = coll.limitToLast(recordsToReadAtOneTime);
     }
@@ -62,16 +62,30 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
     // NOW GET THE RECORDS
     coll.get()
       .then((querySnapshot) => {
+        let noRecsFound = true;
+        let ftime = true;
         querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          d.push({ ...doc.data(), id: doc.id });
-          
+          if (ftime) {
+            d.current = [];
+          }
+          d.current.push({ ...doc.data(), id: doc.id });
+          noRecsFound = false;          
           firstRecOnScreenR.current = querySnapshot.docs[0];
           lastRecOnScreenR.current = querySnapshot.docs[querySnapshot.docs.length - 1];
+          ftime = false;
         });
         
-        setError(null);
-        setData(d);      
+        if (noRecsFound) {
+          console.log("querysnapshot says no records ***************************");
+          if (page == 1) {
+            setError('999');  // No records at all
+          } else {
+            setError('1');    // No more records
+          }
+        } else {
+          setError(null);
+        } 
+        setData([...d.current]);              
       })
       .catch((err) => {
         setError(`Error accessing ${collectionName} from Firestore : ${err.message}`);

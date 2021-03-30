@@ -4,8 +4,12 @@ import AppContext from 'src/contexts/appContext';
 
 const { db } = firebaseProducts;
 
-// This custom hook is for reading multiple records from a collection
-const useFirestore = ({ collectionName, recordsForThisId }) => {
+// DISABLE CACHE PRPCESSING
+const enableCache = false;
+
+// This custom hook is for reading multiple records from a collection WITHOUT PAGINATION
+// ***** USE THIS FOR SMALL COLLECTIONS
+const useFirestoreForSmallCollection = ({ collectionName, recordsForThisId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -18,18 +22,18 @@ const useFirestore = ({ collectionName, recordsForThisId }) => {
     cArray,
     populateCustomerArrayToCache,
     rArray,
-    populateReferralArrayToCache,
+    populateReferralArrayToCache
   } = useContext(AppContext);
 
   useEffect(() => {
     const d = [];
     // TRY TO GET DATA FROM CACHE
-    if (collectionName === 'customers' && cArray.length) {
+    if (enableCache && collectionName === 'customers' && cArray.length) {
       console.log(`%cGetting ${collectionName} data From Cache, not Firestore`, 'background-color:green; color:white');
       setIsLoading(false);
       setData([...cArray]);
       setError(null);
-    } else if (collectionName === 'referrals' && rArray.length) {
+    } else if (enableCache && collectionName === 'referrals' && rArray.length) {
       console.log(`%cGetting ${collectionName} data From Cache, not Firestore`, 'background-color:green; color:white');
       setIsLoading(false);
       // If there is a filter (recordsForThisId) then only return records for recordsForThisId
@@ -52,10 +56,6 @@ const useFirestore = ({ collectionName, recordsForThisId }) => {
         }
       }
 
-      // V. IMP -- When querying multiple records (called list in Firestore) you need to make
-      // sure that what you specify IN security rule is also specified in the query
-
-      // Regular Users can only see their records
       // UNIVERSAL WHERE CLAUSE (for all collections)
       if (claims.role !== 'admin') {
         // Security Rule : request.auth.uid == resource.data.uid;
@@ -75,10 +75,12 @@ const useFirestore = ({ collectionName, recordsForThisId }) => {
             d.push({ ...doc.data(), id: doc.id });
           });
           
-          if (collectionName === 'customers') {
-            populateCustomerArrayToCache(d);
-          } else if (collectionName === 'referrals') {
-            populateReferralArrayToCache(d);
+          if (enableCache) {
+            if (collectionName === 'customers') {
+              populateCustomerArrayToCache(d);
+            } else if (collectionName === 'referrals') {
+              populateReferralArrayToCache(d);
+            }
           }
           // Because setting state is async, try doing all the work before setting it
           setError(null);
@@ -100,4 +102,4 @@ const useFirestore = ({ collectionName, recordsForThisId }) => {
   return { isLoading, data, error };
 };
 
-export default useFirestore;
+export default useFirestoreForSmallCollection;

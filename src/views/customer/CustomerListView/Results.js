@@ -203,8 +203,8 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
       </PerfectScrollbar>      
       </CardContent>
       <CardActions>
-      <Button disabled={!enablePrev} size="small" onClick={prevClicked}>PREV</Button>
-      <Button disabled={!enableNext} size="small" onClick={nextClicked}>NEXT</Button>
+      <Button disabled={!enablePrev} size="small" variant="outlined" onClick={prevClicked}>PREV</Button>
+      <Button disabled={!enableNext} size="small" variant="outlined" onClick={nextClicked}>NEXT</Button>
       </CardActions>
     </Card>
   );

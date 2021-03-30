@@ -42,6 +42,7 @@ const CustomerListView = () => {
   });
   const {isLoading, data: cdata, error} = useFirestorePagination(options);
   const [enableNext, setEnableNext] = useState(true);
+  const [enablePrev, setEnablePrev] = useState(false);
 
   const nextClicked = () => {
     // Early Exit
@@ -50,6 +51,7 @@ const CustomerListView = () => {
       setEnableNext(false);
       return;
     }
+    setEnableNext(true);
     setEnableNext(true);
 
     setOptions((prevstate) => {
@@ -66,6 +68,7 @@ const CustomerListView = () => {
     // Early Exit
     if (options.page <= 1) {
       console.log("No previous data");
+      setEnablePrev(false);
       return;
     }
 
@@ -95,6 +98,20 @@ const CustomerListView = () => {
   };
 
   //#region RETURN AREA
+ 
+  const noRecordsAtAll = () => {
+    return error == '999' ? true : false;
+  };
+  const noMoreRecords = () => {
+    return error == '1' ? true : false;
+  };
+  const networkError = () => {
+    return (error && (error !== '999' && error !== '1') ? true : false);
+  };
+
+  console.log('%cPage Number:' + options.page, 'color:red');
+
+
   return (
     <Page
       className={classes.root}
@@ -104,14 +121,15 @@ const CustomerListView = () => {
         <Toolbar searchFn={(q) => { handleSearchTerm(q); }}/>
         <Box mt={3}>
           {isLoading && <LinearProgress color="secondary" />}
-          {error && <Alert severity="error">{error}</Alert>}
-          {!isLoading && cdata?.length == 0 ? <Alert severity="error">No Customer Records</Alert> : null}
-          {!isLoading && cdata?.length 
+          {networkError() && <Alert severity="error">{error}</Alert>}
+          {noRecordsAtAll() ? <Alert severity="error">No Customer Records</Alert> : null}
+                    
+          {!isLoading && !noRecordsAtAll() && !networkError()
             ? (<Results customers={searchedData.length? searchedData : cdata} 
                         prevClicked={prevClicked} 
                         nextClicked={nextClicked}
                         enablePrev={options.page > 1 ? true : false}
-                        enableNext={enableNext}
+                        enableNext={enableNext && !noMoreRecords()}
                         />) 
             : null
           }

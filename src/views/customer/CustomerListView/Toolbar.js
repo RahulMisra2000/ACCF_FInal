@@ -18,8 +18,9 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  importButton: {
-    marginRight: theme.spacing(1)
+  button: {
+    marginLeft: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
   },
   exportButton: {
     marginRight: theme.spacing(1)
@@ -60,9 +61,10 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
         <Card
         elevation={5}>
           <CardContent>
-            <Box maxWidth={500}>
+            <Box maxWidth={600} display='flex'>
               <TextField
                 fullWidth
+                size="small"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -75,7 +77,7 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                     </InputAdornment>
                   )
                 }}
-                placeholder="Type name and press <Enter>"
+                placeholder="<Name>"
                 variant="outlined"
                 value={q}
                 onChange={(e) => {
@@ -89,6 +91,44 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                   }
                 }}
               />
+              <TextField
+                fullWidth
+                size="small"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SvgIcon
+                        fontSize="small"
+                        color="action"
+                      >
+                        <SearchIcon />
+                      </SvgIcon>
+                    </InputAdornment>
+                  )
+                }}
+                placeholder="<City>"
+                variant="outlined"
+                value={q}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setQ(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.keyCode === 13) {
+                    console.log('enter key pressed', q);
+                    searchFn(q);
+                  }
+                }}
+              />
+              <Button              
+                variant="contained"
+                size="small"
+                color="secondary"
+                className={classes.button}
+                startIcon={<SearchIcon />}
+              >
+                Search
+              </Button>
               {/* This shows a button if there is something in the search field
               { q ? (
                       <Button
@@ -106,42 +146,7 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
             */}
             </Box>
           </CardContent>
-        </Card>
-        <Card
-        elevation={5}>
-          <CardContent>
-            <Box maxWidth={500}>
-              <TextField
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SvgIcon
-                        fontSize="small"
-                        color="action"
-                      >
-                        <SearchIcon />
-                      </SvgIcon>
-                    </InputAdornment>
-                  )
-                }}
-                placeholder="Type name and press <Enter>"
-                variant="outlined"
-                value={q}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setQ(e.target.value);
-                }}
-                onKeyUp={(e) => {
-                  if (e.keyCode === 13) {
-                    console.log('enter key pressed', q);
-                    searchFn(q);
-                  }
-                }}
-              />              
-            </Box>
-          </CardContent>
-        </Card>
+        </Card>        
       </Box>
     </div>
   );

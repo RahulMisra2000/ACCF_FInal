@@ -15,11 +15,11 @@ import {
   Snackbar
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
-import ReferralDataService from 'src/services/ReferralService';
+import CRUDService from 'src/services/CRUDService';
 import { useSnackbar } from 'notistack';
 import Zoom from '@material-ui/core/Zoom';
 import AppContext from '../../../contexts/appContext';
-import useFirestore from 'src/services/useFirestore';
+import useFirestore from 'src/services/useFirestoreForSmallCollections';
 
 //#region STYLES
 const useStyles = makeStyles(() => ({
@@ -201,7 +201,7 @@ const ReferralDetails = ({ className, ...rest }) => {
     data.recStatus = 'Live';
 
     // INSERT customer record in Firestore 
-    ReferralDataService.create(data)
+    CRUDService.create('referrals', data)
       .then((docRef) => {
           console.log(`referral id just created in Firestore is ${docRef.id}`);
 
