@@ -40,16 +40,18 @@ const CustomerListView = () => {
     recordsToReadAtOneTime: 4,
     page: 1
   });
-
   const {isLoading, data: cdata, error} = useFirestorePagination(options);
+  const [enableNext, setEnableNext] = useState(true);
 
   const nextClicked = () => {
     // Early Exit
     if (!cdata || cdata.length == 0 || cdata.length < options.recordsToReadAtOneTime) {
-      console.log("There isn't more data");
+      console.log("There isn't more data");      
+      setEnableNext(false);
       return;
     }
-    
+    setEnableNext(true);
+
     setOptions((prevstate) => {
       // NEVER MUTATE STATE IN REACT, ALWAYS RETURN A NEW OBJECT
       return {
@@ -67,6 +69,7 @@ const CustomerListView = () => {
       return;
     }
 
+    setEnableNext(true);
     setOptions((prevstate) => {
       // NEVER MUTATE STATE IN REACT, ALWAYS RETURN A NEW OBJECT
       return {
@@ -106,7 +109,10 @@ const CustomerListView = () => {
           {!isLoading && cdata?.length 
             ? (<Results customers={searchedData.length? searchedData : cdata} 
                         prevClicked={prevClicked} 
-                        nextClicked={nextClicked}/>) 
+                        nextClicked={nextClicked}
+                        enablePrev={options.page > 1 ? true : false}
+                        enableNext={enableNext}
+                        />) 
             : null
           }
         </Box>

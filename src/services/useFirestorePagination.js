@@ -25,13 +25,6 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
     const d = [];
     console.log(`%cWill try to access ${collectionName} data from Firestore`, 'background-color:red; color:white');
 
-    console.log(collectionName);
-    console.dir(firstRecOnScreenR?.current? firstRecOnScreenR?.current: null);
-    console.dir(lastRecOnScreenR?.current? lastRecOnScreenR?.current: null);
-    console.log(direction);
-    console.log(recordsToReadAtOneTime);
-    console.log(page);
-
     setIsLoading(true);
 
     // BUILD COLLECTION-SPECIFIC WHERE CLAUSE FOR QUERY
@@ -47,7 +40,6 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
     if (claims.role !== 'admin') {
       // Security Rule : request.auth.uid == resource.data.uid;
       const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
-      console.log(whereClauseToMatchSecurityRule);
       coll = coll.where('uid', '==', isLoggedIn.uid);
     }
 
@@ -61,10 +53,8 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
       }
       coll = coll.limit(recordsToReadAtOneTime);
     } else if (direction === 'backward') {
-      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');     
       if (firstRecOnScreenR?.current) {
         coll = coll.endBefore(firstRecOnScreenR?.current);
-        console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');     
       }
       coll = coll.limitToLast(recordsToReadAtOneTime);
     }
@@ -75,15 +65,11 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           d.push({ ...doc.data(), id: doc.id });
-          console.dir(querySnapshot);
-
+          
           firstRecOnScreenR.current = querySnapshot.docs[0];
           lastRecOnScreenR.current = querySnapshot.docs[querySnapshot.docs.length - 1];
-          console.dir(firstRecOnScreenR.current? firstRecOnScreenR?.current: null);
-          console.dir(lastRecOnScreenR?.current? lastRecOnScreenR?.current: null);
         });
         
-
         setError(null);
         setData(d);      
       })

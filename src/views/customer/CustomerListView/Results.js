@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Results = ({ className, customers, prevClicked, nextClicked, ...rest }) => {
+const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, enableNext, ...rest }) => {
   const classes = useStyles();
 
   // STATE
@@ -203,8 +203,8 @@ const Results = ({ className, customers, prevClicked, nextClicked, ...rest }) =>
       </PerfectScrollbar>      
       </CardContent>
       <CardActions>
-      <Button size="small" onClick={prevClicked}>PREV</Button>
-      <Button size="small" onClick={nextClicked}>NEXT</Button>
+      <Button disabled={!enablePrev} size="small" onClick={prevClicked}>PREV</Button>
+      <Button disabled={!enableNext} size="small" onClick={nextClicked}>NEXT</Button>
       </CardActions>
     </Card>
   );
