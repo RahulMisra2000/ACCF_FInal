@@ -29,7 +29,14 @@ import { useNavigate } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   root: {},
   avatar: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    backgroundColor: theme.palette.primary.light
+  },
+  headerLabels: {
+    color: theme.palette.info.dark,
+    fontWeight: theme.typography.fontWeightBold
   }
 }));
 
@@ -105,8 +112,8 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
         <Box minWidth={360}>
           <TableContainer component={Paper}>
             <Table size="small">
-              <TableHead>
-                <TableRow>
+              <TableHead >
+                <TableRow >
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={selectedCustomerIds.length === customers.length}
@@ -119,23 +126,23 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
                     />
                   </TableCell>
                   <TableCell>
-                    Name
+                    <Typography className={classes.headerLabels} variant="h5">NAME</Typography>                    
                   </TableCell>
                   <TableCell>
-                    Phone
+                  <Typography className={classes.headerLabels} variant="h5">PHONE</Typography>                    
                   </TableCell>
                   <Hidden only={['xs', 'sm']}>
                     <TableCell>
-                      Navigator
+                    <Typography className={classes.headerLabels} variant="h5">NAVIGATOR</Typography>                    
                     </TableCell>
                     <TableCell>
-                      Case
+                    <Typography className={classes.headerLabels} variant="h5">EMAIL</Typography>                    
                     </TableCell>
                     <TableCell>
-                      Created At
+                    <Typography className={classes.headerLabels} variant="h5">REGISTERED</Typography>                    
                     </TableCell>
                     <TableCell>
-                      cid
+                    <Typography className={classes.headerLabels} variant="h5">ID</Typography>                    
                     </TableCell>
                   </Hidden>
                 </TableRow>
@@ -160,7 +167,7 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
                         alignItems="center"
                         display="flex"
                       >
-                        <Avatar
+                        <Avatar                          
                           className={classes.avatar}
                           src={customer.avatarUrl}
                         >
@@ -203,8 +210,8 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
       </PerfectScrollbar>      
       </CardContent>
       <CardActions>
-      <Button disabled={!enablePrev} size="small" variant="outlined" onClick={prevClicked}>PREV</Button>
-      <Button disabled={!enableNext} size="small" variant="outlined" onClick={nextClicked}>NEXT</Button>
+      <Button disabled={!enablePrev} size="small" variant="outlined" color="primary" onClick={prevClicked}>PREV</Button>
+      <Button disabled={!enableNext} size="small" variant="outlined" color="primary" onClick={nextClicked}>NEXT</Button>
       </CardActions>
     </Card>
   );

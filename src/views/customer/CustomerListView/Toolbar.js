@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginLeft: theme.spacing(1),
     paddingLeft: theme.spacing(1),
+  },
+  title: {
+    color: theme.palette.info.dark,
+    fontWeight: theme.typography.fontWeightMedium
   }
 }));
 
@@ -65,7 +69,7 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
         display="flex"
         justifyContent="space-between"
       >
-        <Typography variant="h3" component="h3">
+        <Typography variant="h3" component="h3" className={classes.title}>
           CASE MANAGEMENT RECORDS
         </Typography>
         {/*
