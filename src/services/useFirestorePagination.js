@@ -26,20 +26,32 @@ const haveSameData = (obj1, obj2) => {
 }
 
 // FOR READING MULTIPLE RECORDS USING PAGINATION
-const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page, recStatusToFilter, q, recordsForThisId }) => {
+const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page, q, recordsForThisId }) => {
   let firstRecOnScreenR = useRef(null);
   let lastRecOnScreenR = useRef(null);
   let dR = useRef([]);
   let lastQR = useRef(null); // will contain previous search term
 
   if (!haveSameData(lastQR.current, q)) {
-
+    // searchTerms have changed
+    console.log('Search Terms have changed');
+    console.log('OLD');
+    console.log(lastQR.current);
+    console.log('NEW');
+    console.log(q);
     // Reset Markers
     firstRecOnScreenR.current = null;
     lastRecOnScreenR.current = null;
 
     // Housekeeping
     lastQR.current = {...q};
+  }
+  else {
+    console.log('Search Terms are SAME');
+    console.log('OLD');
+    console.log(lastQR.current);
+    console.log('NEW');
+    console.log(q);
   }
 
   const [isLoading, setIsLoading] = useState(true);
@@ -58,24 +70,33 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
 
     setIsLoading(true);
 
-    // UNIVERSAL WHERE CLAUSES
+    //#region UNIVERSAL WHERE CLAUSES
     // 1.
     if (claims.role !== 'admin') {
       // Security Rule : request.auth.uid == resource.data.uid;
       const whereClauseToMatchSecurityRule = `'uid', '==', '${isLoggedIn.uid}'`;
       coll = coll.where('uid', '==', isLoggedIn.uid);
     }
-    // 2. Default if this is not provided, will return all records regardless of recStatus
-    if (recStatusToFilter) {
-      if (recStatusToFilter === 'Archive') {       // only archive
-        coll = coll.where('recStatus', '==', 'Archive');
-      } else if (recStatusToFilter === 'Live') {  // only live
-        coll = coll.where('recStatus', '==', 'Live');
-      }
+    
+    // 2. Default is to get all records regardless of status  (Open or Close)
+    if (q?.excludeClosedOnes) {
+      coll = coll.where('status', '==', 'Open');
     }
 
-    // 3. 
-    // BUILD COLLECTION-SPECIFIC WHERE & ORDERBY CLAUSE FOR QUERY
+    // 3. Default is to get all records regardless of recStatus (Archive or Live)
+    if (q?.excludeArchivedOnes) {
+      coll = coll.where('recStatus', '==', 'Live');
+    }
+    //#endregion
+
+    //#region BUILD COLLECTION-SPECIFIC WHERE & ORDERBY CLAUSE FOR QUERY
+    // NOTES: If the where has an inequality condition then the orderby should have that same field 
+    //        in the same order as the where clause. That is why I have the orderby clause just below the where clause
+    //        And for that reason make sure that createdAt is the last where clause in your query 
+    //        That is why the orderby of created has been placed at the very end.
+    //        You can of course have an orderby without a corresponding where clause. 
+    //        An orderby is only manadatory when there is a where with an inequality condition
+    //#region customers 
     if (collectionName === 'customers') {
       if (q) {
         console.log('******************************** BUILD WHERE CLAUSE FOR SEARCH TERM');
@@ -99,17 +120,21 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
         }
       }
     }
+    //#endregion
     
+    //#region referrals
     if (collectionName === 'referrals') {
       if (recordsForThisId) {
         coll = coll.where('cid', '==', recordsForThisId);
       }
     } 
-    
+    //#endregion
+    //#endregion
+
+
     coll = coll.orderBy('createdAt', 'desc');         // BUILD THE ORDER BY CLAUSE which is common to all
     
-
-    // RESTRICT NUMBER OF RECORDS READ and STARTING OR ENDING MARKER
+    //#region PAGINATION - RESTRICT NUMBER OF RECORDS READ and STARTING OR ENDING MARKER
     if (direction === 'forward') {        
       if (lastRecOnScreenR?.current) {
         coll = coll.startAt(lastRecOnScreenR?.current);
@@ -121,8 +146,9 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
       }
       coll = coll.limitToLast(recordsToReadAtOneTime);
     }
+    //#endregion
 
-    // NOW GET THE RECORDS
+    //#region NOW GET THE RECORDS
     coll.get()
       .then((querySnapshot) => {
         let noRecsFound = true;
@@ -155,6 +181,8 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
       .finally(() => {
         setIsLoading(false);
       });
+      //#endregion
+
       return () => {
         console.log('Component that uses this hook (useFirestore) has just unmounted');
       };

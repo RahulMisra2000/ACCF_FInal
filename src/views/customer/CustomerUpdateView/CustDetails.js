@@ -188,8 +188,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
     if (cid){
       setIsLoading(true);
 
-      // READ RECORD FROM FIRESTORE
-      console.log('%cReading Record ' + cid + ' from FIRESTORE', 'background-Color:red; color:white');
+      // READ RECORD FROM FIRESTORE      
       CRUDService.get('customers', cid)
       .then((doc) => {
         if (doc.exists) {

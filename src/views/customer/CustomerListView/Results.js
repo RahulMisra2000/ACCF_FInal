@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   headerLabels: {
     color: theme.palette.info.dark,
-    fontWeight: theme.typography.fontWeightBold
+    fontWeight: theme.typography.fontWeightLight
   }
 }));
 
@@ -133,16 +133,22 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
                   </TableCell>
                   <Hidden only={['xs', 'sm']}>
                     <TableCell>
-                    <Typography className={classes.headerLabels} variant="h5">NAVIGATOR</Typography>                    
+                      <Typography className={classes.headerLabels} variant="h5">NAVIGATOR</Typography>                    
                     </TableCell>
                     <TableCell>
-                    <Typography className={classes.headerLabels} variant="h5">EMAIL</Typography>                    
+                      <Typography className={classes.headerLabels} variant="h5">EMAIL</Typography>                    
                     </TableCell>
                     <TableCell>
-                    <Typography className={classes.headerLabels} variant="h5">REGISTERED</Typography>                    
+                      <Typography className={classes.headerLabels} variant="h5">REGISTERED</Typography>                    
                     </TableCell>
                     <TableCell>
-                    <Typography className={classes.headerLabels} variant="h5">ID</Typography>                    
+                      <Typography className={classes.headerLabels} variant="h5">ID</Typography>                    
+                    </TableCell>
+                    <TableCell>
+                      <Typography className={classes.headerLabels} variant="h5">STATUS</Typography>                    
+                    </TableCell>
+                    <TableCell>
+                      <Typography className={classes.headerLabels} variant="h5">ARC/LIVE</Typography>                    
                     </TableCell>
                   </Hidden>
                 </TableRow>
@@ -174,7 +180,7 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
                           {getInitials(customer.name)}
                         </Avatar>
                         <Typography
-                          color="textPrimary"
+                          color={customer.status === 'Open' ? "textPrimary" : "textSecondary"}
                           variant="body1"
                         >
                           {customer.name.slice(0,15)}
@@ -199,7 +205,12 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
                       <TableCell>
                         {customer.id}
                       </TableCell>
-
+                      <TableCell>
+                        {customer.status}
+                      </TableCell>
+                      <TableCell>
+                        {customer.recStatus}
+                      </TableCell>
                     </Hidden>
                   </TableRow>
                 ))}

@@ -35,7 +35,6 @@ const CustomerListView = () => {
     
   const [options, setOptions] = useState({
     collectionName: 'customers',
-    recStatusToFilter: 'Live',
     direction: 'forward', 
     recordsToReadAtOneTime: 7,
     page: 1,

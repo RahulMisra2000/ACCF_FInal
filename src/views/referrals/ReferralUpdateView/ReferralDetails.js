@@ -189,7 +189,6 @@ const ReferralDetails = ({ cid, className, ...rest }) => {
       setIsLoading(true);
 
       // READ RECORD FROM FIRESTORE
-      console.log('%cReading Record ' + cid + ' from FIRESTORE', 'background-Color:red; color:white');
       CustomerDataService.get(cid)
       .then((doc) => {
         if (doc.exists) {

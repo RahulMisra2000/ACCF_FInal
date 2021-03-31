@@ -1,17 +1,19 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Box,
   Button,
+  Checkbox,
   Card,
   CardContent,
   TextField,
   Typography,
   InputAdornment,
   SvgIcon,
-  makeStyles
+  makeStyles,
+  Divider
 } from '@material-ui/core';
 import { Search as SearchIcon } from 'react-feather';
 import { Link } from 'react-router-dom';
@@ -19,18 +21,21 @@ import { Link } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   root: {},
   TextField: {
-    marginLeft: theme.spacing(1),
-    maxWidth: "35%",
-    marginTop: theme.spacing(1)
+    maxWidth: "30%"    
+  },
+  CheckBox: {
+    width: "30%"    
   },
   button: {
-    marginTop: theme.spacing(1),
-    marginLeft: theme.spacing(1),
     paddingLeft: theme.spacing(1),
   },
   title: {
     color: theme.palette.info.dark,
-    fontWeight: theme.typography.fontWeightMedium
+    fontWeight: theme.typography.fontWeightLight
+  },
+  margin: {
+    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(1)
   }
 }));
 
@@ -40,7 +45,10 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
   const [phone, setPhone] = useState('');
   const [fDate, setFDate] = useState('');
   const [tDate, setTDate] = useState('');
+  const [status, setStatus] = useState(false);
+  const [recStatus, setRecStatus] = useState(false);
 
+  let selectedContentR = useRef('');
 
   const constructSearchObjectAndCallParentComponent = (e) => {
     
@@ -49,15 +57,43 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
     const p = phone;
     const f = fDate;
     const t = tDate;
+    const s = status;
+    const r = recStatus;
 
     // Call function in parent
-    searchFn({name: n, phone: p, fDate: f, tDate: t});
+    searchFn({name: n, phone: p, fDate: f, tDate: t, excludeClosedOnes: s, excludeArchivedOnes: r});
 
-    // Re-initialize so that the search button gets disabled
+    // Compose Selected Area    
+    
+    // Only one of these will go into effect
+    if (name) {
+      selectedContentR.current = `Name: ${name}`;
+    } else if (phone) {
+      selectedContentR.current = `Phone: ${phone}`;
+    } else if (fDate || tDate) {
+      if (fDate) {
+        selectedContentR.current = `From Date: ${new Date(fDate).toLocaleDateString() + ' ' + new Date(fDate).toLocaleTimeString()}`;
+      }
+      if (tDate) {
+        selectedContentR.current += `    To Date: ${new Date(tDate).toLocaleDateString() + ' ' + new Date(tDate).toLocaleTimeString()}`;
+      }
+    } 
+    
+    // These if selected will always go into effect
+    if (status) { // exclude records where status == 'Close'
+      selectedContentR.current += ` (Excluding closed records) `;
+    }
+    if (recStatus) { // exclude archived records
+      selectedContentR.current += ` (Excluding archived records) `;
+    }
+
+    // Re-initialize so that the search button gets disabled until something is typed
     setName('');
     setPhone('');
     setFDate('');
     setTDate('');
+    setStatus(false);
+    setRecStatus(false);
   };
 
   return (
@@ -69,7 +105,7 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
         display="flex"
         justifyContent="space-between"
       >
-        <Typography variant="h3" component="h3" className={classes.title}>
+        <Typography variant="h3" component="h3" className={clsx(classes.title, classes.margin, className)}>
           CASE MANAGEMENT RECORDS
         </Typography>
         {/*
@@ -86,7 +122,7 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
           </Button>
         </Link>
       </Box>
-      <Box mt={3}>
+      <Box mt={1}>
         <Card
         elevation={5}>
           <CardContent>
@@ -100,7 +136,7 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                 onChange={(e) => {                  
                   setName(e.target.value);
                 }}
-                className={classes.TextField}                
+                className={clsx(classes.TextField, classes.margin, className)}                
               />
               <TextField
                 fullWidth
@@ -108,39 +144,24 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                 placeholder="<Phone>"
                 variant="outlined"
                 value={phone}
-                onChange={(e) => {                  
-                  setPhone(e.target.value);
-                }}
-                className={classes.TextField}
+                onChange={(e) => { setPhone(e.target.value); }}
+                className={clsx(classes.TextField, classes.margin, className)}                
               />
-              <Button              
-                fullwidth
-                variant="contained"
-                size="small"
-                color="secondary"
-                className={classes.button}
-                disabled={!name && !phone && !fDate && !tDate}
-                onClick={(e) => {
-                  constructSearchObjectAndCallParentComponent(e);
-                }}
-              >
-                Search
-              </Button>
-              {/* This shows a button if there is something in the search field
-              { q ? (
-                      <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={() => {
-                          searchFn(q);
-                        }}
-                      >
-                        Search
-                      </Button>
-                    ) 
-                  : null
-              }
-            */}
+              <Checkbox
+                checked={status}
+                onChange={(e) => { setStatus((prevState) => {
+                  return !prevState;
+                }); }}
+              />
+              <Typography color="textSecondary" className={clsx(classes.CheckBox, classes.margin, className)}>Exclude Closed</Typography>
+
+              <Checkbox
+                checked={recStatus}
+                onChange={(e) => { setRecStatus((prevState) => {
+                  return !prevState;
+                }); }}
+              />
+              <Typography color="textSecondary" className={clsx(classes.CheckBox, classes.margin, className)}>Exclude Archived</Typography>
             </Box>
           
             <Box maxWidth={600} display='flex'>
@@ -154,7 +175,7 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                 onChange={(e) => {                  
                   setFDate(e.target.value);
                 }}
-                className={classes.TextField}                
+                className={clsx(classes.TextField, classes.margin, className)}                                
               />
               <TextField
                  type="datetime-local"
@@ -166,10 +187,34 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                 onChange={(e) => {                  
                   setTDate(e.target.value);
                 }}
-                className={classes.TextField}
+                className={clsx(classes.TextField, classes.margin, className)}                
               />
-            </Box>
-            
+                            <Button              
+                fullwidth
+                variant="contained"
+                size="small"
+                color="secondary"
+                className={clsx(classes.button, classes.margin, className)}    
+                disabled={!name && !phone && !fDate && !tDate && !status && !recStatus}
+                onClick={(e) => {
+                  constructSearchObjectAndCallParentComponent(e);
+                }}
+              >
+                Search
+              </Button>
+            </Box>            
+            {/* SELECTION */}
+            {selectedContentR.current ? 
+              (
+                <>
+                  <Divider className={clsx(classes.margin, className)}/>
+                  <Box maxWidth={600} display='flex'>
+                    <Typography variant="h6" component="h6" className={clsx(classes.title, classes.margin, className)}>
+                      YOUR SELECTION: {selectedContentR.current} 
+                    </Typography>
+                  </Box>
+                </>
+              ) : null}            
           </CardContent>
         </Card>        
       </Box>
