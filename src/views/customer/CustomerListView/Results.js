@@ -141,7 +141,7 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
                 </TableRow>
               </TableHead>
               <TableBody>
-                {customers.slice(0 * 5, 0 * 5 + 5).map((customer) => (
+                {customers.map((customer) => (
                   <TableRow
                     onClick={(e) => { customerInListClicked(e, customer.id); }}
                     hover
@@ -170,7 +170,7 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
                           color="textPrimary"
                           variant="body1"
                         >
-                          {customer.name}
+                          {customer.name.slice(0,15)}
                         </Typography>
                       </Box>
                     </TableCell>
@@ -179,15 +179,15 @@ const Results = ({ className, customers, prevClicked, nextClicked, enablePrev, e
                     </TableCell>
                     <Hidden only={['xs', 'sm']}>
                       <TableCell>
-                        {customer.uidEmail}
+                        {customer.uidEmail.slice(0,15)}
                       </TableCell>
                       <TableCell>
-                        {customer.email}
+                        {customer.email.slice(0,15)}
                       </TableCell>
                     </Hidden>
                     <Hidden only={['xs', 'sm']}>
                       <TableCell>
-                        {moment(customer.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                        {moment(customer.createdAt).format('MMMM Do YYYY, h:mm a')}
                       </TableCell>
                       <TableCell>
                         {customer.id}

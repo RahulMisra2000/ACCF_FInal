@@ -138,7 +138,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const location = useLocation();
   const { isLoggedIn, claimsInJwt: claims } = useContext(AppContext);
 
-  console.log(Date.now());
   fillUserCredentials(isLoggedIn, claims);
   populateItems(isLoggedIn);
 

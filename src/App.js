@@ -197,10 +197,11 @@ const App = () => {
     });
 
     const unsubscribe2 = window.setInterval(() => {
-      console.log('%cCustomer\'s Array Cached Content Follows', 'color:green');
+      /* console.log('%cCustomer\'s Array Cached Content Follows', 'color:green');
       console.log(appContextData.cArray);
       console.log('%cCustomer\'s Referral Array Cached Content Follows', 'color:green');
       console.log(appContextData.rArray);
+      */
       console.log('%cApplication\'s AppContextData Follow', 'color:green');
       console.dir(appContextData);
     }, 10000);

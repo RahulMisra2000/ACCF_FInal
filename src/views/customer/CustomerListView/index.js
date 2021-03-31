@@ -32,15 +32,14 @@ const CustomerListView = () => {
   const classes = useStyles();
   
   // STATE
-  const [q, setQ] = useState(null);
-  
+    
   const [options, setOptions] = useState({
     collectionName: 'customers',
     recStatusToFilter: 'Live',
     direction: 'forward', 
-    recordsToReadAtOneTime: 4,
+    recordsToReadAtOneTime: 7,
     page: 1,
-    q
+    q: null
   });
   const {isLoading, data: cdata, error} = useFirestorePagination(options);
 
@@ -87,16 +86,17 @@ const CustomerListView = () => {
   };
 
   // searching happens with data in the cache
-  const handleSearchObject = (q) => {        
+  const handleSearch = (q) => {   
+    console.log(q);
+         
     setOptions((prevstate) => {      
       return {
         ...prevstate, 
         page: 1,
-        direction: 'forward'
+        direction: 'forward',
+        q: q
       };
     });
-    setQ(q);
-
   };
 
   //#region RETURN AREA
@@ -120,19 +120,21 @@ const CustomerListView = () => {
       title="Customers"
     >
       <Container maxWidth={false}>
-        <Toolbar searchFn={(q) => { handleSearchObject(q); }}/>
+        <Toolbar searchFn={(q) => { handleSearch(q); }}/>
         <Box mt={3}>
           {isLoading && <LinearProgress color="secondary" />}
           {networkError() && <Alert severity="error">{error}</Alert>}
           {noRecordsAtAll() ? <Alert severity="error">No Customer Records</Alert> : null}
                     
           {!isLoading && !noRecordsAtAll() && !networkError()
-            ? (<Results customers={cdata} 
+            ? ( 
+                <Results customers={cdata} 
                         prevClicked={prevClicked} 
                         nextClicked={nextClicked}
                         enablePrev={options.page > 1 ? true : false}
                         enableNext={enableNext && !noMoreRecords()}
-                        />) 
+                />
+              ) 
             : null
           }
         </Box>

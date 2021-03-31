@@ -44,8 +44,6 @@ const TopBar = ({
     navigate('/', { replace: true });
   };
 
-  console.dir(isLoggedIn);
-
   return (
     <AppBar
       className={clsx(classes.root, className)}

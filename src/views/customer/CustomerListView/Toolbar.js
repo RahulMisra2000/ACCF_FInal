@@ -18,23 +18,42 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
+  TextField: {
+    marginLeft: theme.spacing(1),
+    maxWidth: "35%",
+    marginTop: theme.spacing(1)
+  },
   button: {
+    marginTop: theme.spacing(1),
     marginLeft: theme.spacing(1),
     paddingLeft: theme.spacing(1),
-  },
-  exportButton: {
-    marginRight: theme.spacing(1)
   }
 }));
 
 const Toolbar = ({ className, searchFn, ...rest }) => {
   const classes = useStyles();
   const [name, setName] = useState('');
-  const [city, setCity] = useState('');
+  const [phone, setPhone] = useState('');
+  const [fDate, setFDate] = useState('');
+  const [tDate, setTDate] = useState('');
 
 
   const constructSearchObjectAndCallParentComponent = (e) => {
-    searchFn({name, city});
+    
+    // Build the search object to be sent to the parent's function
+    const n = name;
+    const p = phone;
+    const f = fDate;
+    const t = tDate;
+
+    // Call function in parent
+    searchFn({name: n, phone: p, fDate: f, tDate: t});
+
+    // Re-initialize so that the search button gets disabled
+    setName('');
+    setPhone('');
+    setFDate('');
+    setTDate('');
   };
 
   return (
@@ -74,21 +93,21 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                 placeholder="<Name>"
                 variant="outlined"
                 value={name}
-                onChange={(e) => {
-                  console.log(e.target.value);
+                onChange={(e) => {                  
                   setName(e.target.value);
-                }}                
+                }}
+                className={classes.TextField}                
               />
               <TextField
                 fullWidth
                 size="small"                
-                placeholder="<City>"
+                placeholder="<Phone>"
                 variant="outlined"
-                value={city}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setCity(e.target.value);
+                value={phone}
+                onChange={(e) => {                  
+                  setPhone(e.target.value);
                 }}
+                className={classes.TextField}
               />
               <Button              
                 fullwidth
@@ -96,7 +115,7 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
                 size="small"
                 color="secondary"
                 className={classes.button}
-                startIcon={<SearchIcon />}
+                disabled={!name && !phone && !fDate && !tDate}
                 onClick={(e) => {
                   constructSearchObjectAndCallParentComponent(e);
                 }}
@@ -119,6 +138,34 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
               }
             */}
             </Box>
+          
+            <Box maxWidth={600} display='flex'>
+              <TextField
+                type="datetime-local"
+                fullWidth
+                size="small"                
+                placeholder="<From Date>"
+                variant="outlined"
+                value={fDate}
+                onChange={(e) => {                  
+                  setFDate(e.target.value);
+                }}
+                className={classes.TextField}                
+              />
+              <TextField
+                 type="datetime-local"
+                fullWidth
+                size="small"                
+                placeholder="<To Date>"
+                variant="outlined"
+                value={tDate}
+                onChange={(e) => {                  
+                  setTDate(e.target.value);
+                }}
+                className={classes.TextField}
+              />
+            </Box>
+            
           </CardContent>
         </Card>        
       </Box>
