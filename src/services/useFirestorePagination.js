@@ -5,7 +5,7 @@ import AppContext from 'src/contexts/appContext';
 
 const { db } = firebaseProducts;
 
-const haveSameData = (obj1, obj2) => {
+const haveSameSearchFilters = (obj1, obj2) => {
   if (!obj1 && obj2 || !obj2 && obj1) {
     return false
   }
@@ -32,7 +32,7 @@ const useFirestore = ({ collectionName, direction, recordsToReadAtOneTime, page,
   let dR = useRef([]);
   let lastQR = useRef(null); // will contain previous search term
 
-  if (!haveSameData(lastQR.current, q)) {
+  if (!haveSameSearchFilters(lastQR.current, q)) {
     // searchTerms have changed
     console.log('Search Terms have changed');
     console.log('OLD');

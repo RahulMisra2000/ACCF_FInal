@@ -66,6 +66,8 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
     // Compose Selected Area    
     
     // Only one of these will go into effect
+    selectedContentR.current = '';
+    
     if (name) {
       selectedContentR.current = `Name: ${name}`;
     } else if (phone) {

@@ -36,7 +36,7 @@ const CustomerListView = () => {
   const [options, setOptions] = useState({
     collectionName: 'customers',
     direction: 'forward', 
-    recordsToReadAtOneTime: 7,
+    recordsToReadAtOneTime: 3,
     page: 1,
     q: null
   });
@@ -53,7 +53,7 @@ const CustomerListView = () => {
       return;
     }
     setEnableNext(true);
-    setEnableNext(true);
+    setEnablePrev(true);
 
     setOptions((prevstate) => {
       // NEVER MUTATE STATE IN REACT, ALWAYS RETURN A NEW OBJECT
@@ -96,6 +96,9 @@ const CustomerListView = () => {
         q: q
       };
     });
+    setEnableNext(true);
+    setEnablePrev(false);
+    
   };
 
   //#region RETURN AREA
