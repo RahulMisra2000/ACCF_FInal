@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Box, Container, makeStyles, LinearProgress } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { Navigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import AppContext from 'src/contexts/appContext';
 
 console.log('%c1st line of CustomerListView(index).js just executed', 'background-Color:black; color:white');
 
+//#region MAKESTYLES
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -20,19 +21,22 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3)
   }
 }));
+//#endregion
 
+//#region COMPONENT
 const CustomerListView = () => {
-  // GUARD - only authenticated users
+  //#region GUARD - only authenticated users  
   const { isLoggedIn } = useContext(AppContext);
   if (!isLoggedIn) {    
     return (<Navigate to='/app/dashboard' />);
   }
-  
+  //#endregion
+
   console.log('%cCustomerListView component code just executed','color:blue');
   const classes = useStyles();
   
-  // STATE
-    
+  //#region STATE AND REF HOOKS
+  
   const [options, setOptions] = useState({
     collectionName: 'customers',
     direction: 'forward', 
@@ -40,11 +44,15 @@ const CustomerListView = () => {
     page: 1,
     q: null
   });
+
   const {isLoading, data: cdata, error} = useFirestorePagination(options);
 
   const [enableNext, setEnableNext] = useState(true);
   const [enablePrev, setEnablePrev] = useState(false);  
 
+  //#endregion
+
+  //#region HANDLERS
   const nextClicked = () => {
     // Early Exit
     if (!cdata || cdata.length == 0 || cdata.length < options.recordsToReadAtOneTime) {
@@ -84,10 +92,9 @@ const CustomerListView = () => {
     });
   };
 
-  // searching happens with data in the cache
   const handleSearch = (q) => {   
-    console.log(q);
-         
+    console.log(q);    
+
     setOptions((prevstate) => {      
       return {
         ...prevstate, 
@@ -100,7 +107,8 @@ const CustomerListView = () => {
     setEnablePrev(false);
     
   };
-
+  //#endregion
+  
   //#region RETURN AREA
  
   const noRecordsAtAll = () => {
@@ -134,7 +142,7 @@ const CustomerListView = () => {
                         prevClicked={prevClicked} 
                         nextClicked={nextClicked}
                         enablePrev={options.page > 1 ? true : false}
-                        enableNext={enableNext && !noMoreRecords()}
+                        enableNext={enableNext && !noMoreRecords()}                        
                 />
               ) 
             : null
@@ -145,5 +153,6 @@ const CustomerListView = () => {
   );
   //#endregion
 };
+//#endregion
 
 export default CustomerListView;

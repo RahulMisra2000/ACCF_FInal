@@ -128,88 +128,94 @@ const Toolbar = ({ className, searchFn, ...rest }) => {
         <Card
         elevation={5}>
           <CardContent>
-            <Box maxWidth={600} display='flex'>
-              <TextField
-                fullWidth
-                size="small"                
-                placeholder="<Name>"
-                variant="outlined"
-                value={name}
-                onChange={(e) => {                  
-                  setName(e.target.value);
-                }}
-                className={clsx(classes.TextField, classes.margin, className)}                
-              />
-              <TextField
-                fullWidth
-                size="small"                
-                placeholder="<Phone>"
-                variant="outlined"
-                value={phone}
-                onChange={(e) => { setPhone(e.target.value); }}
-                className={clsx(classes.TextField, classes.margin, className)}                
-              />
-              <Checkbox
-                checked={status}
-                onChange={(e) => { setStatus((prevState) => {
-                  return !prevState;
-                }); }}
-              />
-              <Typography color="textSecondary" className={clsx(classes.CheckBox, classes.margin, className)}>Exclude Closed</Typography>
+            {!selectedContentR.current ? 
+              ( 
+                <>
+                  <Box maxWidth={600} display='flex'>
+                    <TextField
+                      fullWidth
+                      size="small"                
+                      placeholder="<Name>"
+                      variant="outlined"
+                      value={name}
+                      onChange={(e) => {                  
+                        setName(e.target.value);
+                      }}
+                      className={clsx(classes.TextField, classes.margin, className)}                
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"                
+                      placeholder="<Phone>"
+                      variant="outlined"
+                      value={phone}
+                      onChange={(e) => { setPhone(e.target.value); }}
+                      className={clsx(classes.TextField, classes.margin, className)}                
+                    />
+                    <Checkbox
+                      checked={status}
+                      onChange={(e) => { setStatus((prevState) => {
+                        return !prevState;
+                      }); }}
+                    />
+                    <Typography color="textSecondary" className={clsx(classes.CheckBox, classes.margin, className)}>Exclude Closed</Typography>
 
-              <Checkbox
-                checked={recStatus}
-                onChange={(e) => { setRecStatus((prevState) => {
-                  return !prevState;
-                }); }}
-              />
-              <Typography color="textSecondary" className={clsx(classes.CheckBox, classes.margin, className)}>Exclude Archived</Typography>
-            </Box>
-          
-            <Box maxWidth={600} display='flex'>
-              <TextField
-                type="datetime-local"
-                fullWidth
-                size="small"                
-                placeholder="<From Date>"
-                variant="outlined"
-                value={fDate}
-                onChange={(e) => {                  
-                  setFDate(e.target.value);
-                }}
-                className={clsx(classes.TextField, classes.margin, className)}                                
-              />
-              <TextField
-                 type="datetime-local"
-                fullWidth
-                size="small"                
-                placeholder="<To Date>"
-                variant="outlined"
-                value={tDate}
-                onChange={(e) => {                  
-                  setTDate(e.target.value);
-                }}
-                className={clsx(classes.TextField, classes.margin, className)}                
-              />
-                            <Button              
-                fullwidth
-                variant="contained"
-                size="small"
-                color="secondary"
-                className={clsx(classes.button, classes.margin, className)}    
-                disabled={!name && !phone && !fDate && !tDate && !status && !recStatus}
-                onClick={(e) => {
-                  constructSearchObjectAndCallParentComponent(e);
-                }}
-              >
-                Search
-              </Button>
-            </Box>            
+                    <Checkbox
+                      checked={recStatus}
+                      onChange={(e) => { setRecStatus((prevState) => {
+                        return !prevState;
+                      }); }}
+                    />
+                    <Typography color="textSecondary" className={clsx(classes.CheckBox, classes.margin, className)}>Exclude Archived</Typography>
+                  </Box>
+
+                  <Box maxWidth={600} display='flex'>
+                    <TextField
+                      type="datetime-local"
+                      fullWidth
+                      size="small"                
+                      placeholder="<From Date>"
+                      variant="outlined"
+                      value={fDate}
+                      onChange={(e) => {                  
+                        setFDate(e.target.value);
+                      }}
+                      className={clsx(classes.TextField, classes.margin, className)}                                
+                    />
+                    <TextField
+                      type="datetime-local"
+                      fullWidth
+                      size="small"                
+                      placeholder="<To Date>"
+                      variant="outlined"
+                      value={tDate}
+                      onChange={(e) => {                  
+                        setTDate(e.target.value);
+                      }}
+                      className={clsx(classes.TextField, classes.margin, className)}                
+                    />
+                    <Button              
+                      fullwidth
+                      variant="contained"
+                      size="small"
+                      color="secondary"
+                      className={clsx(classes.button, classes.margin, className)}    
+                      disabled={ !name && !phone && !fDate && !tDate && !status && !recStatus}
+                      onClick={(e) => {
+                        constructSearchObjectAndCallParentComponent(e);
+                      }}
+                    >
+                      Search
+                    </Button>              
+                  </Box>        
+                </>    
+              ) : null 
+            }
+              
             {/* SELECTION */}
             {selectedContentR.current ? 
               (
-                <>
-                  <Divider className={clsx(classes.margin, className)}/>
+                <>                  
                   <Box maxWidth={600} display='flex'>
                     <Typography variant="h6" component="h6" className={clsx(classes.title, classes.margin, className)}>
                       YOUR SELECTION: {selectedContentR.current} 
