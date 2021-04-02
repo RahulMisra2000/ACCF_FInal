@@ -9,7 +9,7 @@ import theme from 'src/theme';
 import firebaseProducts from 'src/config/firebaseConfig';
 import AppContext from 'src/contexts/appContext';
 import { SnackbarProvider } from 'notistack';
-
+// import makeSheetEntry from 'src/utils/MakeSheetEntry';
 import DashboardLayout from './layouts/DashboardLayout';
 
 // No code-splitting this way
@@ -27,6 +27,8 @@ const MainLayout = React.lazy(async () => {
 }); 
 
 console.log('%c1st line of App.js just executed', 'background-Color:black; color:white');
+// makeSheetEntry('App just started'); // publicuser2000
+
 console.log(process.env.REACT_APP_SHELL_1);
 console.log(process.env.REACT_APP_COMING_FROM_ENV_FILE);
 
