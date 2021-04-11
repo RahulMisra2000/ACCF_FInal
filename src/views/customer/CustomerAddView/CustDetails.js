@@ -221,14 +221,14 @@ const CustDetails = ({ className, ...rest }) => {
       crisis: values.crisis,    
       children: (() => {
         const arr = [];
-        if (values.k1name) { arr.push({name: values.k1name, age: values.k1age, grade: values.k1grade, school: values.k1school }); } 
-        if (values.k2name) { arr.push({name: values.k2name, age: values.k2age, grade: values.k2grade, school: values.k2school }); } 
-        if (values.k3name) { arr.push({name: values.k3name, age: values.k3age, grade: values.k3grade, school: values.k3school }); } 
-        if (values.k4name) { arr.push({name: values.k4name, age: values.k4age, grade: values.k4grade, school: values.k4school }); } 
+        if (values.k1name) { arr.push({Id: arr.length+1, name: values.k1name, age: values.k1age, grade: values.k1grade, school: values.k1school }); } 
+        if (values.k2name) { arr.push({Id: arr.length+1, name: values.k2name, age: values.k2age, grade: values.k2grade, school: values.k2school }); } 
+        if (values.k3name) { arr.push({Id: arr.length+1, name: values.k3name, age: values.k3age, grade: values.k3grade, school: values.k3school }); } 
+        if (values.k4name) { arr.push({Id: arr.length+1, name: values.k4name, age: values.k4age, grade: values.k4grade, school: values.k4school }); } 
         return arr;          
       })(),
       ss: [
-        {date: creationMoment, strength: values.strengthScore, stressor: values.stressorScore}
+        {Id: 1, date: creationMoment, strength: values.strengthScore, stressor: values.stressorScore}
       ]     
     };
 

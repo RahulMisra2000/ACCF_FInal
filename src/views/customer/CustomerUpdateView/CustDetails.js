@@ -292,7 +292,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
 
     // PREPARE DATA
     // old array : values.ss
-    const strengthStressorPairThatNeedsToBeAdded = {date: now, strength: values.strengthScore, stressor: values.stressorScore};
+    const strengthStressorPairThatNeedsToBeAdded = {Id: values.ss.length+1, date: now, strength: values.strengthScore, stressor: values.stressorScore};
     const newCompleteSSArray = [...values.ss, strengthStressorPairThatNeedsToBeAdded ];
     
     // UPDATE FIRESTORE
@@ -330,7 +330,7 @@ const CustDetails = ({ cid, className, ...rest }) => {
     }
 
     // PREPARE DATA
-    const childThatNeedsToBeAdded = {name: values.childName, age: values.childAge, grade: values.childGrade, school: values.childSchool};
+    const childThatNeedsToBeAdded = {Id: values.children.length+1, name: values.childName, age: values.childAge, grade: values.childGrade, school: values.childSchool};
     const newCompleteChildrenArray = [...values.children, childThatNeedsToBeAdded ];
     
     console.dir(values.children);

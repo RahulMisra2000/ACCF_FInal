@@ -2,6 +2,7 @@
 const writeRowInSpreadsheet = (data1, data2, data3) => {
   const myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
+  myHeaders.append('X-Requested-With', 'UsingFetch');
 
   const loc = 'https://maker.ifttt.com/trigger/ACC_INFO/with/key/nkhaXei2ZXn46CrUsq3TCn7H5frRQ_U4vz_eBa8GOyi';
   const d = {
